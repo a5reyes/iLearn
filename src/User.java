@@ -29,6 +29,3 @@ class User {
     }
 }
 
-public void SubmitAssignment (){
-
-}
