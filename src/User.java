@@ -12,4 +12,19 @@ class User {
         this.name = name;
         this.classrooms = classrooms;
     }
+    
+    public void viewClassrooms(int id) {
+        //get all the classrooms with id
+        /*
+        int[] ids = Classroom.user_ids;
+        for (int i = 0; i < ids.length; i++) {
+            if(ids[i] == id){
+                System.out.println(ids[i] + " " + classrooms[i]);
+            }
+        }
+         */
+    }
+    public static void main(String[] args) {
+        //
+    }
 }
