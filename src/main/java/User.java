@@ -1,28 +1,32 @@
 public class User {
-    int id;
-    String password;
-    Boolean isTeacher;
-    String name;
-    int[] classrooms;
+    private int id;
+    private String password;
+    private Boolean isTeacher;
+    private String name;
+    private int[] classrooms;
 
-    public User(int id, String password, Boolean ifTeacher, String name, int[] classrooms) {
+    public User(int id, String password, Boolean isTeacher, String name, int[] classrooms) {
         this.id = id;
         this.password = password;
-        this.isTeacher = ifTeacher;
+        this.isTeacher = isTeacher;
         this.name = name;
         this.classrooms = classrooms;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void isStudent(){
+        this.isTeacher = false;
+    }
+
+    public void isTeacher(){
+        this.isTeacher = true;
+    }
     
-    public void viewClassrooms(int id) {
-        //get all the classrooms with id
-        /*
-        int[] ids = Classroom.user_ids;
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i] == id){
-                System.out.println(ids[i] + " " + classrooms[i]);
-            }
-        }
-         */
+    public int[] viewClassrooms() {
+        return this.classrooms;
     }
 
     public void submitAssignment(int id) {
@@ -86,6 +90,6 @@ public class User {
     }
 
     public static void main(String[] args) {
-        //
+        
     }
 }

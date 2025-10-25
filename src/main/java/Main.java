@@ -10,28 +10,37 @@ public class Main {
         JFrame frame = new JFrame("iLearn");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Menu");
-        JMenuItem profileItem = new JMenuItem("Profile");
-        JMenuItem classItem = new JMenuItem("Classrooms");
-        JMenuItem calendarItem = new JMenuItem("Calendar");
-        JMenuItem messageItem = new JMenuItem("Message");
-        fileMenu.add(profileItem);
-        fileMenu.addSeparator();
-        fileMenu.add(classItem);
-        fileMenu.addSeparator();
-        fileMenu.add(calendarItem);
-        fileMenu.addSeparator();
-        fileMenu.add(messageItem);
-        menuBar.add(fileMenu);
-        JPanel panel = new JPanel();
-        JPanel textPanel = new JPanel();
-        JLabel label = new JLabel("iLearn");
-        textPanel.add(label);
+        //profile
+        JPanel profilePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel profile = new JLabel("Profile");
+        profilePanel.add(profile);
+        //calendar
+        JPanel calendarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel calendar = new JLabel("Calendar");
+        calendarPanel.add(calendar);
+        //JTextField calTextPart = new JTextField();
+        //messages
+        JPanel messagesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel messages = new JLabel("Messages");
+        messagesPanel.add(messages);
+        //JTextField messTextPart = new JTextField();
+        //classrooms
+        JPanel classroomsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel classrooms = new JLabel("Classrooms");
+        classroomsPanel.add(classrooms);
+        //JTextField classTextPart = new JTextField();
+
         frame.setLayout(new BorderLayout());
-        frame.setJMenuBar(menuBar);
-        frame.add(panel, BorderLayout.CENTER);
-        frame.add(textPanel, BorderLayout.SOUTH);
+        frame.add(profilePanel, BorderLayout.WEST);
+        frame.add(calendarPanel, BorderLayout.EAST);
+
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
+        southPanel.add(messagesPanel);
+        southPanel.add(classroomsPanel);
+        frame.add(southPanel, BorderLayout.SOUTH);
+    
+    
         frame.setVisible(true); 
     }
 
