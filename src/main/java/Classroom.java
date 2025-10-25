@@ -8,8 +8,6 @@ public class Classroom {
 		this.teacher = teacher;
 		this.discussions = discussions;
 	}
-	
-	
 
 	public int getClassroomId() {
 		return classroomId;
