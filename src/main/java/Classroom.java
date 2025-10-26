@@ -1,12 +1,14 @@
 public class Classroom {
-    int classroomId;
-	String teacher;
-	String discussions;
+    private int classroomId;
+	private String teacher;
+	private String discussions;
+	private String meetingTime;
 	
-	public Classroom(int classroomId, String teacher, String discussions) {
+	public Classroom(int classroomId, String teacher, String discussions,  String meetingTime) {
 		this.classroomId = classroomId;
 		this.teacher = teacher;
 		this.discussions = discussions;
+		this.meetingTime = meetingTime;
 	}
 
 	public int getClassroomId() {
@@ -26,6 +28,12 @@ public class Classroom {
 	}
 	public void setDiscussions(String discussions) {
 		this.discussions = discussions;
+	}
+	public String getMeetingTime() {
+		return meetingTime;
+	}
+	public void setMeetingTime(String meetingTime) {
+		this.meetingTime = meetingTime;
 	}
 	
 	

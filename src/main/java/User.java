@@ -3,9 +3,9 @@ public class User {
     private String password;
     private Boolean isTeacher;
     private String name;
-    private int[] classrooms;
+    private String[] classrooms;
 
-    public User(int id, String password, Boolean isTeacher, String name, int[] classrooms) {
+    public User(int id, String password, Boolean isTeacher, String name, String[] classrooms) {
         this.id = id;
         this.password = password;
         this.isTeacher = isTeacher;
@@ -25,71 +25,31 @@ public class User {
         this.isTeacher = true;
     }
     
-    public int[] viewClassrooms() {
-        return this.classrooms;
+    public String viewClassrooms() {
+        return String.join(", ", this.classrooms);
     }
 
     public void submitAssignment(int id) {
-        //get all the classrooms with id
-        /*
-        int[] ids = Classroom.user_ids;
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i] == id){
-                System.out.println(ids[i] + " " + classrooms[i]);
-            }
-        }
-         */
+        //
     }
 
     public void viewGrades(int id) {
-        //get all the classrooms with id
-        /*
-        int[] ids = Classroom.user_ids;
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i] == id){
-                System.out.println(ids[i] + " " + classrooms[i]);
-            }
-        }
-         */
+        //
     }
 
     public void sendMessage(int id) {
-        //get all the classrooms with id
-        /*
-        int[] ids = Classroom.user_ids;
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i] == id){
-                System.out.println(ids[i] + " " + classrooms[i]);
-            }
-        }
-         */
+        //
     }
 
     public void viewClassroomRoster(int id) {
-        //get all the classrooms with id
-        /*
-        int[] ids = Classroom.user_ids;
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i] == id){
-                System.out.println(ids[i] + " " + classrooms[i]);
-            }
-        }
-         */
+        //
     }
 
     public void viewCalendar(int id) {
-        //get all the classrooms with id
-        /*
-        int[] ids = Classroom.user_ids;
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i] == id){
-                System.out.println(ids[i] + " " + classrooms[i]);
-            }
-        }
-         */
+        //
     }
 
     public static void main(String[] args) {
-        
+        //
     }
 }
