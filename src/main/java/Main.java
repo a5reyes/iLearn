@@ -14,6 +14,7 @@ public class Main {
         JPanel profilePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel profile = new JLabel("Profile");
         profilePanel.add(profile);
+
         //calendar
         JPanel calendarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel calendar = new JLabel("Calendar");
@@ -44,11 +45,13 @@ public class Main {
         frame.setVisible(true); 
     }
 
-    public static void main(String[] args) {   
-        try (MongoClient mongoClient = MongoClients.create("mongodb+srv://vinyldealsbot:QmXOPNFAaumrY3P1@cluster0.izmp5gi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")) {
+    public static void main(String[] args) { 
+        /*
+        try (MongoClient mongoClient = MongoClients.create("...")) {
             MongoDatabase database = mongoClient.getDatabase("ilearn");
             System.out.println("Connected to the database: " + database.getName());
         }
+        */  
         SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true));
     }
 }
