@@ -6,15 +6,14 @@ import com.mongodb.client.MongoDatabase;
 
 public class Main {
     public static boolean loggedIn = false;
-    public static void HomePage(){
+    public static void HomePage(String user){
         JFrame frame = new JFrame("iLearn");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         //profile
         JPanel profilePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel profile = new JLabel("Profile");
+        JLabel profile = new JLabel("Profile: " + user);
         profilePanel.add(profile);
-
         //calendar
         JPanel calendarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel calendar = new JLabel("Calendar");
@@ -40,8 +39,6 @@ public class Main {
         southPanel.add(messagesPanel);
         southPanel.add(classroomsPanel);
         frame.add(southPanel, BorderLayout.SOUTH);
-    
-    
         frame.setVisible(true); 
     }
 

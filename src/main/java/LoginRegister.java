@@ -44,7 +44,7 @@ public class LoginRegister extends JFrame {
             if (!username.equals("") && !password.equals("")) {
                 JOptionPane.showMessageDialog(this, "Login successful!");
                 SwingUtilities.getWindowAncestor(panel).dispose();
-                Main.HomePage();
+                Main.HomePage(username);
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid credentials.");
             }
@@ -73,23 +73,17 @@ public class LoginRegister extends JFrame {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             //User user = new User(rand.nextInt() + 1, password, null, username, null);
-           
+            if (!username.equals("") && !password.equals("")) {
+                JOptionPane.showMessageDialog(this, "Register successful!");
+                SwingUtilities.getWindowAncestor(panel).dispose();
+                Main.HomePage(username);
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid credentials.");
+            }
             // TODO: Save to MongoDB here
-            JOptionPane.showMessageDialog(this, "Registered user: " + username);
-            cardLayout.show(mainPanel, "login");
         });
         return panel;
     }
-    /*
-    private JPanel createProfilePanel(User person) {
-        JPanel profilePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel profile = new JLabel("Profile");
-        profilePanel.add(profile);
-        JTextField profTextPart = new JTextField(person.getName());
-        profilePanel.add(profTextPart);
-        return profilePanel;
-    }
-    */
 
     public static void main(String[] args){
         SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true));
