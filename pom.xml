@@ -25,6 +25,12 @@
             <version>6.0.0</version>
             <scope>test</scope>
         </dependency>
+    
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>25-ea+21</version>
+      </dependency>
     </dependencies>
 
     <build>
