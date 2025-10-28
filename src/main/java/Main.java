@@ -1,12 +1,13 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+/* 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+*/
 
 public class Main {
-    public static boolean loggedIn = false;
     public static void HomePage(User user){
         JFrame frame = new JFrame("iLearn");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,7 +30,7 @@ public class Main {
             calendarPanel.add(calendar);
         });
          */
-        //calendar-classroom section where classrooms are viewed at a glance
+        //student schedule-week at a glance; idea taken from infobear
         String[] sectionsInfo = user.viewClassrooms().split(", ");
         for(String sectionInfo : sectionsInfo){
             Integer classId = Integer.parseInt(sectionInfo.replaceAll("\\D", "")); 
@@ -37,8 +38,6 @@ public class Main {
             JTextArea sectionLabel = new JTextArea(sectionInfo + "\n" + course.getTeacher() + "\n" + course.getMeetingTime() +  "\n" + course.getDiscussions());
             calendarPanel.add(sectionLabel);
         }
-        
-        //JPanel classPanel = new JPanel();
 
         //messages
         JPanel messagesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -59,7 +58,7 @@ public class Main {
                 sectionButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //open to classroom frame
+                        //TODO: open to classroom frame
                         JOptionPane.showMessageDialog(frame, "You clicked the button!");
                     }
                 });
@@ -81,7 +80,7 @@ public class Main {
     }
 
     public static void main(String[] args) { 
-        /*
+        /* TODO
         try (MongoClient mongoClient = MongoClients.create("...")) {
             MongoDatabase database = mongoClient.getDatabase("ilearn");
             System.out.println("Connected to the database: " + database.getName());

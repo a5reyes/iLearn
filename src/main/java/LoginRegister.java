@@ -7,6 +7,7 @@ public class LoginRegister extends JFrame {
     private JPanel mainPanel;
     private User currUser;
 
+    //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
         setTitle("iLearn");
         setSize(400, 300);
@@ -23,6 +24,7 @@ public class LoginRegister extends JFrame {
         cardLayout.show(mainPanel, "login");
     }
 
+    //login panel
     private JPanel createLoginPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
 
@@ -38,6 +40,7 @@ public class LoginRegister extends JFrame {
         panel.add(loginButton);
         panel.add(switchToRegister);
 
+        //listening to responses on login page; otherwise switching to register if register button clicked
         switchToRegister.addActionListener(e -> cardLayout.show(mainPanel, "register"));
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
@@ -58,6 +61,7 @@ public class LoginRegister extends JFrame {
         return panel;
     }
 
+    //register panel
     private JPanel createRegisterPanel() {
         Random rand = new Random();
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
@@ -77,6 +81,7 @@ public class LoginRegister extends JFrame {
         panel.add(registerButton);
         panel.add(switchToLogin);
 
+        //listening to responses on register page; otherwise switching to login if login button clicked
         switchToLogin.addActionListener(e -> cardLayout.show(mainPanel, "login"));
         registerButton.addActionListener(e -> {
             String username = usernameField.getText();
