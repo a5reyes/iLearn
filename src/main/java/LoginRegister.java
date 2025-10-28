@@ -26,7 +26,7 @@ public class LoginRegister extends JFrame {
 
     //login panel
     private JPanel createLoginPanel() {
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
 
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
@@ -64,7 +64,7 @@ public class LoginRegister extends JFrame {
     //register panel
     private JPanel createRegisterPanel() {
         Random rand = new Random();
-        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
 
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
@@ -95,12 +95,23 @@ public class LoginRegister extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid credentials.");
             }
-            // TODO: Save to MongoDB here
+            //TODO save to mongodb here
         });
         return panel;
     }
 
-    public static void main(String[] args){
-        SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true));
+    protected void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    public void login(String user) {
+        if (!isRegistered(user)) {
+            showMessage("Please register");
+        }
+    }
+
+    private boolean isRegistered(String user) {
+        //TODO use mongodb here
+        return user.equals("");
     }
 }
