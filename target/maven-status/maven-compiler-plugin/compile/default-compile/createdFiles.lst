@@ -1,7 +1,2 @@
-Main.class
-Classroom.class
-User.class
-LoginRegister.class
-Message.class
-Calendar.class
-Main$1.class
+com\example\App.class
+com\example\Controller.class
