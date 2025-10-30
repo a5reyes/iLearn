@@ -1,16 +1,15 @@
 package com.example;
-import javax.swing.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.awt.*;
+import javax.swing.*;
+import java.sql.*;
 import java.util.Random;
 
 public class LoginRegister extends JFrame {
-    private static final String db = "jdbc:sqlite:ilearn.db";
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private User currUser;
+    private boolean isTeacher = false;
+    Connection connection = Main.connect();
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
@@ -51,13 +50,13 @@ public class LoginRegister extends JFrame {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             if (!username.equals("") && !password.equals("")) {
-                if(currUser == null){
-                    JOptionPane.showMessageDialog(this, "Please register");
-                    cardLayout.show(mainPanel, "register");
-                } else {
+                if(isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     Main.HomePage(currUser);
+                } else {
+                    JOptionPane.showMessageDialog(this, "User not found. Please register");
+                    cardLayout.show(mainPanel, "register");
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid credentials.");
@@ -69,11 +68,12 @@ public class LoginRegister extends JFrame {
     //register panel
     private JPanel createRegisterPanel() {
         Random rand = new Random();
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
 
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
         JTextField classesField = new JTextField();
+        JCheckBox teacherCheckBox = new JCheckBox("Teacher");
         JButton registerButton = new JButton("Register");
         JButton switchToLogin = new JButton("Back to Login");
 
@@ -85,22 +85,41 @@ public class LoginRegister extends JFrame {
         panel.add(classesField);
         panel.add(registerButton);
         panel.add(switchToLogin);
-
+        panel.add(teacherCheckBox);
+        teacherCheckBox.addItemListener(e -> {
+            if (teacherCheckBox.isSelected()) {
+                isTeacher = true;
+            } else {
+                isTeacher = false;
+            }
+        });
         //listening to responses on register page; otherwise switching to login if login button clicked
         switchToLogin.addActionListener(e -> cardLayout.show(mainPanel, "login"));
         registerButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             String classes = classesField.getText();
+            int id = Math.abs(rand.nextInt() + 1);
             if (!username.equals("") && !password.equals("")) {
-                User user = new User(rand.nextInt() + 1, password, null, username, classes.split(","));
+                try(Statement statement = connection.createStatement()){
+                    String insertNewUser = "INSERT INTO users (id, name, password, isTeacher, classrooms) VALUES (?, ?, ?, ?, ?)";
+                    PreparedStatement pstmtNewUser = connection.prepareStatement(insertNewUser);
+                    pstmtNewUser.setInt(1, id);
+                    pstmtNewUser.setString(2, username);
+                    pstmtNewUser.setString(3, password);
+                    pstmtNewUser.setInt(4, isTeacher ? 1 : 0);
+                    pstmtNewUser.setString(5, classes);
+                    pstmtNewUser.executeUpdate();
+                } catch (SQLException er) {
+                    er.printStackTrace(System.err);
+                }
+                User user = new User(id, password, isTeacher, username, classes.split(","));
                 currUser = user;
                 JOptionPane.showMessageDialog(this, "Registered user: " + username);
                 cardLayout.show(mainPanel, "login");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid credentials.");
             }
-            //TODO save to mongodb here
         });
         return panel;
     }
@@ -109,14 +128,28 @@ public class LoginRegister extends JFrame {
         JOptionPane.showMessageDialog(null, message);
     }
 
-    public void login(String user) {
-        if (!isRegistered(user)) {
+    public void login(String username, String password) {
+        if (!isRegistered(username, password)) {
             showMessage("Please register");
         }
     }
 
-    private boolean isRegistered(String user) {
-        //TODO use mongodb here
-        return user.equals("");
+    private boolean isRegistered(String username, String pw) {
+        try(Statement statement = connection.createStatement()){
+            String findUser = "SELECT * FROM users WHERE name = ? AND password = ?";
+            PreparedStatement pstmtFindUser = connection.prepareStatement(findUser);
+            pstmtFindUser.setString(1, username);
+            pstmtFindUser.setString(2, pw);
+            try (ResultSet res = pstmtFindUser.executeQuery()){
+                while (res.next()){
+                    String name = res.getString("name");
+                    String password = res.getString("password");
+                    return (username.equals(name) && password.equals(pw));
+                }
+            }
+        } catch (SQLException er) {
+            er.printStackTrace(System.err);
+        }
+        return false;
     }
 }

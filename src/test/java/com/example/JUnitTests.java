@@ -16,7 +16,7 @@ public class JUnitTests {
             }
         }
         TestLogin login = new TestLogin();
-        login.login("user");
+        login.login("user", "abc");
 
         assertEquals("Please register", login.message);
     }
