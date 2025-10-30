@@ -1,10 +1,13 @@
 package com.example;
 import javax.swing.*;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.awt.*;
 import java.util.Random;
 
 public class LoginRegister extends JFrame {
+    private static final String db = "jdbc:sqlite:ilearn.db";
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private User currUser;

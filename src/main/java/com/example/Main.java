@@ -1,14 +1,9 @@
 package com.example;
 import javax.swing.*;
-/* 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
-*/
 
-public class Main {
+public class Main{
     public static void HomePage(User user){
-        App.launch();
+        App.main(null);
         //get profile username - user.getName()
         //student schedule-week at a glance; idea taken from infobear
         /*
