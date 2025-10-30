@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class Main{
     public static void HomePage(User user){
-        App.main(null);
+        AppController.main(null);
         //get profile username - user.getName()
         //student schedule-week at a glance; idea taken from infobear
         /*

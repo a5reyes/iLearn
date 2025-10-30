@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class App extends Application {
+public class AppController extends Application {
     /**
      * Creates the GUI page, set its height/width and gives it a name
      * @param stage - the area in which the GUI is created
@@ -14,8 +14,8 @@ public class App extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("app.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 300, 500);
+        FXMLLoader fxmlLoader = new FXMLLoader(AppController.class.getResource("MainPage.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 650, 600);
         stage.setTitle("iLearn");
         stage.setScene(scene);
         stage.show();
@@ -24,4 +24,6 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+    
 }
