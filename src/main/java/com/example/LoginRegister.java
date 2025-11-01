@@ -101,19 +101,8 @@ public class LoginRegister extends JFrame {
             String classes = classesField.getText();
             int id = Math.abs(rand.nextInt() + 1);
             if (!username.equals("") && !password.equals("")) {
-                try(Statement statement = connection.createStatement()){
-                    String insertNewUser = "INSERT INTO users (id, name, password, isTeacher, classrooms) VALUES (?, ?, ?, ?, ?)";
-                    PreparedStatement pstmtNewUser = connection.prepareStatement(insertNewUser);
-                    pstmtNewUser.setInt(1, id);
-                    pstmtNewUser.setString(2, username);
-                    pstmtNewUser.setString(3, password);
-                    pstmtNewUser.setInt(4, isTeacher ? 1 : 0);
-                    pstmtNewUser.setString(5, classes);
-                    pstmtNewUser.executeUpdate();
-                } catch (SQLException er) {
-                    er.printStackTrace(System.err);
-                }
                 User user = new User(id, password, isTeacher, username, classes.split(","));
+                user.connectToDatabase();
                 currUser = user;
                 JOptionPane.showMessageDialog(this, "Registered user: " + username);
                 cardLayout.show(mainPanel, "login");
