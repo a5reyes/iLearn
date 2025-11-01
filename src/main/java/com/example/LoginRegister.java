@@ -100,12 +100,18 @@ public class LoginRegister extends JFrame {
             String password = new String(passwordField.getPassword());
             String classes = classesField.getText();
             int id = Math.abs(rand.nextInt() + 1);
-            if (!username.equals("") && !password.equals("")) {
-                User user = new User(id, password, isTeacher, username, classes.split(","));
-                user.connectToDatabase();
-                currUser = user;
-                JOptionPane.showMessageDialog(this, "Registered user: " + username);
-                cardLayout.show(mainPanel, "login");
+            if (!username.equals("") && !password.equals("") && !classes.equals("")) {
+                if(isRegistered(username, password)){ 
+                    JOptionPane.showMessageDialog(this, "Already registered! Login successful!");
+                    SwingUtilities.getWindowAncestor(panel).dispose();
+                    Main.HomePage(currUser);
+                } else {
+                    User user = new User(id, password, isTeacher, username, classes.split("[, ]+\""));
+                    user.connectToDatabase();
+                    currUser = user;
+                    JOptionPane.showMessageDialog(this, "Registered user: " + username);
+                    cardLayout.show(mainPanel, "login");
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid credentials.");
             }
