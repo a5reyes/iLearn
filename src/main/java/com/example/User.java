@@ -3,6 +3,14 @@ import java.sql.*;
 
 public class User {
     private int id;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String password;
     private Boolean isTeacher;
     private String name;

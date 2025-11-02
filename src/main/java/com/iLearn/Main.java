@@ -1,8 +1,12 @@
-package com.example;
+package com.iLearn;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.*;
+
+import com.example.User;
+
+
 
 public class Main{
     public static void HomePage(User user){

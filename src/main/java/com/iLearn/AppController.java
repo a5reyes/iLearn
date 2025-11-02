@@ -1,4 +1,4 @@
-package com.example;
+package com.iLearn;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,7 +14,7 @@ public class AppController extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AppController.class.getResource("MainPage.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(AppController.class.getResource("/com/example/MainPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 650, 600);
         stage.setTitle("iLearn");
         stage.setScene(scene);
