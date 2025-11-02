@@ -21,6 +21,10 @@ public class User {
         return this.name;
     }
 
+    public Boolean getIsTeacher() {
+        return this.isTeacher;
+    }
+
     public void isStudent(){
         this.isTeacher = false;
     }
