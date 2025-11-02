@@ -103,23 +103,18 @@ public class LoginRegister extends JFrame {
             String password = new String(passwordField.getPassword());
             String classes = classesField.getText();
             int id = Math.abs(rand.nextInt() + 1);
-            if (!username.equals("") && !password.equals("")) {
-                try(Statement statement = connection.createStatement()){
-                    String insertNewUser = "INSERT INTO users (id, name, password, isTeacher, classrooms) VALUES (?, ?, ?, ?, ?)";
-                    PreparedStatement pstmtNewUser = connection.prepareStatement(insertNewUser);
-                    pstmtNewUser.setInt(1, id);
-                    pstmtNewUser.setString(2, username);
-                    pstmtNewUser.setString(3, password);
-                    pstmtNewUser.setInt(4, isTeacher ? 1 : 0);
-                    pstmtNewUser.setString(5, classes);
-                    pstmtNewUser.executeUpdate();
-                } catch (SQLException er) {
-                    er.printStackTrace(System.err);
+            if (!username.equals("") && !password.equals("") && !classes.equals("")) {
+                if(isRegistered(username, password)){ 
+                    JOptionPane.showMessageDialog(this, "Already registered! Login successful!");
+                    SwingUtilities.getWindowAncestor(panel).dispose();
+                    Main.HomePage(currUser);
+                } else {
+                    User user = new User(id, password, isTeacher, username, classes.split("[, ]+\""));
+                    user.connectToDatabase();
+                    currUser = user;
+                    JOptionPane.showMessageDialog(this, "Registered user: " + username);
+                    cardLayout.show(mainPanel, "login");
                 }
-                User user = new User(id, password, isTeacher, username, classes.split(","));
-                currUser = user;
-                JOptionPane.showMessageDialog(this, "Registered user: " + username);
-                cardLayout.show(mainPanel, "login");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid credentials.");
             }
