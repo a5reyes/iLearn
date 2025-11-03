@@ -7,11 +7,11 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.SceneController">
    <children>
-      <Label layoutX="216.0" layoutY="223.0" text="Messages">
+      <Label layoutX="260.0" text="Messages">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Button layoutX="190.0" layoutY="378.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
+      <Button layoutY="1.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
    </children>
 </AnchorPane>
