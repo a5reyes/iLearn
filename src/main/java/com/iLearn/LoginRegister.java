@@ -112,6 +112,7 @@ public class LoginRegister extends JFrame {
                 } else {
                     User user = new User(id, password, isTeacher, username, classes.split("[,;|\\s]+"));
                     user.connectToDatabase();
+                    
                     for(String enteredClass : classes.split("[,;|\\s]+")){
                         Integer classId = 0;
                         try {
