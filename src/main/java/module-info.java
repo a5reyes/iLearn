@@ -7,8 +7,8 @@ module app {
     requires javafx.graphics;
     requires javafx.base;
     
-    opens com.iLearn to javafx.fxml;
-    exports com.iLearn;
+    opens com.ilearn to javafx.fxml;
+    exports com.ilearn;
 
 
 
