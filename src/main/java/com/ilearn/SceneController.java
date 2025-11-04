@@ -53,8 +53,6 @@ public class SceneController {
         stage.setScene(scene);
         stage.show();
     }
-<<<<<<< Updated upstream:src/main/java/com/example/SceneController.java
-=======
 
     // 🆕 Add this method
     @FXML
@@ -62,5 +60,4 @@ public class SceneController {
         System.out.println("Loading user classes...");
         // TODO: Add your logic to populate the ListView here if needed
     }
->>>>>>> Stashed changes:src/main/java/com/ilearn/SceneController.java
 }
