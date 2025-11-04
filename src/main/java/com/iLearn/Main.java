@@ -4,7 +4,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.*;
 
-import com.example.AppController;
 import com.example.User;
 
 public class Main{

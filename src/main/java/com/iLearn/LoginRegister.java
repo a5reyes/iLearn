@@ -3,7 +3,6 @@ import java.awt.*;
 import javax.swing.*;
 
 import com.example.User;
-
 import java.sql.*;
 import java.util.Random;
 

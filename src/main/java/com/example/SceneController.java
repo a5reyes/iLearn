@@ -15,7 +15,7 @@ public class SceneController {
     private Scene scene;
     private Parent root;
 
-    @FXML
+    
     public void switchToClasses(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/ClassesPage.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -25,7 +25,7 @@ public class SceneController {
 
     }
     
-    @FXML
+    
 
     public void switchToGradebook(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Gradebook.fxml"));
@@ -35,7 +35,7 @@ public class SceneController {
         stage.show();
     }
     
-     @FXML
+     
 
     public void switchToCalender(ActionEvent event)throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Calender.fxml"));
@@ -44,7 +44,7 @@ public class SceneController {
         stage.setScene(scene);
         stage.show();
     }
-    @FXML
+    
 
     public void switchToMessages(ActionEvent event)throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Messaging.fxml"));
@@ -53,7 +53,7 @@ public class SceneController {
         stage.setScene(scene);
         stage.show();
     }
-    @FXML
+    
 
     public void backToMain(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
