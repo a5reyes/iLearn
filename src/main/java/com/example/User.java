@@ -47,23 +47,24 @@ public class User {
         return String.join(", ", this.classrooms);
     }
 
-    public void submitAssignment(int id) {
+    public void submitAssignment() {
+        //
+        
+    }
+
+    public void viewGrades() {
         //
     }
 
-    public void viewGrades(int id) {
+    public void sendMessage() {
         //
     }
 
-    public void sendMessage(int id) {
+    public void viewClassroomRoster() {
         //
     }
 
-    public void viewClassroomRoster(int id) {
-        //
-    }
-
-    public void viewCalendar(int id) {
+    public void viewCalendar() {
         //
     }
 

@@ -5,6 +5,7 @@ import javax.swing.*;
 import com.example.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class LoginRegister extends JFrame {
@@ -109,8 +110,20 @@ public class LoginRegister extends JFrame {
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     Main.HomePage(currUser);
                 } else {
-                    User user = new User(id, password, isTeacher, username, classes.split("[, ]+\""));
+                    User user = new User(id, password, isTeacher, username, classes.split("[,;|\\s]+"));
                     user.connectToDatabase();
+                    
+                    for(String enteredClass : classes.split("[,;|\\s]+")){
+                        Integer classId = 0;
+                        try {
+                            classId = Integer.parseInt(enteredClass.replaceAll("\\D", ""));  
+                        } catch (NumberFormatException error){
+                            classId = Math.abs(rand.nextInt() + 1);
+                        }
+                        String[] newDiscussion = {"Hello! Check syllabus"};
+                        Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
+                        course.connectToDatabase(user);
+                    }
                     currUser = user;
                     JOptionPane.showMessageDialog(this, "Registered user: " + username);
                     cardLayout.show(mainPanel, "login");
