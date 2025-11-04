@@ -16,7 +16,7 @@ public class SceneController {
 
 
     public void switchToClasses(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("ClassesPage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/ClassesPage.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -25,7 +25,7 @@ public class SceneController {
     }
 
     public void switchToGradebook(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("Gradebook.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Gradebook.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -33,7 +33,7 @@ public class SceneController {
     }
 
     public void switchToCalender(ActionEvent event)throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("Calender.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Calender.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -41,7 +41,7 @@ public class SceneController {
     }
 
     public void switchToMessages(ActionEvent event)throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("Messaging.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Messaging.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -49,10 +49,11 @@ public class SceneController {
     }
 
     public void backToMain(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
+
 }
