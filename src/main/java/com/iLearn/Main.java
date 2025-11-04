@@ -10,6 +10,7 @@ public class Main{
         //user object passed in; get it to main page somehow; 
         //extend scenecontroller to mainpagecontroller; 
         //then pass on the user object to mainpagecontroller somehow
+        System.out.println(user.getName());
         AppController.main(null);
     }
 

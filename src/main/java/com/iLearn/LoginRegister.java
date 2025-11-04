@@ -58,10 +58,10 @@ public class LoginRegister extends JFrame {
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     User loginUser = new User(0, password, null, username, null);
                     loginUser.getFromDatabase(username, password, loginUser);
-                    if(!currUser.equals(null)){
+                    if(currUser == null){
                         Main.HomePage(loginUser);
                     } else {
-                        Main.HomePage(loginUser); 
+                        Main.HomePage(currUser); 
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");

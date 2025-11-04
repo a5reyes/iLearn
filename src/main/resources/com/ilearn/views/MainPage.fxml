@@ -37,7 +37,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#loadUserClasses" text="INFO" />
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" text="INFO" />
                </children>
             </HBox>
          </children>
