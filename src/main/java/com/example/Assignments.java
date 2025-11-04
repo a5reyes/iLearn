@@ -1,7 +1,7 @@
 package com.example;
 import java.util.List;
 
-import com.ilearn.Classroom;
+import com.iLearn.Classroom;
 
 public class Assignments extends Classroom {
     private List<String> assignments;

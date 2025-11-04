@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ilearn.Main;
+import com.iLearn.Main;
 
 public class MainPageController {
     @FXML

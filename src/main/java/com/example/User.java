@@ -1,7 +1,7 @@
 package com.example;
 import java.sql.*;
 
-import com.ilearn.Main;
+import com.iLearn.Main;
 
 public class User {
     private int id;
