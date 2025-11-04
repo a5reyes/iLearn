@@ -1,11 +1,12 @@
-package com.iLearn;
+package com.example;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.example.User;
+import com.iLearn.Main;
+
 
 public class Classroom {
 	private String classroomName;
