@@ -5,7 +5,6 @@ import javax.swing.*;
 import com.example.User;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class LoginRegister extends JFrame {
@@ -57,7 +56,13 @@ public class LoginRegister extends JFrame {
                 if(isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
-                    Main.HomePage(currUser);
+                    User loginUser = new User(0, password, null, username, null);
+                    loginUser.getFromDatabase(username, password, loginUser);
+                    if(!currUser.equals(null)){
+                        Main.HomePage(loginUser);
+                    } else {
+                        Main.HomePage(loginUser); 
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
                     cardLayout.show(mainPanel, "register");
@@ -106,13 +111,12 @@ public class LoginRegister extends JFrame {
             int id = Math.abs(rand.nextInt() + 1);
             if (!username.equals("") && !password.equals("") && !classes.equals("")) {
                 if(isRegistered(username, password)){ 
-                    JOptionPane.showMessageDialog(this, "Already registered! Login successful!");
+                    JOptionPane.showMessageDialog(this, "Already registered! Login!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
-                    Main.HomePage(currUser);
+                    cardLayout.show(mainPanel, "login");
                 } else {
                     User user = new User(id, password, isTeacher, username, classes.split("[,;|\\s]+"));
                     user.connectToDatabase();
-                    
                     for(String enteredClass : classes.split("[,;|\\s]+")){
                         Integer classId = 0;
                         try {
