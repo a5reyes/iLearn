@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -36,10 +37,11 @@
             <HBox prefHeight="100.0" prefWidth="200.0" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" text="INFO" />
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#loadClasses" text="INFO" />
                </children>
             </HBox>
          </children>
       </VBox>
+      <ListView fx:id="classListView" layoutX="125.0" layoutY="108.0" prefHeight="471.0" prefWidth="470.0" />
    </children>
 </AnchorPane>
