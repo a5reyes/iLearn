@@ -2,8 +2,6 @@ package com.ilearn;
 import java.awt.*;
 import javax.swing.*;
 
-import com.example.User;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -57,7 +55,17 @@ public class LoginRegister extends JFrame {
                 if(isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
+<<<<<<< Updated upstream
                     Main.HomePage(currUser);
+=======
+                    User loginUser = new User(0, password, null, username, null);
+                    loginUser.getFromDatabase(username, password, loginUser);
+                    if(currUser==null){
+                        Main.HomePage(loginUser);
+                    } else {
+                        Main.HomePage(loginUser); 
+                    }
+>>>>>>> Stashed changes
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
                     cardLayout.show(mainPanel, "register");

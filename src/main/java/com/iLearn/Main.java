@@ -3,9 +3,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.*;
+<<<<<<< Updated upstream
 import javafx.application.Application;
 import javafx.stage.Stage;
 import com.example.User;
+=======
+>>>>>>> Stashed changes
 
 public class Main{
     public static void HomePage(User user){

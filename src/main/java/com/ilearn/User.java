@@ -1,4 +1,4 @@
-package com.example;
+package com.ilearn;
 import java.sql.*;
 
 import com.ilearn.Main;

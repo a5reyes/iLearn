@@ -1,4 +1,4 @@
-package com.example;
+package com.iexample;
 import org.junit.jupiter.api.Test;
 
 import com.ilearn.LoginRegister;

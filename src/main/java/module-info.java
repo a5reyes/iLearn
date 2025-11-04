@@ -9,8 +9,12 @@ module app {
     
     opens com.ilearn to javafx.fxml;
     exports com.ilearn;
+<<<<<<< Updated upstream
 
 
 
     exports com.example;
+=======
+    //exports com.example;
+>>>>>>> Stashed changes
 }

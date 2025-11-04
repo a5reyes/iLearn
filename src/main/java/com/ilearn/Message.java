@@ -1,3 +1,3 @@
-package com.example;
+package com.ilearn;
 public class Message {
 }
