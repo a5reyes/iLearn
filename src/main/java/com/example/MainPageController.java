@@ -19,7 +19,7 @@ public class MainPageController {
         this.currentUser = user;
         loadUserClasses();
     }
-    @FXML
+
     private void loadUserClasses() {
         List<String> classes = new ArrayList<>();
 

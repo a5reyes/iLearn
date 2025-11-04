@@ -7,8 +7,6 @@ import java.sql.Statement;
 
 import com.example.User;
 
-
-
 public class Classroom {
 	private String classroomName;
     private int classroomId;
