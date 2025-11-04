@@ -1,6 +1,7 @@
 package com.example;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,4 +40,5 @@ public class MainPageController {
             e.printStackTrace();
         }
     }
+    
 }

@@ -12,8 +12,8 @@ public class Gradebook extends Assignments {
     //ex. [{"Project1": {"Alyssa": 76}}, {"Project2": {"Jaden": 42}}]
     private List<Map<String, Map<String, Float>>> gradeBookList;
  
-	public Gradebook(List<Map<String, Map<String, Float>>> gradeBookList, List<String> assignments, int classroomId, String teacher, String discussions, String meetingTime) {
-        super(assignments, classroomId, teacher, discussions, meetingTime);
+	public Gradebook(List<Map<String, Map<String, Float>>> gradeBookList, List<String> assignments, String classroomName, int classroomId, String teacher, String[] discussions, String meetingTime) {
+        super(assignments, classroomName, classroomId, teacher, discussions, meetingTime);
         this.gradeBookList = gradeBookList;
     }
 
