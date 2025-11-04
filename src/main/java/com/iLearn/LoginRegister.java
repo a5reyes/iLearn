@@ -2,7 +2,6 @@ package com.iLearn;
 import java.awt.*;
 import javax.swing.*;
 
-import com.example.Classroom;
 import com.example.User;
 
 import java.sql.*;
@@ -59,9 +58,11 @@ public class LoginRegister extends JFrame {
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     User loginUser = new User(0, password, null, username, null);
                     loginUser.getFromDatabase(username, password, loginUser);
-                   
-                    currUser = loginUser;
-                    Main.HomePage(loginUser);
+                    if(currUser == null){
+                        Main.HomePage(loginUser);
+                    } else {
+                        Main.HomePage(currUser); 
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
                     cardLayout.show(mainPanel, "register");
