@@ -20,12 +20,12 @@
       <HBox fx:id="BackMonthButton" alignment="CENTER" layoutX="183.0" layoutY="11.0" prefHeight="66.0" prefWidth="283.0">
          <children>
             <Button fx:id="backMonth" mnemonicParsing="false" text="&lt;" />
-            <Text fx:id="year" strokeType="OUTSIDE" strokeWidth="0.0" text="####">
+            <Text fx:id="year" strokeType="OUTSIDE" strokeWidth="0.0" text="2025">
                <font>
                   <Font size="22.0" />
                </font>
             </Text>
-            <Text fx:id="month" strokeType="OUTSIDE" strokeWidth="0.0" text="####">
+            <Text fx:id="month" strokeType="OUTSIDE" strokeWidth="0.0" text="November">
                <font>
                   <Font size="22.0" />
                </font>
@@ -73,5 +73,10 @@
          </children>
       </HBox>
       <FlowPane layoutY="145.0" prefHeight="455.0" prefWidth="650.0" />
+      <Label layoutX="171.0" layoutY="73.0" text="Current Date: November 2, 2025">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
