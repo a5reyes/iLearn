@@ -6,11 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<<<<<<< HEAD
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iLearn.AppController">
-=======
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iLearn.AppController">
->>>>>>> 62125c3f0a3c289867f915567fe57db484d49520
    <children>
       <Label layoutX="265.0" layoutY="14.0" text="Classes">
          <font>
@@ -18,9 +14,10 @@
          </font>
       </Label>
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
-      <ListView layoutX="32.0" layoutY="136.0" prefHeight="441.0" prefWidth="585.0" />
-      <Button layoutX="116.0" layoutY="78.0" mnemonicParsing="false" text="Assignments" />
+      <ListView fx:id="currClassListView" layoutX="32.0" layoutY="136.0" prefHeight="441.0" prefWidth="585.0" />
+      <Button layoutX="143.0" layoutY="78.0" mnemonicParsing="false" text="Assignments" />
       <Button layoutX="288.0" layoutY="78.0" mnemonicParsing="false" text="Roster" />
       <Button layoutX="436.0" layoutY="78.0" mnemonicParsing="false" text="Gradebook" />
+      <Button layoutX="44.0" layoutY="78.0" mnemonicParsing="false" onAction="#currClassToClassTab" text="Info" />
    </children>
 </AnchorPane>

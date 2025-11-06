@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -21,15 +22,22 @@ import com.example.User;
 
 public class AppController extends Application {
     private static User currentUser;
+    private static String currentClassroomInfo;
     private Stage stage;
     private Scene scene;
     private Parent root;
     private Connection connection = Main.connect();
     @FXML
     private ListView<String> classListView;
+    @FXML
+    private ListView<String> currClassListView;
 
     public static void setCurrentUser(User user) {
         currentUser = user;
+    }
+
+    public static void setCurrentClass(String currentClassInfo) {
+        currentClassroomInfo = currentClassInfo;
     }
     /**
      * Creates the GUI page, set its height/width and gives it a name
@@ -103,7 +111,7 @@ public class AppController extends Application {
             while (rs.next()) {
                 String name = rs.getString("class_name");
                 int id = rs.getInt("class_id");
-                classes.add(name + " (ID: " + id + ")");
+                classes.add(name + ", " + id);
 
             }
 
@@ -116,7 +124,37 @@ public class AppController extends Application {
     @FXML
     private void handleItemClick() throws IOException{
         String selectedItem = classListView.getSelectionModel().getSelectedItem();
+        setCurrentClass(selectedItem);
         System.out.println("Selected item: " + selectedItem);
+    }
+
+    @FXML
+    private void currClassToClassTab(){
+        List<String> classInfo = new ArrayList<>();
+        try {
+            String query = "SELECT class_name, class_id, discussions, teacher, meeting_time FROM classrooms WHERE class_name = ? OR class_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, currentClassroomInfo.split(", ")[0]);
+            stmt.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("class_name");
+                int id = rs.getInt("class_id");
+                String discussions = rs.getString("discussions");
+                String teacher = rs.getString("teacher");
+                String meetingTime = rs.getString("meeting_time");
+                classInfo.add(name);
+                classInfo.add(Integer.toString(id));
+                classInfo.add(discussions);
+                classInfo.add(teacher);
+                classInfo.add(meetingTime);
+                break;
+            }
+            currClassListView.getItems().addAll(classInfo);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
