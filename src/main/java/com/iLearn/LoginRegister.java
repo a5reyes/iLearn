@@ -3,13 +3,13 @@ import java.awt.*;
 import javax.swing.*;
 
 import com.example.User;
+import com.example.SetUser;
 import java.sql.*;
 import java.util.Random;
 
 public class LoginRegister extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
-    private User currUser;
     private boolean isTeacher = false;
     Connection connection = Main.connect();
 
@@ -57,11 +57,9 @@ public class LoginRegister extends JFrame {
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     User loginUser = new User(0, password, null, username, null);
                     loginUser.getFromDatabase(username, password, loginUser);
-                    if(currUser == null){
-                        Main.HomePage(loginUser);
-                    } else {
-                        Main.HomePage(currUser); 
-                    }
+                    SetUser currentUser = new SetUser();
+                    currentUser.setUser(loginUser);
+                    Main.HomePage(currentUser); 
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
                     cardLayout.show(mainPanel, "register");
@@ -127,7 +125,6 @@ public class LoginRegister extends JFrame {
                         Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
                         course.connectToDatabase(user);
                     }
-                    currUser = user;
                     JOptionPane.showMessageDialog(this, "Registered user: " + username);
                     cardLayout.show(mainPanel, "login");
                 }

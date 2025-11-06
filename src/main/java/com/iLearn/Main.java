@@ -3,15 +3,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.*;
-
+import com.example.SetUser;
 import com.example.User;
 
 public class Main{
-    public static void HomePage(User user){
-        //user object passed in; get it to main page somehow; 
-        //extend scenecontroller to mainpagecontroller; 
-        //then pass on the user object to mainpagecontroller somehow
-        System.out.println(user.getName());
+    public static void HomePage(SetUser currUser){
+        User user = currUser.getUser();
+        AppController.setCurrentUser(user);
         AppController.main(null);
     }
 
