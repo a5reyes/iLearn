@@ -1,4 +1,4 @@
 # iLearn
-###Richard Simison, Matthew Charette, Saurav Niroula, Albert Reyes, Charles Mcnamara 
+Richard Simison, Matthew Charette, Saurav Niroula, Albert Reyes, Charles Mcnamara 
 ### Scope:
 We hope to create an all in one solution for all digital classroom functions and integration. Allowing students and teachers to easily manage all of their academic needs digitally will save time that can be used for class planning, homework, studying, and other duties essential for the success of both teachers and students. By allowing teachers to quickly roll out assignments to students, give feedback, and submit grades through class management, students can more easily adapt their studies to the areas that need attention the most, and save time by not needing to wait to see each other in person. Integrated email messaging and calendar functions will make it easier for teachers and students to plan weeks ahead instead of days.
