@@ -4,8 +4,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.*;
 
+import com.ilearn.SetUser;
+import com.ilearn.User;
+
 public class Main{
-    public static void HomePage(User user){
+    public static void HomePage(SetUser currUser){
+        User user = currUser.getUser();
+        AppController.setCurrentUser(user);
         AppController.main(null);
     }
 

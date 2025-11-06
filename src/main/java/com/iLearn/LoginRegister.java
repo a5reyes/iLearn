@@ -2,14 +2,14 @@ package com.ilearn;
 import java.awt.*;
 import javax.swing.*;
 
+import com.ilearn.User;
+import com.ilearn.SetUser;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class LoginRegister extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
-    private User currUser;
     private boolean isTeacher = false;
     Connection connection = Main.connect();
 
@@ -55,7 +55,11 @@ public class LoginRegister extends JFrame {
                 if(isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
-                    Main.HomePage(currUser);
+                    User loginUser = new User(0, password, null, username, null);
+                    loginUser.getFromDatabase(username, password, loginUser);
+                    SetUser currentUser = new SetUser();
+                    currentUser.setUser(loginUser);
+                    Main.HomePage(currentUser); 
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
                     cardLayout.show(mainPanel, "register");
@@ -104,13 +108,12 @@ public class LoginRegister extends JFrame {
             int id = Math.abs(rand.nextInt() + 1);
             if (!username.equals("") && !password.equals("") && !classes.equals("")) {
                 if(isRegistered(username, password)){ 
-                    JOptionPane.showMessageDialog(this, "Already registered! Login successful!");
+                    JOptionPane.showMessageDialog(this, "Already registered! Login!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
-                    Main.HomePage(currUser);
+                    cardLayout.show(mainPanel, "login");
                 } else {
                     User user = new User(id, password, isTeacher, username, classes.split("[,;|\\s]+"));
                     user.connectToDatabase();
-                    
                     for(String enteredClass : classes.split("[,;|\\s]+")){
                         Integer classId = 0;
                         try {
@@ -119,11 +122,9 @@ public class LoginRegister extends JFrame {
                             classId = Math.abs(rand.nextInt() + 1);
                         }
                         String[] newDiscussion = {"Hello! Check syllabus"};
-                        Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari",
-                            newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
-                            course.connectToDatabase(user);
+                        Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
+                        course.connectToDatabase(user);
                     }
-                    currUser = user;
                     JOptionPane.showMessageDialog(this, "Registered user: " + username);
                     cardLayout.show(mainPanel, "login");
                 }

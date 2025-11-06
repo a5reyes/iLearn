@@ -1,7 +1,6 @@
 com/ilearn/Roster.class
+com/ilearn/SetUser.class
 com/ilearn/Calendar.class
-com/ilearn/MainPageController.class
-com/ilearn/SceneController.class
 com/ilearn/Gradebook.class
 module-info.class
 com/ilearn/LoginRegister.class

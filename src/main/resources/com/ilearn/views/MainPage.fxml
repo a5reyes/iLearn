@@ -5,19 +5,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.SceneController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
    <children>
       <HBox alignment="CENTER" layoutX="14.0" prefHeight="118.0" prefWidth="650.0">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#switchToClasses" text="Classes" />
+                  <Button mnemonicParsing="false" onAction="#switchToClassroom" text="Classroom" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#switchToCalender" text="Calender" />
+                  <Button mnemonicParsing="false" onAction="#switchToCalendar" text="Calendar" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
@@ -37,11 +38,12 @@
             <HBox prefHeight="100.0" prefWidth="200.0" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" text="INFO" />
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#loadUserClasses" prefHeight="81.0" prefWidth="123.0" text="Glance at Classes" />
                </children>
             </HBox>
          </children>
       </VBox>
-      <ListView fx:id="classListView" layoutX="125.0" layoutY="108.0" prefHeight="471.0" prefWidth="470.0" />
+      <ListView fx:id="mainPageListView" layoutX="146.0" layoutY="128.0" onMouseClicked="#handleItemClick" prefHeight="457.0" prefWidth="470.0" />
+      <Text layoutX="153.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Glance at classes, then click on a class" wrappingWidth="203.25845336914062" />
    </children>
 </AnchorPane>
