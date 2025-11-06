@@ -43,7 +43,7 @@
             </HBox>
          </children>
       </VBox>
-      <ListView fx:id="classListView" layoutX="146.0" layoutY="128.0" onMouseClicked="#handleItemClick" prefHeight="457.0" prefWidth="470.0" />
+      <ListView fx:id="mainPageListView" layoutX="146.0" layoutY="128.0" onMouseClicked="#handleItemClick" prefHeight="457.0" prefWidth="470.0" />
       <Text layoutX="153.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Glance at classes, then click on a class" wrappingWidth="203.25845336914062" />
    </children>
 </AnchorPane>

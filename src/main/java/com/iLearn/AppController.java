@@ -28,7 +28,7 @@ public class AppController extends Application {
     private Parent root;
     private Connection connection = Main.connect();
     @FXML
-    private ListView<String> classListView;
+    private ListView<String> mainPageListView;
     @FXML
     private ListView<String> currClassListView;
 
@@ -106,7 +106,7 @@ public class AppController extends Application {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, currentUser.getId());
             ResultSet rs = stmt.executeQuery();
-            classListView.getItems().clear();
+            mainPageListView.getItems().clear();
 
             while (rs.next()) {
                 String name = rs.getString("class_name");
@@ -115,7 +115,7 @@ public class AppController extends Application {
 
             }
 
-            classListView.getItems().addAll(classes);
+            mainPageListView.getItems().addAll(classes);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -123,7 +123,7 @@ public class AppController extends Application {
 
     @FXML
     private void handleItemClick() throws IOException{
-        String selectedItem = classListView.getSelectionModel().getSelectedItem();
+        String selectedItem = mainPageListView.getSelectionModel().getSelectedItem();
         setCurrentClass(selectedItem);
         System.out.println("Selected item: " + selectedItem);
     }
