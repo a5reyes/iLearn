@@ -98,11 +98,13 @@ public class AppController extends Application {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, currentUser.getId());
             ResultSet rs = stmt.executeQuery();
+            classListView.getItems().clear();
 
             while (rs.next()) {
                 String name = rs.getString("class_name");
                 int id = rs.getInt("class_id");
                 classes.add(name + " (ID: " + id + ")");
+
             }
 
             classListView.getItems().addAll(classes);
