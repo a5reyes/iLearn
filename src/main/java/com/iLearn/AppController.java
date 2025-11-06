@@ -111,6 +111,12 @@ public class AppController extends Application {
         }
     }
 
+    @FXML
+    private void handleItemClick() throws IOException{
+        String selectedItem = classListView.getSelectionModel().getSelectedItem();
+        System.out.println("Selected item: " + selectedItem);
+    }
+
     public static void main(String[] args) {
         launch();
     }

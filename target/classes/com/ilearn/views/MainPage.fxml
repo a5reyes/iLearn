@@ -42,6 +42,6 @@
             </HBox>
          </children>
       </VBox>
-      <ListView fx:id="classListView" layoutX="125.0" layoutY="108.0" prefHeight="471.0" prefWidth="470.0" />
+      <ListView fx:id="classListView" layoutX="125.0" layoutY="108.0" onMouseClicked="#handleItemClick" prefHeight="471.0" prefWidth="470.0" />
    </children>
 </AnchorPane>
