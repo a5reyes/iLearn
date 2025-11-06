@@ -55,8 +55,8 @@ public class AppController extends Application {
         stage.show();
     }
 
-    public void switchToClasses(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/ClassesPage.fxml"));
+    public void switchToClassroom(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Classroom.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -72,8 +72,8 @@ public class AppController extends Application {
         stage.show();
     }     
 
-    public void switchToCalender(ActionEvent event)throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Calender.fxml"));
+    public void switchToCalendar(ActionEvent event)throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Calendar.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
