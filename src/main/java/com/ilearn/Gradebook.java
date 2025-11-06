@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Gradebook extends Assignments {
+public class Gradebook extends Assignments {                                   
     //List of map for each assignment, with key=assignment, val=map of student, grade
     //ex. [{"Project1": {"Alyssa": 76}}, {"Project2": {"Jaden": 42}}]
     private List<Map<String, Map<String, Float>>> gradeBookList;
  
-	public Gradebook(List<Map<String, Map<String, Float>>> gradeBookList, List<String> assignments, String classroomName, int classroomId, String teacher, String[] discussions, String meetingTime) {
+	public Gradebook(List<Map<String, Map<String, Float>>> gradeBookList, List<String> assignments,
+        String classroomName, int classroomId, String teacher, String[] discussions, String meetingTime) {
         super(assignments, classroomName, classroomId, teacher, discussions, meetingTime);
         this.gradeBookList = gradeBookList;
     }

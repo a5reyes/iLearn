@@ -6,7 +6,8 @@ import com.ilearn.Classroom;
 public class Assignments extends Classroom {
     private List<String> assignments;
      
-	public Assignments(List<String> assignments, String classroomName, int classroomId, String teacher, String[] discussions, String meetingTime) {
+	public Assignments(List<String> assignments, String classroomName, int classroomId, String teacher,
+        String[] discussions, String meetingTime) {
         super(classroomName, classroomId, teacher, discussions, meetingTime);
         this.assignments = assignments;
     }

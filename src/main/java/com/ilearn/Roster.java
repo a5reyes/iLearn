@@ -6,7 +6,8 @@ import com.ilearn.Classroom;
 public class Roster extends Classroom {
     private List<String> roster;
 
-	public Roster(List<String> roster, String classroomName, int classroomId, String teacher, String[] discussions, String meetingTime) {
+	public Roster(List<String> roster, String classroomName, int classroomId, String teacher,
+        String[] discussions, String meetingTime) {
 		super(classroomName, classroomId, teacher, discussions, meetingTime);
         this.roster = roster;
 	}

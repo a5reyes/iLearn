@@ -119,8 +119,9 @@ public class LoginRegister extends JFrame {
                             classId = Math.abs(rand.nextInt() + 1);
                         }
                         String[] newDiscussion = {"Hello! Check syllabus"};
-                        Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
-                        course.connectToDatabase(user);
+                        Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari",
+                            newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
+                            course.connectToDatabase(user);
                     }
                     currUser = user;
                     JOptionPane.showMessageDialog(this, "Registered user: " + username);
