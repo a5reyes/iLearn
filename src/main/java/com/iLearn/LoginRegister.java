@@ -1,12 +1,6 @@
-package com.iLearn;
+package com.ilearn;
 import java.awt.*;
 import javax.swing.*;
-<<<<<<< HEAD
-
-import com.example.User;
-import com.example.SetUser;
-=======
->>>>>>> cross-platoform
 import java.sql.*;
 import java.util.Random;
 
