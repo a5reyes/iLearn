@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\saura\OneDrive\Documents\GitHub\iLearn\src\main\java\com\example\Assignments.java
 C:\Users\saura\OneDrive\Documents\GitHub\iLearn\src\main\java\com\example\User.java
 C:\Users\saura\OneDrive\Documents\GitHub\iLearn\src\main\java\com\iLearn\LoginRegister.java
@@ -11,3 +12,17 @@ C:\Users\saura\OneDrive\Documents\GitHub\iLearn\src\main\java\com\example\AppCon
 C:\Users\saura\OneDrive\Documents\GitHub\iLearn\src\main\java\com\example\Gradebook.java
 C:\Users\saura\OneDrive\Documents\GitHub\iLearn\src\main\java\com\example\Classroom.java
 C:\Users\saura\OneDrive\Documents\GitHub\iLearn\src\main\java\com\iLearn\Main.java
+=======
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/Calendar.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/module-info.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/Message.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/Assignments.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/LoginRegister.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/Classroom.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/Roster.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/AppController.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/User.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/Gradebook.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/Main.java
+/Users/richard/Documents/GitHub/iLearn/src/main/java/com/ilearn/SetUser.java
+>>>>>>> cross-platoform

@@ -1,8 +1,11 @@
-package com.example;
+package com.ilearn;
 import java.sql.*;
+<<<<<<< HEAD:src/main/java/com/example/User.java
 
 import com.iLearn.Main;
 
+=======
+>>>>>>> cross-platoform:src/main/java/com/ilearn/User.java
 public class User {
     private int id;
     private String password;

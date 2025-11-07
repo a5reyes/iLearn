@@ -1,12 +1,16 @@
-package com.example;
+package com.ilearn;
 import java.util.List;
 
+<<<<<<< HEAD:src/main/java/com/example/Roster.java
 import com.iLearn.Classroom;
 
+=======
+>>>>>>> cross-platoform:src/main/java/com/ilearn/Roster.java
 public class Roster extends Classroom {
     private List<String> roster;
 
-	public Roster(List<String> roster, String classroomName, int classroomId, String teacher, String[] discussions, String meetingTime) {
+	public Roster(List<String> roster, String classroomName, int classroomId, String teacher,
+        String[] discussions, String meetingTime) {
 		super(classroomName, classroomId, teacher, discussions, meetingTime);
         this.roster = roster;
 	}
