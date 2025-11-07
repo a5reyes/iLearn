@@ -1,9 +1,6 @@
 package com.ilearn;
 import java.awt.*;
 import javax.swing.*;
-
-import com.ilearn.User;
-import com.ilearn.SetUser;
 import java.sql.*;
 import java.util.Random;
 

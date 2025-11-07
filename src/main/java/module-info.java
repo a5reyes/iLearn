@@ -9,5 +9,4 @@ module app {
     
     opens com.ilearn to javafx.fxml;
     exports com.ilearn;
-    //exports com.example;
 }

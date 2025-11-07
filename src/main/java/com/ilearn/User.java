@@ -1,8 +1,5 @@
 package com.ilearn;
 import java.sql.*;
-
-import com.ilearn.Main;
-
 public class User {
     private int id;
     private String password;

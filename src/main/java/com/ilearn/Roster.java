@@ -1,8 +1,6 @@
 package com.ilearn;
 import java.util.List;
 
-import com.ilearn.Classroom;
-
 public class Roster extends Classroom {
     private List<String> roster;
 
