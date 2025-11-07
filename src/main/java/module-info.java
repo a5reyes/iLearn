@@ -7,6 +7,6 @@ module app {
     requires javafx.graphics;
     requires javafx.base;
     
-    opens com.example to javafx.fxml;
-    exports com.example;
+    opens com.ilearn to javafx.fxml;
+    exports com.ilearn;
 }
