@@ -106,7 +106,6 @@ public class LoginRegister extends JFrame {
             if (!username.equals("") && !password.equals("") && !classes.equals("")) {
                 if(isRegistered(username, password)){ 
                     JOptionPane.showMessageDialog(this, "Already registered! Login!");
-                    SwingUtilities.getWindowAncestor(panel).dispose();
                     cardLayout.show(mainPanel, "login");
                 } else {
                     User user = new User(id, password, isTeacher, username, classes.split("[,;|\\s]+"));
@@ -120,6 +119,10 @@ public class LoginRegister extends JFrame {
                         }
                         String[] newDiscussion = {"Hello! Check syllabus"};
                         Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
+                        Gradebook gradebook = new Gradebook(course);
+                        gradebook.connectToDatabase(user);
+                        Roster roster = new Roster(course);
+                        roster.connectToDatabase(user);
                         course.connectToDatabase(user);
                     }
                     JOptionPane.showMessageDialog(this, "Registered user: " + username);
