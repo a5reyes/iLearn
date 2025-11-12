@@ -19,15 +19,15 @@ import java.util.List;
 
 public class AppController extends Application {
     private static User currentUser;
-    private static String currentClassroomInfo;
+    private static String currentClassroomInfo; //string for classroom info displayed on main page
     private Stage stage;
     private Scene scene;
     private Parent root;
     private Connection connection = Main.connect();
     @FXML
-    private ListView<String> mainPageListView;
+    private ListView<String> mainPageListView; //list view element in main page
     @FXML
-    private ListView<String> currClassListView;
+    private ListView<String> currClassroomListView; //list view element in classroom page
 
     public static void setCurrentUser(User user) {
         currentUser = user;
@@ -52,6 +52,7 @@ public class AppController extends Application {
         stage.show();
     }
 
+    //back button in classroom page
     public void switchToClassroom(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Classroom.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -61,6 +62,7 @@ public class AppController extends Application {
 
     }
 
+    //back button in gradebook page
     public void switchToGradebook(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Gradebook.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -69,6 +71,7 @@ public class AppController extends Application {
         stage.show();
     }     
 
+    //back button in calendar page
     public void switchToCalendar(ActionEvent event)throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Calendar.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -77,7 +80,7 @@ public class AppController extends Application {
         stage.show();
     }
     
-
+    //back button in messages page
     public void switchToMessages(ActionEvent event)throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Messaging.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -86,7 +89,7 @@ public class AppController extends Application {
         stage.show();
     }
     
-
+    //back button in main page
     public void backToMain(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -95,6 +98,7 @@ public class AppController extends Application {
         stage.show();
     }
 
+    //from user info, get classrooms from classrooms database
     @FXML
     private void loadUserClasses() {
         List<String> classes = new ArrayList<>();
@@ -118,6 +122,8 @@ public class AppController extends Application {
         }
     }
 
+
+    //get selected/highlighted item in current Classroom ListView element
     @FXML
     private void handleItemClick() throws IOException{
         String selectedItem = mainPageListView.getSelectionModel().getSelectedItem();
@@ -125,6 +131,7 @@ public class AppController extends Application {
         System.out.println("Selected item: " + selectedItem);
     }
 
+    //get classroom info from sqlite db into the current Classroom ListView element
     @FXML
     private void currClassToClassTab(){
         List<String> classInfo = new ArrayList<>();
@@ -148,11 +155,34 @@ public class AppController extends Application {
                 classInfo.add(meetingTime);
                 break;
             }
-            currClassListView.getItems().addAll(classInfo);
+            currClassroomListView.getItems().addAll(classInfo);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    //get roster info from sqlite db into the current Classroom ListView element
+    @FXML
+    private void currRosterToClassTab(){
+        List<String> rosterArr = new ArrayList<>();
+        try {
+            String query = "SELECT username FROM rosters WHERE class_name = ? AND class_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, currentClassroomInfo.split(", ")[0]);
+            stmt.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("username");
+                rosterArr.add(name);
+            }
+            currClassroomListView.getItems().addAll(rosterArr);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
 
     public static void main(String[] args) {
         launch();
