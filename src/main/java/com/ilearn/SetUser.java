@@ -1,4 +1,4 @@
-package com.ilearn;
+package com.iLearn;
 
 public class SetUser {
     private User currentUser;

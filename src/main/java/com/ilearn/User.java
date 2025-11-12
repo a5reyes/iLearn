@@ -1,4 +1,4 @@
-package com.ilearn;
+package com.iLearn;
 import java.sql.*;
 public class User {
     private int id;

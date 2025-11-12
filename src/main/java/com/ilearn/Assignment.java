@@ -1,4 +1,4 @@
-package com.ilearn;
+package com.iLearn;
 
 import java.util.Objects;
 

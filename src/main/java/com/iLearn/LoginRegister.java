@@ -1,4 +1,4 @@
-package com.ilearn;
+package com.iLearn;
 import java.awt.*;
 import javax.swing.*;
 import java.sql.*;

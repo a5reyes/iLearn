@@ -1,4 +1,4 @@
-package com.ilearn;
+package com.iLearn;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
