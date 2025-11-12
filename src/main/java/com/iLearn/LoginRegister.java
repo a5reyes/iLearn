@@ -135,16 +135,19 @@ public class LoginRegister extends JFrame {
         return panel;
     }
 
+    // Displays an error message via jframe
     protected void showMessage(String message) {
         JOptionPane.showMessageDialog(null, message);
     }
 
+    // Verifies that the user info is registered
     public void login(String username, String password) {
         if (!isRegistered(username, password)) {
             showMessage("Please register");
         }
     }
 
+    // Checks if a user is registered
     private boolean isRegistered(String username, String pw) {
         try(Statement statement = connection.createStatement()){
             String findUser = "SELECT * FROM users WHERE name = ? AND password = ?";

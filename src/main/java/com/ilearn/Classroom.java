@@ -81,6 +81,7 @@ public class Classroom {
         }
     }
 
+	// Fetches and inserts classroom data depending on the presence of exisitng data
 	public void connectToDatabase(User user){
 		try(Statement statement = connection.createStatement()){
 			String checkIfInClassroom = "SELECT * FROM classrooms WHERE user_id = ? AND class_id = ? AND class_name = ?";

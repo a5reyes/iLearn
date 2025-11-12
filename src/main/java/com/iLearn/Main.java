@@ -11,6 +11,7 @@ public class Main{
         AppController.main(null);
     }
 
+    // Connects application to SQL database
     public static Connection connect() {
         Connection conn = null;
         try {

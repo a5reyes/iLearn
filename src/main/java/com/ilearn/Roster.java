@@ -53,6 +53,7 @@ public class Roster {
         }
 	}
 
+    // Fetches and inserts roster data depending on the presence of exisitng data
     public void connectToDatabase(User user){
 		try(Statement statement = connection.createStatement()){
             String checkIfInRoster = "SELECT * FROM rosters WHERE user_id = ? AND username = ? AND class_id = ? AND class_name = ?";
