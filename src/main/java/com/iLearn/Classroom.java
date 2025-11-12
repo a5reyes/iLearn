@@ -13,7 +13,7 @@ public class Classroom {
 	private String teacher;
 	private String[] discussions;
 	private String meetingTime;
-	ArrayList<Assignment> assignments = new ArrayList<>();
+	ArrayList<Assignment> assignments = new ArrayList<>(); 
 	Connection connection = Main.connect();
 	
 	public Classroom(String classroomName, int classroomId, String teacher, String[] discussions,  String meetingTime) {
