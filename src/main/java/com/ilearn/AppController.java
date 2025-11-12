@@ -27,7 +27,7 @@ public class AppController extends Application {
     @FXML
     private ListView<String> mainPageListView;
     @FXML
-    private ListView<String> currClassListView;
+    private ListView<String> currClassroomListView;
 
     public static void setCurrentUser(User user) {
         currentUser = user;
@@ -148,11 +148,33 @@ public class AppController extends Application {
                 classInfo.add(meetingTime);
                 break;
             }
-            currClassListView.getItems().addAll(classInfo);
+            currClassroomListView.getItems().addAll(classInfo);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void currRosterToClassTab(){
+        List<String> rosterArr = new ArrayList<>();
+        try {
+            String query = "SELECT username FROM rosters WHERE class_name = ? AND class_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, currentClassroomInfo.split(", ")[0]);
+            stmt.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("username");
+                rosterArr.add(name);
+            }
+            currClassroomListView.getItems().addAll(rosterArr);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
 
     public static void main(String[] args) {
         launch();
