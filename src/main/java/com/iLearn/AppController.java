@@ -6,15 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +29,8 @@ public class AppController extends Application {
     private ListView<String> currClassroomListView; //list view element in classroom page
     @FXML
     private ListView<String> currGradebookListView; //list view element in gradebook page
+    @FXML
+    private TextArea assignmentText;
     
     public static void setCurrentUser(User user) {
         currentUser = user;
@@ -116,11 +116,11 @@ public class AppController extends Application {
     }
 
     //----- Main Page -----
-    //from user info, get classrooms from classrooms database
+    //from user info, get classrooms from classrooms database - might use getclassroomsNames instead of sqlite
     @FXML
     private void loadUserClasses() {
         mainPageListView.getItems().clear();
-        List<String> userClassrooms = currentUser.viewClassrooms();
+        List<String> userClassrooms = currentUser.viewClassroomsNamesIds();
         mainPageListView.getItems().addAll(userClassrooms);
     }
 
@@ -158,6 +158,23 @@ public class AppController extends Application {
         currClassroomListView.getItems().clear();
         List<String> classroomGradebook = currentUser.viewClassroomGrades(currentClassroomInfo);
         currClassroomListView.getItems().addAll(classroomGradebook);
+    }
+    
+    //----- Classroom Page -----
+    @FXML
+    private void addAssignmentToClassTab(){
+        String assignment = assignmentText.getText();
+        String[] assignmentStuff = assignment.split(", ");
+        currentUser.addAssignment(currentClassroomInfo, assignmentStuff[0], assignmentStuff[1], Integer.parseInt(assignmentStuff[2]));
+        System.out.println("Assignment - " + assignmentStuff[0].toString() + " added");
+    }
+
+    //----- Classroom Page -----
+    @FXML
+    private void currAssignmentToClassTab(){
+        currClassroomListView.getItems().clear();
+        List<String> assignmentList = currentUser.getAssignments(currentClassroomInfo);
+        currClassroomListView.getItems().addAll(assignmentList);
     }
 
     //----- Gradebook Page -----
