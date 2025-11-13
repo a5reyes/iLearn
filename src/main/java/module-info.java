@@ -8,6 +8,7 @@ module app {
     requires javafx.base;
     requires java.naming;
     requires jakarta.activation;
+    requires jakarta.mail;    
     
     opens com.ilearn to javafx.fxml;
     exports com.ilearn;

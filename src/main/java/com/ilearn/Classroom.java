@@ -99,9 +99,12 @@ public class Classroom {
 					pstmtNewClassroom.setString(4, String.join(",", this.discussions));
 					pstmtNewClassroom.setString(5, this.teacher);
 					pstmtNewClassroom.setString(6, this.meetingTime);
-					/*String assignmentsString = "";
-					for(Assignment assignmentObj : this.assi)
-					pstmtNewClassroom.setString(7, this.assignments.toString());*/
+					StringBuilder sb = new StringBuilder();
+					for (Assignment assignmentObj : this.assignments) {
+						sb.append(assignmentObj.toString()).append(",");
+					}
+					String assignmentsString = sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "";
+					pstmtNewClassroom.setString(7, assignmentsString);
 					pstmtNewClassroom.executeUpdate();
                 }
             }
