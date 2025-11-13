@@ -11,6 +11,7 @@ public class Main{
         AppController.main(null);
     }
 
+    // Connects application to SQL database
     public static Connection connect() {
         Connection conn = null;
         try {
@@ -22,7 +23,6 @@ public class Main{
         } 
         return conn;
     }
-
 
     public static void main(String[] args) { 
         SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true));
