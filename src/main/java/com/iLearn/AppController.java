@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -28,7 +29,9 @@ public class AppController extends Application {
     private ListView<String> mainPageListView; //list view element in main page
     @FXML
     private ListView<String> currClassroomListView; //list view element in classroom page
-
+    @FXML
+    private ListView<String> currGradebookListView; //list view element in gradebook page
+    
     public static void setCurrentUser(User user) {
         currentUser = user;
     }
@@ -58,12 +61,19 @@ public class AppController extends Application {
 
     //back button in classroom page
     public void switchToClassroom(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Classroom.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
+        if(currentUser.getIsTeacher()){
+            Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/TeacherClassroom.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Classroom.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show(); 
+        }
     }
 
     //back button in gradebook page
@@ -73,6 +83,7 @@ public class AppController extends Application {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        currGradebookToGradebookTab();
     }     
 
     //back button in calendar page
@@ -84,6 +95,7 @@ public class AppController extends Application {
         stage.show();
     }
     
+    //----- Main Page -----
     //back button in messages page
     public void switchToMessages(ActionEvent event)throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Messaging.fxml"));
@@ -93,6 +105,7 @@ public class AppController extends Application {
         stage.show();
     }
     
+    //----- Main Page -----
     //back button in main page
     public void backToMain(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
@@ -102,6 +115,7 @@ public class AppController extends Application {
         stage.show();
     }
 
+    //----- Main Page -----
     //from user info, get classrooms from classrooms database
     @FXML
     private void loadUserClasses() {
@@ -123,7 +137,7 @@ public class AppController extends Application {
         }
     }
 
-
+    //----- Main Page -----
     //get selected/highlighted item in current Classroom ListView element
     @FXML
     private void handleItemClick() throws IOException{
@@ -132,6 +146,14 @@ public class AppController extends Application {
         System.out.println("Selected item: " + selectedItem);
     }
 
+    @FXML
+    private void teacherView() throws IOException{
+        String selectedItem = mainPageListView.getSelectionModel().getSelectedItem();
+        setCurrentClass(selectedItem);
+        System.out.println("Selected item: " + selectedItem);
+    }
+
+    //----- Classroom Page -----
     //get classroom info from sqlite db into the current Classroom ListView element
     @FXML
     private void currClassInfoToClassTab(){
@@ -162,6 +184,7 @@ public class AppController extends Application {
         }
     }
 
+    //----- Classroom Page -----
     //get roster info from sqlite db into the current Classroom ListView element
     @FXML
     private void currRosterToClassTab(){
@@ -183,6 +206,7 @@ public class AppController extends Application {
         }
     }
 
+    //----- Classroom Page -----
     //get gradebook info from sqlite db into the current Classroom ListView element
     @FXML
     private void currGradebookToClassTab(){
@@ -206,10 +230,34 @@ public class AppController extends Application {
             e.printStackTrace();
         }
     }
+
+    //----- Gradebook Page -----
+    //get gradebook info from sqlite db into the current Classroom ListView element
+    @FXML
+    private void currGradebookToGradebookTab(){
+        List<String> gradebookArr = new ArrayList<>();
+        try {
+            String query = "SELECT class_name, assignment, grade FROM gradebooks WHERE user_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, currentUser.getId());
+            stmt.setString(2, currentClassroomInfo.split(", ")[0]);
+            stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            ResultSet rs = stmt.executeQuery();
+            currGradebookListView.getItems().clear();
+            while (rs.next()) {
+                String name = rs.getString("class_name");
+                String assignment = rs.getString("assignment");
+                double grade = rs.getDouble("grade");
+                gradebookArr.add(name + ", " + assignment + ", " + String.valueOf(grade));
+            }
+            currGradebookListView.getItems().addAll(gradebookArr);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
     public static void main(String[] args) {
         launch();
     }
-
     
 }

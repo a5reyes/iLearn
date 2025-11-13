@@ -24,7 +24,6 @@ public class Main{
         return conn;
     }
 
-
     public static void main(String[] args) { 
         SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true));
     }
