@@ -119,22 +119,9 @@ public class AppController extends Application {
     //from user info, get classrooms from classrooms database
     @FXML
     private void loadUserClasses() {
-        List<String> classes = new ArrayList<>();
-        try {
-            String query = "SELECT class_name, class_id FROM classrooms WHERE user_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setInt(1, currentUser.getId());
-            ResultSet rs = stmt.executeQuery();
-            mainPageListView.getItems().clear();
-            while (rs.next()) {
-                String name = rs.getString("class_name");
-                int id = rs.getInt("class_id");
-                classes.add(name + ", " + id);
-            }
-            mainPageListView.getItems().addAll(classes);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        mainPageListView.getItems().clear();
+        List<String> userClassrooms = currentUser.viewClassrooms();
+        mainPageListView.getItems().addAll(userClassrooms);
     }
 
     //----- Main Page -----
@@ -146,112 +133,40 @@ public class AppController extends Application {
         System.out.println("Selected item: " + selectedItem);
     }
 
-    @FXML
-    private void teacherView() throws IOException{
-        String selectedItem = mainPageListView.getSelectionModel().getSelectedItem();
-        setCurrentClass(selectedItem);
-        System.out.println("Selected item: " + selectedItem);
-    }
-
     //----- Classroom Page -----
     //get classroom info from sqlite db into the current Classroom ListView element
     @FXML
     private void currClassInfoToClassTab(){
-        List<String> classInfo = new ArrayList<>();
-        try {
-            String query = "SELECT class_name, class_id, discussions, teacher, meeting_time FROM classrooms WHERE class_name = ? OR class_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, currentClassroomInfo.split(", ")[0]);
-            stmt.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
-            ResultSet rs = stmt.executeQuery();
-            currClassroomListView.getItems().clear();
-            while (rs.next()) {
-                String name = rs.getString("class_name");
-                int id = rs.getInt("class_id");
-                String discussions = rs.getString("discussions");
-                String teacher = rs.getString("teacher");
-                String meetingTime = rs.getString("meeting_time");
-                classInfo.add(name);
-                classInfo.add(Integer.toString(id));
-                classInfo.add(discussions);
-                classInfo.add(teacher);
-                classInfo.add(meetingTime);
-                break;
-            }
-            currClassroomListView.getItems().addAll(classInfo);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        currClassroomListView.getItems().clear();
+        List<String> classroomInfo = currentUser.viewClassroomInfo(currentClassroomInfo);
+        currClassroomListView.getItems().addAll(classroomInfo);
     }
 
     //----- Classroom Page -----
     //get roster info from sqlite db into the current Classroom ListView element
     @FXML
     private void currRosterToClassTab(){
-        List<String> rosterArr = new ArrayList<>();
-        try {
-            String query = "SELECT username FROM rosters WHERE class_name = ? AND class_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, currentClassroomInfo.split(", ")[0]);
-            stmt.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
-            ResultSet rs = stmt.executeQuery();
-            currClassroomListView.getItems().clear();
-            while (rs.next()) {
-                String name = rs.getString("username");
-                rosterArr.add(name);
-            }
-            currClassroomListView.getItems().addAll(rosterArr);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        currClassroomListView.getItems().clear();
+        List<String> classroomRoster = currentUser.viewClassroomRoster(currentClassroomInfo);
+        currClassroomListView.getItems().addAll(classroomRoster);
     }
 
     //----- Classroom Page -----
     //get gradebook info from sqlite db into the current Classroom ListView element
     @FXML
     private void currGradebookToClassTab(){
-        List<String> gradebookArr = new ArrayList<>();
-        try {
-            String query = "SELECT class_name, assignment, grade FROM gradebooks WHERE user_id = ? AND class_name = ? AND class_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setInt(1, currentUser.getId());
-            stmt.setString(2, currentClassroomInfo.split(", ")[0]);
-            stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
-            ResultSet rs = stmt.executeQuery();
-            currClassroomListView.getItems().clear();
-            while (rs.next()) {
-                String name = rs.getString("class_name");
-                String assignment = rs.getString("assignment");
-                double grade = rs.getDouble("grade");
-                gradebookArr.add(name + ", " + assignment + ", " + String.valueOf(grade));
-            }
-            currClassroomListView.getItems().addAll(gradebookArr);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        currClassroomListView.getItems().clear();
+        List<String> classroomGradebook = currentUser.viewClassroomGrades(currentClassroomInfo);
+        currClassroomListView.getItems().addAll(classroomGradebook);
     }
 
     //----- Gradebook Page -----
     //get total gradebook info from sqlite db into the current Gradebook ListView element
     @FXML
     private void currGradebookToGradebookTab(){
-        List<String> gradebookArr = new ArrayList<>();
-        try {
-            String query = "SELECT class_name, assignment, grade FROM gradebooks WHERE user_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setInt(1, currentUser.getId());
-            ResultSet rs = stmt.executeQuery();
-            currGradebookListView.getItems().clear();
-            while (rs.next()) {
-                String name = rs.getString("class_name");
-                String assignment = rs.getString("assignment");
-                double grade = rs.getDouble("grade");
-                gradebookArr.add(name + ", " + assignment + ", " + String.valueOf(grade));
-            }
-            currGradebookListView.getItems().addAll(gradebookArr);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        currGradebookListView.getItems().clear();
+        List<String> userGradebook = currentUser.viewGrades();
+        currGradebookListView.getItems().addAll(userGradebook);
     }
     
     public static void main(String[] args) {
