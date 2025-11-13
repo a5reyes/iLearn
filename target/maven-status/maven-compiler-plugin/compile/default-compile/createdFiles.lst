@@ -1,23 +1,12 @@
-<<<<<<< HEAD
-com\example\Roster.class
-com\example\MainPageController.class
-com\example\User.class
-module-info.class
-com\iLearn\Classroom.class
-com\example\Assignments.class
-com\example\Gradebook.class
-com\iLearn\LoginRegister.class
-=======
 com/ilearn/Roster.class
 com/ilearn/SetUser.class
 com/ilearn/Calendar.class
 com/ilearn/Gradebook.class
+com/ilearn/Assignment.class
 module-info.class
 com/ilearn/LoginRegister.class
 com/ilearn/Classroom.class
 com/ilearn/Message.class
-com/ilearn/Assignments.class
 com/ilearn/User.class
 com/ilearn/AppController.class
 com/ilearn/Main.class
->>>>>>> cross-platoform
