@@ -232,7 +232,7 @@ public class AppController extends Application {
     }
 
     //----- Gradebook Page -----
-    //get gradebook info from sqlite db into the current Classroom ListView element
+    //get total gradebook info from sqlite db into the current Gradebook ListView element
     @FXML
     private void currGradebookToGradebookTab(){
         List<String> gradebookArr = new ArrayList<>();
@@ -240,8 +240,6 @@ public class AppController extends Application {
             String query = "SELECT class_name, assignment, grade FROM gradebooks WHERE user_id = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, currentUser.getId());
-            stmt.setString(2, currentClassroomInfo.split(", ")[0]);
-            stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
             ResultSet rs = stmt.executeQuery();
             currGradebookListView.getItems().clear();
             while (rs.next()) {

@@ -15,5 +15,6 @@
       </Label>
       <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
       <ListView fx:id="currGradebookListView" layoutX="55.0" layoutY="100.0" prefHeight="459.0" prefWidth="545.0" />
+      <Button layoutX="114.0" layoutY="64.0" mnemonicParsing="false" onAction="#currGradebookToGradebookTab" text="View" />
    </children>
 </AnchorPane>
