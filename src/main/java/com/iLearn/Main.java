@@ -1,4 +1,4 @@
-package com.iLearn;
+package com.ilearn;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

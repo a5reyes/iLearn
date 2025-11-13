@@ -1,4 +1,4 @@
-package com.iLearn;
+package com.ilearn;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,6 +81,7 @@ public class Gradebook {
         }  
     }
 
+    // Fetches and inserts gradebook data depending on the presence of exisitng data
     public void connectToDatabase(User user){
 		try(Statement statement = connection.createStatement()){
             String checkIfInGradebook = "SELECT * FROM gradebooks WHERE user_id = ? AND class_id = ? AND class_name = ?";

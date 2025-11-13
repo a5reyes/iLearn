@@ -1,4 +1,4 @@
-package com.iLearn;
+package com.ilearn;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ public class Classroom {
 	private String teacher;
 	private String[] discussions;
 	private String meetingTime;
-	ArrayList<Assignment> assignments = new ArrayList<>();
+	ArrayList<Assignment> assignments = new ArrayList<>(); 
 	Connection connection = Main.connect();
 	
 	public Classroom(String classroomName, int classroomId, String teacher, String[] discussions,  String meetingTime) {
@@ -81,6 +81,7 @@ public class Classroom {
         }
     }
 
+	// Fetches and inserts classroom data depending on the presence of exisitng data
 	public void connectToDatabase(User user){
 		try(Statement statement = connection.createStatement()){
 			String checkIfInClassroom = "SELECT * FROM classrooms WHERE user_id = ? AND class_id = ? AND class_name = ?";

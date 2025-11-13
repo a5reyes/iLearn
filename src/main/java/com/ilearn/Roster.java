@@ -1,4 +1,4 @@
-package com.iLearn;
+package com.ilearn;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,6 +53,7 @@ public class Roster {
         }
 	}
 
+    // Fetches and inserts roster data depending on the presence of exisitng data
     public void connectToDatabase(User user){
 		try(Statement statement = connection.createStatement()){
             String checkIfInRoster = "SELECT * FROM rosters WHERE user_id = ? AND username = ? AND class_id = ? AND class_name = ?";
