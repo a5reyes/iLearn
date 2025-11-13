@@ -1,7 +1,7 @@
 package com.example;
 import org.junit.jupiter.api.Test;
 
-import com.iLearn.LoginRegister;
+import com.ilearn.LoginRegister;
 
 import static org.junit.jupiter.api.Assertions.*;
 
