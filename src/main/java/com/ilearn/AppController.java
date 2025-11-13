@@ -185,7 +185,6 @@ public class AppController extends Application {
     public static void main(String[] args) {
         launch();
     }
-<<<<<<< HEAD
 
 
 
@@ -345,7 +344,5 @@ public class AppController extends Application {
     }
     
 
-=======
->>>>>>> d1c8b9957cea2797d97bd56ac1e9b0f666d64252
     
 }
