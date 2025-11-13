@@ -9,6 +9,6 @@ module app {
     requires java.naming;
     requires jakarta.activation;
     
-    opens com.ilearn to javafx.fxml;
-    exports com.ilearn;
+    opens com.iLearn to javafx.fxml;
+    exports com.iLearn;
 }
