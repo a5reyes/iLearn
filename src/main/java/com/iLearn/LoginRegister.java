@@ -54,6 +54,7 @@ public class LoginRegister extends JFrame {
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     User loginUser = new User(0, password, null, username, null);
                     loginUser.getFromDatabase(username, password, loginUser);
+                    loginUser.setClassrooms();
                     SetUser currentUser = new SetUser();
                     currentUser.setUser(loginUser);
                     Main.HomePage(currentUser); 

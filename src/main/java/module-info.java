@@ -6,7 +6,10 @@ module app {
     requires org.xerial.sqlitejdbc;
     requires javafx.graphics;
     requires javafx.base;
+    requires java.naming;
+    requires jakarta.activation;
+    requires jakarta.mail;    
     
-    opens com.iLearn to javafx.fxml;
-    exports com.iLearn;
+    opens com.ilearn to javafx.fxml;
+    exports com.ilearn;
 }

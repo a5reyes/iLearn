@@ -1,4 +1,5 @@
 package com.ilearn;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,8 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -20,76 +21,66 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
-public class AppController extends Application {
+public class AppController extends Application implements Initializable {
+
     private static User currentUser;
-    private static String currentClassroomInfo; //string for classroom info displayed on main page
+    private static String currentClassroomInfo;
     private Stage stage;
     private Scene scene;
     private Parent root;
     private Connection connection = Main.connect();
-    @FXML
-    private ListView<String> mainPageListView; //list view element in main page
-    @FXML
-    private ListView<String> currClassroomListView; //list view element in classroom page
-    @FXML
-    private ListView<String> currGradebookListView; //list view element in gradebook page
-    
-    public static void setCurrentUser(User user) {
-        currentUser = user;
-    }
 
-    public static void setCurrentClass(String currentClassInfo) {
-        currentClassroomInfo = currentClassInfo;
-    }
-    /**
-     * Creates the GUI page, set its height/width and gives it a name
-     * @param stage - the area in which the GUI is created
-     * @throws IOException watches to make sure no exception gives an error
-     */
+    
+    @FXML private ListView<String> mainPageListView;
+    @FXML private ListView<String> currClassroomListView;
+    @FXML private ListView<String> currGradebookListView;
+    @FXML private TextArea assignmentText;
+
+    
+    private ZonedDateTime dateFocus;
+    private ZonedDateTime today;
+
+    @FXML private Text year;
+    @FXML private Text month;
+    @FXML private FlowPane calendar;
+
+    
+    public static void setCurrentUser(User user) { currentUser = user; }
+    public static void setCurrentClass(String currentClassInfo) { currentClassroomInfo = currentClassInfo; }
+
+    
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
-        System.out.println("FXML URL: " + getClass().getResource("/com/ilearn/views/MainPage.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 650, 600);
-        if(currentUser.getIsTeacher()){
+
+        if (currentUser.getIsTeacher())
             stage.setTitle("iLearn - Teacher View");
-        } else {
+        else
             stage.setTitle("iLearn - Student View");
-        }
+
         stage.setScene(scene);
         stage.show();
     }
 
-    //back button in classroom page
+    // ---------- Scene Switching ----------
     public void switchToClassroom(ActionEvent event) throws IOException {
-        if(currentUser.getIsTeacher()){
-            Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/TeacherClassroom.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } else {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Classroom.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show(); 
-        }
+        String target = currentUser.getIsTeacher()
+                ? "/com/ilearn/views/TeacherClassroom.fxml"
+                : "/com/ilearn/views/Classroom.fxml";
+
+        Parent root = FXMLLoader.load(getClass().getResource(target));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
-    //back button in gradebook page
     public void switchToGradebook(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Gradebook.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -97,255 +88,246 @@ public class AppController extends Application {
         stage.setScene(scene);
         stage.show();
         currGradebookToGradebookTab();
-    }     
+    }
 
-    //back button in calendar page
-    public void switchToCalendar(ActionEvent event)throws IOException{
+    public void switchToCalendar(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Calendar.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-    
-    //----- Main Page -----
-    //back button in messages page
-    public void switchToMessages(ActionEvent event)throws IOException{
+
+    public void switchToMessages(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Messaging.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-    
-    //----- Main Page -----
-    //back button in main page
-    public void backToMain(ActionEvent event) throws IOException{
+
+    public void backToMain(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
 
-    //----- Main Page -----
-    //from user info, get classrooms from classrooms database
-    @FXML
-    private void loadUserClasses() {
+    // ---------- Main Page ----------
+    @FXML private void loadUserClasses() {
         mainPageListView.getItems().clear();
-        List<String> userClassrooms = currentUser.viewClassrooms();
-        mainPageListView.getItems().addAll(userClassrooms);
+        mainPageListView.getItems().addAll(currentUser.viewClassroomsNamesIds());
     }
 
-    //----- Main Page -----
-    //get selected/highlighted item in current Classroom ListView element
-    @FXML
-    private void handleItemClick() throws IOException{
+    @FXML private void handleItemClick() {
         String selectedItem = mainPageListView.getSelectionModel().getSelectedItem();
         setCurrentClass(selectedItem);
         System.out.println("Selected item: " + selectedItem);
     }
 
-    //----- Classroom Page -----
-    //get classroom info from sqlite db into the current Classroom ListView element
-    @FXML
-    private void currClassInfoToClassTab(){
+    // ---------- Classroom Page ----------
+    @FXML private void currClassInfoToClassTab() {
         currClassroomListView.getItems().clear();
-        List<String> classroomInfo = currentUser.viewClassroomInfo(currentClassroomInfo);
-        currClassroomListView.getItems().addAll(classroomInfo);
+        currClassroomListView.getItems().addAll(
+                currentUser.viewClassroomInfo(currentClassroomInfo)
+        );
     }
 
-    //----- Classroom Page -----
-    //get roster info from sqlite db into the current Classroom ListView element
-    @FXML
-    private void currRosterToClassTab(){
+    @FXML private void currRosterToClassTab() {
         currClassroomListView.getItems().clear();
-        List<String> classroomRoster = currentUser.viewClassroomRoster(currentClassroomInfo);
-        currClassroomListView.getItems().addAll(classroomRoster);
+        currClassroomListView.getItems().addAll(
+                currentUser.viewClassroomRoster(currentClassroomInfo)
+        );
     }
 
-    //----- Classroom Page -----
-    //get gradebook info from sqlite db into the current Classroom ListView element
-    @FXML
-    private void currGradebookToClassTab(){
+    @FXML private void currGradebookToClassTab() {
         currClassroomListView.getItems().clear();
-        List<String> classroomGradebook = currentUser.viewClassroomGrades(currentClassroomInfo);
-        currClassroomListView.getItems().addAll(classroomGradebook);
+        currClassroomListView.getItems().addAll(
+                currentUser.viewClassroomGrades(currentClassroomInfo)
+        );
     }
 
-    //----- Gradebook Page -----
-    //get total gradebook info from sqlite db into the current Gradebook ListView element
-    @FXML
-    private void currGradebookToGradebookTab(){
+    @FXML private void addAssignmentToClassTab() {
+        String assignment = assignmentText.getText();
+        String[] parts = assignment.split(", ");
+        currentUser.addAssignment(
+                currentClassroomInfo,
+                parts[0],
+                parts[1],
+                Integer.parseInt(parts[2])
+        );
+        System.out.println("Assignment added: " + parts[0]);
+    }
+
+    @FXML private void currAssignmentToClassTab() {
+        currClassroomListView.getItems().clear();
+        currClassroomListView.getItems().addAll(
+                currentUser.getAssignments(currentClassroomInfo)
+        );
+    }
+
+    // ---------- Gradebook ----------
+    @FXML private void currGradebookToGradebookTab() {
         currGradebookListView.getItems().clear();
-        List<String> userGradebook = currentUser.viewGrades();
-        currGradebookListView.getItems().addAll(userGradebook);
+        currGradebookListView.getItems().addAll(
+                currentUser.viewGrades()
+        );
     }
-    
-    public static void main(String[] args) {
-        launch();
-    }
-<<<<<<< HEAD
 
+    // ========= CALENDAR SECTION ========= //
 
-
-
-    ///////////////////////////////Caledner Section///////////////////////////////
-    public class CalenderController implements Initializable{
-
-        ZonedDateTime dateFocus;
-        ZonedDateTime today;
-
-        @FXML
-        private Text year;
-
-        @FXML
-        private Text month;
-
-        @FXML 
-        private FlowPane calendar;
-        
-
-        @Overide
-        public void initialize(URL url, ResourceBundle resourceBundle){
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Only initialize calendar if this controller was loaded by Calendar.fxml
+        if (calendar != null && year != null && month != null) {
             dateFocus = ZonedDateTime.now();
             today = ZonedDateTime.now();
             drawCalendar();
-
         }
-           @FXML
-    void backOneMonth(ActionEvent event) {
+    }
+
+    @FXML
+    private void backOneMonth(ActionEvent event) {
         dateFocus = dateFocus.minusMonths(1);
-        calendar.getChildren().clear();
         drawCalendar();
     }
 
     @FXML
-    void forwardOneMonth(ActionEvent event) {
+    private void forwardOneMonth(ActionEvent event) {
         dateFocus = dateFocus.plusMonths(1);
-        calendar.getChildren().clear();
         drawCalendar();
     }
 
-        private void drawCalendar(){
-            year.setText(String.valueOf(dateFocus.getYear()));
-            month.setText(String.valueOf(dateFocus.getMonth()));
+    private void drawCalendar() {
+        year.setText(String.valueOf(dateFocus.getYear()));
+        month.setText(String.valueOf(dateFocus.getMonth()));
 
-            double calendarWidth = calendar.getPrefWidth();
-            double calendarHeight = calendar.getPrefHeight();
-            double strokeWidth = 1;
-            double spacingH = calendar.getHgap();
-            double spacingV = calendar.getVgap();
+        double width = calendar.getPrefWidth();
+        double height = calendar.getPrefHeight();
+        double strokeWidth = 1;
+        double spaceH = calendar.getHgap();
+        double spaceV = calendar.getVgap();
 
-            Map<Integer, List<CalendarActivity>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
+        Map<Integer, List<CalendarActivity>> activityMap =
+                getCalendarActivitiesMonth(dateFocus);
 
-               int monthMaxDate = dateFocus.getMonth().maxLength();
-        //Check for leap year
-        if(dateFocus.getYear() % 4 != 0 && monthMaxDate == 29){
-            monthMaxDate = 28;
-        }
-        int dateOffset = ZonedDateTime.of(dateFocus.getYear(), dateFocus.getMonthValue(), 1,0,0,0,0,dateFocus.getZone()).getDayOfWeek().getValue();
+        
+        LocalDate firstOfMonth = dateFocus.toLocalDate().withDayOfMonth(1);
+        int monthLength = firstOfMonth.lengthOfMonth();
 
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                StackPane stackPane = new StackPane();
+        
+        int dowValue = firstOfMonth.getDayOfWeek().getValue();
 
-                Rectangle rectangle = new Rectangle();
-                rectangle.setFill(Color.TRANSPARENT);
-                rectangle.setStroke(Color.BLACK);
-                rectangle.setStrokeWidth(strokeWidth);
-                double rectangleWidth =(calendarWidth/7) - strokeWidth - spacingH;
-                rectangle.setWidth(rectangleWidth);
-                double rectangleHeight = (calendarHeight/6) - strokeWidth - spacingV;
-                rectangle.setHeight(rectangleHeight);
-                stackPane.getChildren().add(rectangle);
+        
+        int offset = dowValue % 7; 
 
-                int calculatedDate = (j+1)+(7*i);
-                if(calculatedDate > dateOffset){
-                    int currentDate = calculatedDate - dateOffset;
-                    if(currentDate <= monthMaxDate){
-                        Text date = new Text(String.valueOf(currentDate));
-                        double textTranslationY = - (rectangleHeight / 2) * 0.75;
-                        date.setTranslateY(textTranslationY);
-                        stackPane.getChildren().add(date);
+        calendar.getChildren().clear();
+        int day = 1;
 
-                        List<CalendarActivity> calendarActivities = calendarActivityMap.get(currentDate);
-                        if(calendarActivities != null){
-                            createCalendarActivity(calendarActivities, rectangleHeight, rectangleWidth, stackPane);
-                        }
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 7; col++) {
+                StackPane cell = new StackPane();
+
+                Rectangle rect = new Rectangle();
+                rect.setFill(Color.TRANSPARENT);
+                rect.setStroke(Color.BLACK);
+                rect.setStrokeWidth(strokeWidth);
+
+                double cellW = (width / 7) - strokeWidth - spaceH;
+                double cellH = (height / 6) - strokeWidth - spaceV;
+                rect.setWidth(cellW);
+                rect.setHeight(cellH);
+
+                cell.getChildren().add(rect);
+
+                int cellIndex = col + row * 7;
+
+                if (cellIndex >= offset && day <= monthLength) {
+                    Text dateText = new Text(String.valueOf(day));
+                    dateText.setTranslateY(-(cellH / 2) * 0.75);
+                    cell.getChildren().add(dateText);
+
+                    List<CalendarActivity> activities = activityMap.get(day);
+                    if (activities != null) {
+                        createCalendarActivity(activities, cellH, cellW, cell);
                     }
-                    if(today.getYear() == dateFocus.getYear() && today.getMonth() == dateFocus.getMonth() && today.getDayOfMonth() == currentDate){
-                        rectangle.setStroke(Color.BLUE);
+
+                    if (today.getYear() == dateFocus.getYear()
+                            && today.getMonth() == dateFocus.getMonth()
+                            && today.getDayOfMonth() == day) {
+                        rect.setStroke(Color.BLUE);
                     }
+
+                    day++;
                 }
-                calendar.getChildren().add(stackPane);
+
+                calendar.getChildren().add(cell);
             }
         }
     }
 
-    private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
-        VBox calendarActivityBox = new VBox();
-        for (int k = 0; k < calendarActivities.size(); k++) {
-            if(k >= 2) {
-                Text moreActivities = new Text("...");
-                calendarActivityBox.getChildren().add(moreActivities);
-                moreActivities.setOnMouseClicked(mouseEvent -> {
-                    //On ... click print all activities for given date
-                    System.out.println(calendarActivities);
-                });
+    private void createCalendarActivity(List<CalendarActivity> activities,
+                                        double cellH, double cellW,
+                                        StackPane cell) {
+        VBox box = new VBox();
+
+        for (int i = 0; i < activities.size(); i++) {
+            if (i >= 2) {
+                Text more = new Text("...");
+                box.getChildren().add(more);
+                more.setOnMouseClicked(e -> System.out.println(activities));
                 break;
             }
-            Text text = new Text(calendarActivities.get(k).getUserName() + ", " + calendarActivities.get(k).getDate().toLocalTime());
-            calendarActivityBox.getChildren().add(text);
-            text.setOnMouseClicked(mouseEvent -> {
-                //On Text clicked
-                System.out.println(text.getText());
-            });
+
+            CalendarActivity activity = activities.get(i);
+            Text text = new Text(activity.getUserName() + ", " +
+                    activity.getDate().toLocalTime());
+
+            box.getChildren().add(text);
+            text.setOnMouseClicked(e -> System.out.println(text.getText()));
         }
-        calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
-        calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
-        calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
-        calendarActivityBox.setStyle("-fx-background-color:GRAY");
-        stackPane.getChildren().add(calendarActivityBox);
+
+        box.setTranslateY((cellH / 2) * 0.20);
+        box.setMaxWidth(cellW * 0.8);
+        box.setMaxHeight(cellH * 0.65);
+        box.setStyle("-fx-background-color:GRAY");
+
+        cell.getChildren().add(box);
     }
 
-    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
-        Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
+    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> activities) {
+        Map<Integer, List<CalendarActivity>> map = new HashMap<>();
 
-        for (CalendarActivity activity: calendarActivities) {
-            int activityDate = activity.getDate().getDayOfMonth();
-            if(!calendarActivityMap.containsKey(activityDate)){
-                calendarActivityMap.put(activityDate, List.of(activity));
-            } else {
-                List<CalendarActivity> OldListByDate = calendarActivityMap.get(activityDate);
-
-                List<CalendarActivity> newList = new ArrayList<>(OldListByDate);
-                newList.add(activity);
-                calendarActivityMap.put(activityDate, newList);
-            }
+        for (CalendarActivity activity : activities) {
+            int date = activity.getDate().getDayOfMonth();
+            map.computeIfAbsent(date, k -> new ArrayList<>()).add(activity);
         }
-        return  calendarActivityMap;
+
+        return map;
     }
 
-    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
-        List<CalendarActivity> calendarActivities = new ArrayList<>();
-        int year = dateFocus.getYear();
-        int month = dateFocus.getMonth().getValue();
+    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime date) {
+        List<CalendarActivity> list = new ArrayList<>();
+        int y = date.getYear();
+        int m = date.getMonthValue();
+        Random r = new Random();
 
-        Random random = new Random();
         for (int i = 0; i < 50; i++) {
-            ZonedDateTime time = ZonedDateTime.of(year, month, random.nextInt(27)+1, 16,0,0,0,dateFocus.getZone());
-            calendarActivities.add(new CalendarActivity(time , "user", 1234533));
+            ZonedDateTime t = ZonedDateTime.of(
+                    y, m, r.nextInt(27) + 1,
+                    16, 0, 0, 0,
+                    date.getZone()
+            );
+            list.add(new CalendarActivity(t, "user", 1234533));
         }
 
-        return createCalendarMap(calendarActivities);
+        return createCalendarMap(list);
     }
-        
-        
-    }
-    
 
-=======
->>>>>>> d1c8b9957cea2797d97bd56ac1e9b0f666d64252
-    
+    // ---------- Main ----------
+    public static void main(String[] args) {
+        launch();
+    }
+
 }

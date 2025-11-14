@@ -7,15 +7,16 @@ public class User {
     private String password;
     private Boolean isTeacher;
     private String name;
-    private String[] classrooms;
+    private String[] classroomsNames;
+    ArrayList<Classroom> classroomArr = new ArrayList<>(); 
     Connection connection = Main.connect();
 
-    public User(int id, String password, Boolean isTeacher, String name, String[] classrooms) {
+    public User(int id, String password, Boolean isTeacher, String name, String[] classroomsNames) {
         this.id = id;
         this.password = password;
         this.isTeacher = isTeacher;
         this.name = name;
-        this.classrooms = classrooms;
+        this.classroomsNames = classroomsNames;
     }
 
     public int getId() {
@@ -46,18 +47,43 @@ public class User {
         this.isTeacher = true;
     }
 
-    //user's classrooms setter
-    public void setClassrooms(String[] classrooms) {
-        this.classrooms = classrooms;
-    }
-    
-    //user's classrooms getter
-    public String getClassrooms() {
-        return String.join(", ", this.classrooms);
+    //classroom objects are only created when a user is registered so if user logins, 
+    //here we get their classrooms from classrooms table in sqlite db and then create a classroom object for each
+    //then add to classroomsArr
+    public void setClassrooms(){
+        for(String className : this.classroomsNames){
+            try {
+                String query = "SELECT * FROM classrooms WHERE class_name = ?";
+                PreparedStatement stmt = connection.prepareStatement(query);
+                stmt.setString(1, className);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    String name = rs.getString("class_name");
+                    int id = rs.getInt("class_id");
+                    String teacher = rs.getString("teacher");
+                    String discussions = rs.getString("discussions");
+                    String meetingTime = rs.getString("meeting_time");
+                    Classroom course = new Classroom(name, id, teacher, discussions.split(","), meetingTime);
+                    classroomArr.add(course);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    //view user's classrooms from sqlite db
-    public List<String> viewClassrooms(){
+    //user's classrooms names setter
+    public void setClassroomsNames(String[] classroomsNames) {
+        this.classroomsNames = classroomsNames;
+    }
+    
+    //user's classrooms names getter
+    public String getClassroomsNames() {
+        return String.join(", ", this.classroomsNames);
+    }
+
+    //view user's classrooms names & ids from sqlite db
+    public List<String> viewClassroomsNamesIds(){
         List<String> classes = new ArrayList<>();
         try {
             String query = "SELECT class_name, class_id FROM classrooms WHERE user_id = ?";
@@ -73,6 +99,47 @@ public class User {
             e.printStackTrace();
         }
         return classes;
+    }
+    
+    public List<String> getAssignments(String currentClassroomName){
+        //ArrayList<Assignment> assignmentList = new ArrayList<>();
+        List<String> assignmentNameList = new ArrayList<>();
+        //for(Classroom classroomObj: classroomArr){
+            //if(classroomObj.getClassroomName().equals(currentClassroomName)){
+                //assignmentList = classroomObj.getAssignments();
+        try {
+            String query = "SELECT assignments FROM classrooms WHERE class_name = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, currentClassroomName);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String assignmentName = rs.getString("assignments");
+                assignmentNameList.add(assignmentName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return assignmentNameList;
+            //}
+        //}
+    }
+
+    public void addAssignment(String currentClassroomName, String name, String description, int grade){
+        //for(Classroom classroomObj: classroomArr){
+            //if(classroomObj.getClassroomName().equals(currentClassroomName)){
+                //Assignment assignment = new Assignment(name, description, grade);
+                //classroomObj.addAssignment(assignment);
+        try(Statement statement = connection.createStatement()){
+            String insertNewAssignment = "UPDATE classrooms SET assignments = ? WHERE class_name = ?";
+            PreparedStatement pstmtNewAssignment = connection.prepareStatement(insertNewAssignment);
+            pstmtNewAssignment.setString(1, name);
+            pstmtNewAssignment.setString(2, currentClassroomName);
+            pstmtNewAssignment.executeUpdate();
+        } catch (SQLException er) {
+            er.printStackTrace(System.err);
+        }
+            //}
+        //}
     }
 
     public void submitAssignment() {
@@ -186,7 +253,7 @@ public class User {
             pstmtNewUser.setString(2, this.name);
             pstmtNewUser.setString(3, this.password);
             pstmtNewUser.setInt(4, this.isTeacher ? 1 : 0);
-            pstmtNewUser.setString(5, String.join(",", this.classrooms));
+            pstmtNewUser.setString(5, String.join(",", this.classroomsNames));
             pstmtNewUser.executeUpdate();
         } catch (SQLException er) {
             er.printStackTrace(System.err);
@@ -205,14 +272,14 @@ public class User {
             while (res.next()) {
                 Integer id = res.getInt("id");
                 Boolean isTeacherCheck = (res.getInt("isTeacher") == 1);
-                String classrooms = res.getString("classrooms");
+                String classroomName = res.getString("classrooms");
                 currUser.setId(id);
                 if(isTeacherCheck){
                     currUser.isTeacher();
                 } else {
                     currUser.isStudent();
                 }
-                currUser.setClassrooms(classrooms.split("[,;|\\s]+"));
+                currUser.setClassroomsNames(classroomName.split("[,;|\\s]+"));
             }
         } catch (SQLException er) {
             er.printStackTrace(System.err);
