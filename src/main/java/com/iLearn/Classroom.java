@@ -91,7 +91,7 @@ public class Classroom {
 			pstmtIfInClassroom.setString(3, this.classroomName);
             try (ResultSet rs = pstmtIfInClassroom.executeQuery()) {
                 if (!rs.next()) {
-                    String insertNewClassroom = "INSERT INTO classrooms (user_id, class_id, class_name, discussions, teacher, meeting_time, assignments) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    String insertNewClassroom = "INSERT INTO classrooms (user_id, class_id, class_name, discussions, teacher, meeting_time) VALUES (?, ?, ?, ?, ?, ?)";
 					PreparedStatement pstmtNewClassroom = connection.prepareStatement(insertNewClassroom);
 					pstmtNewClassroom.setInt(1, user.getId());
 					pstmtNewClassroom.setInt(2, this.classroomId);
@@ -99,12 +99,6 @@ public class Classroom {
 					pstmtNewClassroom.setString(4, String.join(",", this.discussions));
 					pstmtNewClassroom.setString(5, this.teacher);
 					pstmtNewClassroom.setString(6, this.meetingTime);
-					StringBuilder sb = new StringBuilder();
-					for (Assignment assignmentObj : this.assignments) {
-						sb.append(assignmentObj.toString()).append(",");
-					}
-					String assignmentsString = sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "";
-					pstmtNewClassroom.setString(7, assignmentsString);
 					pstmtNewClassroom.executeUpdate();
                 }
             }
