@@ -1,3 +1,4 @@
+//iLearn - Richard Simison, Matthew Charette, Saurav Niroula, Albert Reyes, Charles McNamara
 package com.ilearn;
 import java.sql.Connection;
 import java.sql.DriverManager;
