@@ -131,50 +131,35 @@ public class AppController extends Application implements Initializable {
     // ---------- Classroom Page ----------
     @FXML private void currClassInfoToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(
-                currentUser.viewClassroomInfo(currentClassroomInfo)
-        );
+        currClassroomListView.getItems().addAll(currentUser.viewClassroomInfo(currentClassroomInfo));
     }
 
     @FXML private void currRosterToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(
-                currentUser.viewClassroomRoster(currentClassroomInfo)
-        );
+        currClassroomListView.getItems().addAll(currentUser.viewClassroomRoster(currentClassroomInfo));
     }
 
     @FXML private void currGradebookToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(
-                currentUser.viewClassroomGrades(currentClassroomInfo)
-        );
+        currClassroomListView.getItems().addAll(currentUser.viewClassroomGrades(currentClassroomInfo));
     }
 
     @FXML private void addAssignmentToClassTab() {
         String assignment = assignmentText.getText();
         String[] parts = assignment.split(", ");
-        currentUser.addAssignment(
-                currentClassroomInfo,
-                parts[0],
-                parts[1],
-                Integer.parseInt(parts[2])
-        );
+        currentUser.addAssignment(currentClassroomInfo, parts[0], parts[1], Integer.parseInt(parts[2]));
         System.out.println("Assignment added: " + parts[0]);
     }
 
     @FXML private void currAssignmentToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(
-                currentUser.getAssignments(currentClassroomInfo)
-        );
+        currClassroomListView.getItems().addAll(currentUser.getAssignments(currentClassroomInfo));
     }
 
     // ---------- Gradebook ----------
     @FXML private void currGradebookToGradebookTab() {
         currGradebookListView.getItems().clear();
-        currGradebookListView.getItems().addAll(
-                currentUser.viewGrades()
-        );
+        currGradebookListView.getItems().addAll(currentUser.viewGrades());
     }
 
     // ========= CALENDAR SECTION ========= //
