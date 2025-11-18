@@ -23,6 +23,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.ilearn.dao.AssignmentDAO;
@@ -56,6 +57,7 @@ public class AppController extends Application implements Initializable {
     @FXML private TextArea assignmentDescription;
     @FXML private TextArea assignmentGrade;
     @FXML private TextArea assignmentStudent;
+    @FXML private DatePicker assignmentDatePicker;
     
     private ZonedDateTime dateFocus;
     private ZonedDateTime today;
@@ -200,7 +202,9 @@ public class AppController extends Application implements Initializable {
         String assignmentDescriptionStr = assignmentDescription.getText();
         String assignmentGradeStr = assignmentGrade.getText();
         String assignmentStudentStr = assignmentStudent.getText();
-        assignmentDAO.addAssignment(currentUser, currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr);
+        LocalDate assignmentDueDate = assignmentDatePicker.getValue();
+        String assignmentDueDateStr = assignmentDueDate.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+        assignmentDAO.addAssignment(currentUser, currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr, assignmentDueDateStr);
         System.out.println("Assignment added: " + assignmentNameStr);
     }
 

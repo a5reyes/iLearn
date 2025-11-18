@@ -13,13 +13,13 @@ import com.ilearn.User;
 
 public class AssignmentDAO {
     Connection connection = Main.connect();
-    public void addAssignment(User user, String currentClassroomInfo, String name, String description, double grade, String student){
+    public void addAssignment(User user, String currentClassroomInfo, String name, String description, double grade, String student, String dueDate){
         //for(Classroom classroomObj: classroomArr){
             //if(classroomObj.getClassroomName().equals(currentClassroomName)){
                 //Assignment assignment = new Assignment(name, description, grade);
                 //classroomObj.addAssignment(assignment);
         try(Statement statement = connection.createStatement()){
-            String insertNewAssignment = "INSERT INTO assignments (user_id, class_id, class_name, name, description, grade, student) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String insertNewAssignment = "INSERT INTO assignments (user_id, class_id, class_name, name, description, grade, student, due_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmtNewAssignment = connection.prepareStatement(insertNewAssignment);
             pstmtNewAssignment.setInt(1, user.getId());
             pstmtNewAssignment.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
@@ -28,6 +28,7 @@ public class AssignmentDAO {
             pstmtNewAssignment.setString(5, description);
             pstmtNewAssignment.setDouble(6, grade);
             pstmtNewAssignment.setString(7, student);
+            pstmtNewAssignment.setString(8, dueDate);
             pstmtNewAssignment.executeUpdate();
         } catch (SQLException er) {
             er.printStackTrace(System.err);
@@ -53,7 +54,8 @@ public class AssignmentDAO {
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 double grade = rs.getDouble("grade");
-                assignmentNameList.add(name + ", " + description + ", " + String.valueOf(grade));
+                String dueDateString = rs.getString("due_date");
+                assignmentNameList.add(name + ", " + description + ", " + String.valueOf(grade) + ", " + dueDateString);
             }
         } catch (SQLException e) {
             e.printStackTrace();
