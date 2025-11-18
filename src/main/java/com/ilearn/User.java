@@ -101,20 +101,24 @@ public class User {
         return classes;
     }
     
-    public List<String> getAssignments(String currentClassroomName){
+    public List<String> getAssignments(String currentClassroomInfo){
         //ArrayList<Assignment> assignmentList = new ArrayList<>();
         List<String> assignmentNameList = new ArrayList<>();
         //for(Classroom classroomObj: classroomArr){
             //if(classroomObj.getClassroomName().equals(currentClassroomName)){
                 //assignmentList = classroomObj.getAssignments();
         try {
-            String query = "SELECT assignments FROM classrooms WHERE class_name = ?";
+            String query = "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, currentClassroomName);
+            stmt.setString(1, this.name);
+            stmt.setString(2, currentClassroomInfo.split(", ")[0]);
+            stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String assignmentName = rs.getString("assignments");
-                assignmentNameList.add(assignmentName);
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                double grade = rs.getDouble("grade");
+                assignmentNameList.add(name + ", " + description + ", " + String.valueOf(grade));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,16 +128,21 @@ public class User {
         //}
     }
 
-    public void addAssignment(String currentClassroomName, String name, String description, int grade){
+    public void addAssignment(String currentClassroomInfo, String name, String description, double grade, String student){
         //for(Classroom classroomObj: classroomArr){
             //if(classroomObj.getClassroomName().equals(currentClassroomName)){
                 //Assignment assignment = new Assignment(name, description, grade);
                 //classroomObj.addAssignment(assignment);
         try(Statement statement = connection.createStatement()){
-            String insertNewAssignment = "UPDATE classrooms SET assignments = ? WHERE class_name = ?";
+            String insertNewAssignment = "INSERT INTO assignments (user_id, class_id, class_name, name, description, grade, student) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmtNewAssignment = connection.prepareStatement(insertNewAssignment);
-            pstmtNewAssignment.setString(1, name);
-            pstmtNewAssignment.setString(2, currentClassroomName);
+            pstmtNewAssignment.setInt(1, this.id);
+            pstmtNewAssignment.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            pstmtNewAssignment.setString(3, currentClassroomInfo.split(", ")[0]);
+            pstmtNewAssignment.setString(4, name);
+            pstmtNewAssignment.setString(5, description);
+            pstmtNewAssignment.setDouble(6, grade);
+            pstmtNewAssignment.setString(7, student);
             pstmtNewAssignment.executeUpdate();
         } catch (SQLException er) {
             er.printStackTrace(System.err);

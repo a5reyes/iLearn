@@ -40,7 +40,10 @@ public class AppController extends Application implements Initializable {
     @FXML private ListView<String> mainPageListView;
     @FXML private ListView<String> currClassroomListView;
     @FXML private ListView<String> currGradebookListView;
-    @FXML private TextArea assignmentText;
+    @FXML private TextArea assignmentName;
+    @FXML private TextArea assignmentDescription;
+    @FXML private TextArea assignmentGrade;
+    @FXML private TextArea assignmentStudent;
 
     
     private ZonedDateTime dateFocus;
@@ -60,7 +63,6 @@ public class AppController extends Application implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 650, 600);
-
         if (currentUser.getIsTeacher())
             stage.setTitle("iLearn - Teacher View");
         else
@@ -72,10 +74,7 @@ public class AppController extends Application implements Initializable {
 
     // ---------- Scene Switching ----------
     public void switchToClassroom(ActionEvent event) throws IOException {
-        String target = currentUser.getIsTeacher()
-                ? "/com/ilearn/views/TeacherClassroom.fxml"
-                : "/com/ilearn/views/Classroom.fxml";
-
+        String target = currentUser.getIsTeacher() ? "/com/ilearn/views/TeacherClassroom.fxml" : "/com/ilearn/views/Classroom.fxml";
         Parent root = FXMLLoader.load(getClass().getResource(target));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -145,10 +144,12 @@ public class AppController extends Application implements Initializable {
     }
 
     @FXML private void addAssignmentToClassTab() {
-        String assignment = assignmentText.getText();
-        String[] parts = assignment.split(", ");
-        currentUser.addAssignment(currentClassroomInfo, parts[0], parts[1], Integer.parseInt(parts[2]));
-        System.out.println("Assignment added: " + parts[0]);
+        String assignmentNameStr = assignmentName.getText();
+        String assignmentDescriptionStr = assignmentDescription.getText();
+        String assignmentGradeStr = assignmentGrade.getText();
+        String assignmentStudentStr = assignmentStudent.getText();
+        currentUser.addAssignment(currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr);
+        System.out.println("Assignment added: " + assignmentNameStr);
     }
 
     @FXML private void currAssignmentToClassTab() {
