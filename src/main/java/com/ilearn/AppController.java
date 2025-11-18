@@ -8,17 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,57 +33,101 @@ public class AppController extends Application implements Initializable {
     private Parent root;
     private Connection connection = Main.connect();
 
-    
+    // ---------- MESSAGING FXML ----------
+    @FXML private TextArea messageBody;
+    @FXML private TextField recipientField;
+
+    // ---------- MAIN PAGE FXML ----------
     @FXML private ListView<String> mainPageListView;
+
+    // ---------- CLASSROOM FXML ----------
     @FXML private ListView<String> currClassroomListView;
-    @FXML private ListView<String> currGradebookListView;
     @FXML private TextArea assignmentName;
     @FXML private TextArea assignmentDescription;
     @FXML private TextArea assignmentGrade;
     @FXML private TextArea assignmentStudent;
 
-    
-    private ZonedDateTime dateFocus;
-    private ZonedDateTime today;
+    // ---------- GRADEBOOK FXML ----------
+    @FXML private ListView<String> currGradebookListView;
 
+    // ---------- EMAIL LOGIN ----------
+    private static String outlookEmail = null;
+    private static String outlookPassword = null;
+
+    // ---------- CALENDAR FXML ----------
     @FXML private Text year;
     @FXML private Text month;
     @FXML private FlowPane calendar;
 
-    
+    private ZonedDateTime dateFocus;
+    private ZonedDateTime today;
+
+    // ===========================================
+    //                INITIALIZATION
+    // ===========================================
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        initializeCalendarIfLoaded();
+        initializeMessagingIfLoaded();
+    }
+
+    private void initializeCalendarIfLoaded() {
+        if (calendar != null && year != null && month != null) {
+            dateFocus = ZonedDateTime.now();
+            today = ZonedDateTime.now();
+            drawCalendar();
+            System.out.println("Calendar initialized.");
+        }
+    }
+
+    private void initializeMessagingIfLoaded() {
+        if (recipientField != null && messageBody != null) {
+            System.out.println("Messaging system initialized.");
+            if (outlookEmail == null || outlookPassword == null) {
+                showEmailLoginPopup();
+            }
+        }
+    }
+
+    @FXML private void newMessage() {
+        recipientField.clear();
+        messageBody.clear();
+    }
+
+    // ===========================================
+    //                SCENE SWITCHING
+    // ===========================================
+
     public static void setCurrentUser(User user) { currentUser = user; }
     public static void setCurrentClass(String currentClassInfo) { currentClassroomInfo = currentClassInfo; }
 
-    
     @Override
     public void start(Stage stage) throws IOException {
+        if (currentUser == null) {
+            showLoginPopup(stage); // ensure login first
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 650, 600);
-        if (currentUser.getIsTeacher())
-            stage.setTitle("iLearn - Teacher View");
-        else
-            stage.setTitle("iLearn - Student View");
-
+        stage.setTitle(currentUser.getIsTeacher() ? "iLearn - Teacher View" : "iLearn - Student View");
         stage.setScene(scene);
         stage.show();
     }
 
-    // ---------- Scene Switching ----------
     public void switchToClassroom(ActionEvent event) throws IOException {
         String target = currentUser.getIsTeacher() ? "/com/ilearn/views/TeacherClassroom.fxml" : "/com/ilearn/views/Classroom.fxml";
         Parent root = FXMLLoader.load(getClass().getResource(target));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void switchToGradebook(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Gradebook.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
         stage.show();
         currGradebookToGradebookTab();
     }
@@ -94,28 +135,31 @@ public class AppController extends Application implements Initializable {
     public void switchToCalendar(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Calendar.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void switchToMessages(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/Messaging.fxml"));
+        if (outlookEmail == null || outlookPassword == null) {
+            showEmailLoginPopup();
+        }
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/EmailSender.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void backToMain(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
-    // ---------- Main Page ----------
+    // ===========================================
+    //                MAIN PAGE
+    // ===========================================
+
     @FXML private void loadUserClasses() {
         mainPageListView.getItems().clear();
         mainPageListView.getItems().addAll(currentUser.viewClassroomsNamesIds());
@@ -127,20 +171,26 @@ public class AppController extends Application implements Initializable {
         System.out.println("Selected item: " + selectedItem);
     }
 
-    // ---------- Classroom Page ----------
+    // ===========================================
+    //               CLASSROOM PAGE
+    // ===========================================
+
     @FXML private void currClassInfoToClassTab() {
-        currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.viewClassroomInfo(currentClassroomInfo));
+        currClassroomListView.getItems().setAll(
+                currentUser.viewClassroomInfo(currentClassroomInfo)
+        );
     }
 
     @FXML private void currRosterToClassTab() {
-        currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.viewClassroomRoster(currentClassroomInfo));
+        currClassroomListView.getItems().setAll(
+                currentUser.viewClassroomRoster(currentClassroomInfo)
+        );
     }
 
     @FXML private void currGradebookToClassTab() {
-        currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.viewClassroomGrades(currentClassroomInfo));
+        currClassroomListView.getItems().setAll(
+                currentUser.viewClassroomGrades(currentClassroomInfo)
+        );
     }
 
     @FXML private void addAssignmentToClassTab() {
@@ -148,32 +198,36 @@ public class AppController extends Application implements Initializable {
         String assignmentDescriptionStr = assignmentDescription.getText();
         String assignmentGradeStr = assignmentGrade.getText();
         String assignmentStudentStr = assignmentStudent.getText();
-        currentUser.addAssignment(currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr);
+
+        currentUser.addAssignment(currentClassroomInfo,
+                assignmentNameStr,
+                assignmentDescriptionStr,
+                Double.parseDouble(assignmentGradeStr),
+                assignmentStudentStr
+        );
+
         System.out.println("Assignment added: " + assignmentNameStr);
     }
 
     @FXML private void currAssignmentToClassTab() {
-        currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.getAssignments(currentClassroomInfo));
+        currClassroomListView.getItems().setAll(
+                currentUser.getAssignments(currentClassroomInfo)
+        );
     }
 
-    // ---------- Gradebook ----------
+    // ===========================================
+    //                 GRADEBOOK
+    // ===========================================
+
     @FXML private void currGradebookToGradebookTab() {
-        currGradebookListView.getItems().clear();
-        currGradebookListView.getItems().addAll(currentUser.viewGrades());
+        currGradebookListView.getItems().setAll(
+                currentUser.viewGrades()
+        );
     }
 
-    // ========= CALENDAR SECTION ========= //
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Only initialize calendar if this controller was loaded by Calendar.fxml
-        if (calendar != null && year != null && month != null) {
-            dateFocus = ZonedDateTime.now();
-            today = ZonedDateTime.now();
-            drawCalendar();
-        }
-    }
+    // ===========================================
+    //                 CALENDAR
+    // ===========================================
 
     @FXML
     private void backOneMonth(ActionEvent event) {
@@ -200,15 +254,10 @@ public class AppController extends Application implements Initializable {
         Map<Integer, List<CalendarActivity>> activityMap =
                 getCalendarActivitiesMonth(dateFocus);
 
-        
         LocalDate firstOfMonth = dateFocus.toLocalDate().withDayOfMonth(1);
         int monthLength = firstOfMonth.lengthOfMonth();
-
-        
         int dowValue = firstOfMonth.getDayOfWeek().getValue();
-
-        
-        int offset = dowValue % 7; 
+        int offset = dowValue % 7;
 
         calendar.getChildren().clear();
         int day = 1;
@@ -216,7 +265,6 @@ public class AppController extends Application implements Initializable {
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 7; col++) {
                 StackPane cell = new StackPane();
-
                 Rectangle rect = new Rectangle();
                 rect.setFill(Color.TRANSPARENT);
                 rect.setStroke(Color.BLACK);
@@ -286,12 +334,10 @@ public class AppController extends Application implements Initializable {
 
     private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> activities) {
         Map<Integer, List<CalendarActivity>> map = new HashMap<>();
-
         for (CalendarActivity activity : activities) {
             int date = activity.getDate().getDayOfMonth();
             map.computeIfAbsent(date, k -> new ArrayList<>()).add(activity);
         }
-
         return map;
     }
 
@@ -313,9 +359,193 @@ public class AppController extends Application implements Initializable {
         return createCalendarMap(list);
     }
 
-    // ---------- Main ----------
+    // ===========================================
+    //             EMAIL LOGIN + SEND
+    // ===========================================
+
+    private void showEmailLoginPopup() {
+        Stage popup = new Stage();
+        popup.setTitle("Outlook Login");
+        popup.setWidth(350);
+        popup.setHeight(200);
+
+        VBox layout = new VBox(10);
+        layout.setStyle("-fx-padding: 20;");
+
+        javafx.scene.control.TextField emailField = new javafx.scene.control.TextField();
+        emailField.setPromptText("Outlook Email");
+
+        javafx.scene.control.PasswordField passwordField = new javafx.scene.control.PasswordField();
+        passwordField.setPromptText("Outlook Password");
+
+        javafx.scene.control.Button saveButton = new javafx.scene.control.Button("Save");
+
+        saveButton.setOnAction(e -> {
+            outlookEmail = emailField.getText();
+            outlookPassword = passwordField.getText();
+            popup.close();
+        });
+
+        layout.getChildren().addAll(
+                new Text("Enter Outlook Login:"),
+                emailField,
+                passwordField,
+                saveButton
+        );
+
+        popup.setScene(new Scene(layout));
+        popup.showAndWait();
+    }
+
+    @FXML
+    private void sendMessage() {
+        try {
+            String recipient = recipientField.getText();
+            String body = messageBody.getText();
+
+            if (recipient == null || recipient.isEmpty()) {
+                System.out.println("No recipient entered.");
+                return;
+            }
+
+            if (body == null || body.isEmpty()) {
+                System.out.println("Message body is empty.");
+                return;
+            }
+
+            if (outlookEmail == null || outlookPassword == null) {
+                System.out.println("Email credentials not entered.");
+                showEmailLoginPopup();
+                return;
+            }
+
+            EmailSender.sendEmail(
+                    recipient,
+                    "Message from iLearn",
+                    body,
+                    outlookEmail,
+                    outlookPassword
+            );
+
+            System.out.println("Message sent!");
+            messageBody.clear();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ===========================================
+    //           REGISTER NEW USER POPUP
+    // ===========================================
+    @FXML
+    private void showRegisterPopup() {
+        Stage popup = new Stage();
+        popup.setTitle("Register New User");
+        popup.setWidth(400);
+        popup.setHeight(300);
+
+        VBox layout = new VBox(10);
+        layout.setStyle("-fx-padding: 20;");
+
+        javafx.scene.control.TextField usernameField = new javafx.scene.control.TextField();
+        usernameField.setPromptText("Username");
+
+        javafx.scene.control.PasswordField passwordField = new javafx.scene.control.PasswordField();
+        passwordField.setPromptText("Password");
+
+        javafx.scene.control.CheckBox teacherCheckbox = new javafx.scene.control.CheckBox("Teacher");
+
+        javafx.scene.control.Button registerButton = new javafx.scene.control.Button("Register");
+
+        registerButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            boolean isTeacher = teacherCheckbox.isSelected();
+
+            if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+                System.out.println("Username or password cannot be empty.");
+                return;
+            }
+
+            User newUser = new User(0, password, isTeacher, username, new String[]{});
+            newUser.connectToDatabase();
+            currentUser = newUser;
+            System.out.println("New user registered: " + username);
+            popup.close();
+        });
+
+        layout.getChildren().addAll(
+                new Text("Register New User:"),
+                usernameField,
+                passwordField,
+                teacherCheckbox,
+                registerButton
+        );
+
+        popup.setScene(new Scene(layout));
+        popup.show();
+    }
+
+    // ===========================================
+    //               LOGIN POPUP
+    // ===========================================
+    private void showLoginPopup(Stage primaryStage) {
+        Stage popup = new Stage();
+        popup.setTitle("Login");
+        popup.setWidth(350);
+        popup.setHeight(250);
+
+        VBox layout = new VBox(10);
+        layout.setStyle("-fx-padding: 20;");
+
+        TextField usernameField = new TextField();
+        usernameField.setPromptText("Username");
+
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Password");
+
+        Button loginButton = new Button("Login");
+        Button registerButton = new Button("Register New User");
+
+        loginButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            User user = new User(0, password, false, username, new String[]{});
+            user.getFromDatabase(username, password, user);
+
+            if (user.getName() != null) {
+                currentUser = user;
+                popup.close();
+                try {
+                    start(primaryStage);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                System.out.println("Invalid login credentials.");
+            }
+        });
+
+        registerButton.setOnAction(e -> showRegisterPopup());
+
+        layout.getChildren().addAll(
+                new Text("Login:"),
+                usernameField,
+                passwordField,
+                loginButton,
+                registerButton
+        );
+
+        popup.setScene(new Scene(layout));
+        popup.show();
+    }
+
+    // ===========================================
+    //                 MAIN
+    // ===========================================
+
     public static void main(String[] args) {
         launch();
     }
-
 }
