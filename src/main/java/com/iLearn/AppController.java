@@ -171,8 +171,7 @@ public class AppController extends Application implements Initializable {
     //                MAIN PAGE
     // ===========================================
     @FXML private void loadUserClasses() {
-        mainPageListView.getItems().clear();
-        mainPageListView.getItems().addAll(classroomDAO.viewClassroomsNamesIds(currentUser));
+        mainPageListView.getItems().setAll(classroomDAO.viewClassroomsNamesIds(currentUser));
     }
 
     @FXML private void handleItemClick() {
