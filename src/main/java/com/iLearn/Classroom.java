@@ -9,8 +9,6 @@ public class Classroom {
 	private String teacher;
 	private String[] discussions;
 	private String meetingTime;
-	private Gradebook gradebook;
-	private Roster roster;
 	ArrayList<Assignment> assignments = new ArrayList<>(); 
 	Connection connection = Main.connect();
 	
