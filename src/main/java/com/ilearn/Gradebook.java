@@ -1,10 +1,5 @@
 package com.ilearn;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +12,6 @@ public class Gradebook {
     //ex. [{"Project1": {"Alyssa": 76}}, {"Project2": {"Jaden": 42}}]
     private List<Map<Assignment, Map<String, Float>>> gradeBookList = new ArrayList<>();
     private Classroom classroom;
-    Connection connection = Main.connect();
  
 	Gradebook(Classroom classroom) {
         this.classroom = classroom;
@@ -80,30 +74,6 @@ public class Gradebook {
             }
         }  
     }
-
-    // Fetches and inserts gradebook data depending on the presence of exisitng data
-    public void connectToDatabase(User user){
-		try(Statement statement = connection.createStatement()){
-            String checkIfInGradebook = "SELECT * FROM gradebooks WHERE user_id = ? AND class_id = ? AND class_name = ?";
-            PreparedStatement pstmtIfInGradeBook = connection.prepareStatement(checkIfInGradebook);
-			pstmtIfInGradeBook.setInt(1, user.getId());
-			pstmtIfInGradeBook.setInt(2, this.classroom.getClassroomId());
-			pstmtIfInGradeBook.setString(3, this.classroom.getClassroomName());
-            try (ResultSet rs = pstmtIfInGradeBook.executeQuery()) {
-                if (!rs.next()) {
-                    String insertNewGradebook = "INSERT INTO gradebooks (user_id, class_id, class_name) VALUES (?, ?, ?)";
-                    PreparedStatement pstmtNewGradebook = connection.prepareStatement(insertNewGradebook);
-                    pstmtNewGradebook.setInt(1, user.getId());
-			        pstmtNewGradebook.setInt(2, this.classroom.getClassroomId());
-                    pstmtNewGradebook.setString(3, this.classroom.getClassroomName());
-                    pstmtNewGradebook.executeUpdate(); 
-                }
-            }
-        } catch (SQLException er) {
-            er.printStackTrace(System.err);
-        }
-	}	
-
 
 }
 

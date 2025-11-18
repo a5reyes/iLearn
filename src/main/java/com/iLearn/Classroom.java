@@ -1,10 +1,6 @@
 package com.ilearn;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Classroom {
@@ -13,6 +9,8 @@ public class Classroom {
 	private String teacher;
 	private String[] discussions;
 	private String meetingTime;
+	private Gradebook gradebook;
+	private Roster roster;
 	ArrayList<Assignment> assignments = new ArrayList<>(); 
 	Connection connection = Main.connect();
 	
@@ -80,32 +78,6 @@ public class Classroom {
             }   
         }
     }
-
-	// Fetches and inserts classroom data depending on the presence of exisitng data
-	public void connectToDatabase(User user){
-		try(Statement statement = connection.createStatement()){
-			String checkIfInClassroom = "SELECT * FROM classrooms WHERE user_id = ? AND class_id = ? AND class_name = ?";
-            PreparedStatement pstmtIfInClassroom = connection.prepareStatement(checkIfInClassroom);
-			pstmtIfInClassroom.setInt(1, user.getId());
-			pstmtIfInClassroom.setInt(2, this.classroomId);
-			pstmtIfInClassroom.setString(3, this.classroomName);
-            try (ResultSet rs = pstmtIfInClassroom.executeQuery()) {
-                if (!rs.next()) {
-                    String insertNewClassroom = "INSERT INTO classrooms (user_id, class_id, class_name, discussions, teacher, meeting_time) VALUES (?, ?, ?, ?, ?, ?)";
-					PreparedStatement pstmtNewClassroom = connection.prepareStatement(insertNewClassroom);
-					pstmtNewClassroom.setInt(1, user.getId());
-					pstmtNewClassroom.setInt(2, this.classroomId);
-					pstmtNewClassroom.setString(3, this.classroomName);
-					pstmtNewClassroom.setString(4, String.join(",", this.discussions));
-					pstmtNewClassroom.setString(5, this.teacher);
-					pstmtNewClassroom.setString(6, this.meetingTime);
-					pstmtNewClassroom.executeUpdate();
-                }
-            }
-        } catch (SQLException er) {
-            er.printStackTrace(System.err);
-        }
-	}	
 
 	
 }

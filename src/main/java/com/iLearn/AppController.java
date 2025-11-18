@@ -27,15 +27,24 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-public class AppController extends Application implements Initializable {
+import com.ilearn.dao.AssignmentDAO;
+import com.ilearn.dao.ClassroomDAO;
+import com.ilearn.dao.GradebookDAO;
+import com.ilearn.dao.RosterDAO;
+import com.ilearn.dao.UserDAO;
 
+public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static String currentClassroomInfo;
+    private UserDAO userDAO = new UserDAO();
+    private ClassroomDAO classroomDAO = new ClassroomDAO();
+    private RosterDAO rosterDAO = new RosterDAO();
+    private GradebookDAO gradebookDAO = new GradebookDAO();
+    private AssignmentDAO assignmentDAO = new AssignmentDAO();
     private Stage stage;
     private Scene scene;
     private Parent root;
     private Connection connection = Main.connect();
-
     
     @FXML private ListView<String> mainPageListView;
     @FXML private ListView<String> currClassroomListView;
@@ -88,7 +97,6 @@ public class AppController extends Application implements Initializable {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        currGradebookToGradebookTab();
     }
 
     public void switchToCalendar(ActionEvent event) throws IOException {
@@ -118,7 +126,7 @@ public class AppController extends Application implements Initializable {
     // ---------- Main Page ----------
     @FXML private void loadUserClasses() {
         mainPageListView.getItems().clear();
-        mainPageListView.getItems().addAll(currentUser.viewClassroomsNamesIds());
+        mainPageListView.getItems().addAll(classroomDAO.viewClassroomsNamesIds(currentUser));
     }
 
     @FXML private void handleItemClick() {
@@ -130,17 +138,17 @@ public class AppController extends Application implements Initializable {
     // ---------- Classroom Page ----------
     @FXML private void currClassInfoToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.viewClassroomInfo(currentClassroomInfo));
+        currClassroomListView.getItems().addAll(classroomDAO.viewClassroomInfo(currentClassroomInfo));
     }
 
     @FXML private void currRosterToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.viewClassroomRoster(currentClassroomInfo));
+        currClassroomListView.getItems().addAll(classroomDAO.viewClassroomRoster(currentClassroomInfo));
     }
 
     @FXML private void currGradebookToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.viewClassroomGrades(currentClassroomInfo));
+        currClassroomListView.getItems().addAll(classroomDAO.viewClassroomGrades(currentUser, currentClassroomInfo));
     }
 
     @FXML private void addAssignmentToClassTab() {
@@ -148,19 +156,19 @@ public class AppController extends Application implements Initializable {
         String assignmentDescriptionStr = assignmentDescription.getText();
         String assignmentGradeStr = assignmentGrade.getText();
         String assignmentStudentStr = assignmentStudent.getText();
-        currentUser.addAssignment(currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr);
+        assignmentDAO.addAssignment(currentUser, currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr);
         System.out.println("Assignment added: " + assignmentNameStr);
     }
 
     @FXML private void currAssignmentToClassTab() {
         currClassroomListView.getItems().clear();
-        currClassroomListView.getItems().addAll(currentUser.getAssignments(currentClassroomInfo));
+        currClassroomListView.getItems().addAll(assignmentDAO.getAssignments(currentUser, currentClassroomInfo));
     }
 
     // ---------- Gradebook ----------
     @FXML private void currGradebookToGradebookTab() {
         currGradebookListView.getItems().clear();
-        currGradebookListView.getItems().addAll(currentUser.viewGrades());
+        currGradebookListView.getItems().addAll(gradebookDAO.viewGrades(currentUser));
     }
 
     // ========= CALENDAR SECTION ========= //

@@ -1,17 +1,26 @@
 package com.ilearn;
 import java.awt.*;
 import javax.swing.*;
+
+import com.ilearn.dao.ClassroomDAO;
+import com.ilearn.dao.UserDAO;
+
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class LoginRegister extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private boolean isTeacher = false;
+    private UserDAO userDAO;
+    private ClassroomDAO classroomDAO;
     Connection connection = Main.connect();
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
+        this.userDAO = new UserDAO();
+        this.classroomDAO = new ClassroomDAO();
         setTitle("iLearn");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,11 +61,10 @@ public class LoginRegister extends JFrame {
                 if(isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
-                    User loginUser = new User(0, password, null, username, null);
-                    loginUser.getFromDatabase(username, password, loginUser);
-                    loginUser.setClassrooms();
+                    User loggedUser = new User(0, password, null, username, null);
+                    loginUser(loggedUser, username, password);
                     SetUser currentUser = new SetUser();
-                    currentUser.setUser(loginUser);
+                    currentUser.setUser(loggedUser);
                     Main.HomePage(currentUser); 
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
@@ -100,6 +108,7 @@ public class LoginRegister extends JFrame {
         //listening to responses on register page; otherwise switching to login if login button clicked
         switchToLogin.addActionListener(e -> cardLayout.show(mainPanel, "login"));
         registerButton.addActionListener(e -> {
+            ArrayList<Classroom> classroomArr = new ArrayList<>();
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             String classes = classesField.getText();
@@ -110,7 +119,6 @@ public class LoginRegister extends JFrame {
                     cardLayout.show(mainPanel, "login");
                 } else {
                     User user = new User(id, password, isTeacher, username, classes.split("[,;|\\s]+"));
-                    user.connectToDatabase();
                     for(String enteredClass : classes.split("[,;|\\s]+")){
                         Integer classId = 0;
                         try {
@@ -120,12 +128,9 @@ public class LoginRegister extends JFrame {
                         }
                         String[] newDiscussion = {"Hello! Check syllabus"};
                         Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
-                        Gradebook gradebook = new Gradebook(course);
-                        gradebook.connectToDatabase(user);
-                        Roster roster = new Roster(course);
-                        roster.connectToDatabase(user);
-                        course.connectToDatabase(user);
+                        classroomArr.add(course);
                     }
+                    registerUser(user, classroomArr);
                     JOptionPane.showMessageDialog(this, "Registered user: " + username);
                     cardLayout.show(mainPanel, "login");
                 }
@@ -134,6 +139,20 @@ public class LoginRegister extends JFrame {
             }
         });
         return panel;
+    }
+
+    //register user in dao
+    private void registerUser(User user, ArrayList<Classroom> classes) {
+        userDAO.connectToDatabase(user);
+        for (Classroom c : classes) {
+            classroomDAO.connectToDatabase(user, c);
+        }
+    }
+
+    //login user in dao
+    private void loginUser(User user, String username, String password) {
+        userDAO.getFromDatabase(username, password, user);
+        classroomDAO.setClassrooms(user);
     }
 
     // Displays an error message via jframe
