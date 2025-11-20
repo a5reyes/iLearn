@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +34,7 @@ import com.ilearn.dao.UserDAO;
 public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static String currentClassroomInfo;
+    private static String currentAssignmentString;
     private UserDAO userDAO = new UserDAO();
     private ClassroomDAO classroomDAO = new ClassroomDAO();
     private RosterDAO rosterDAO = new RosterDAO();
@@ -43,7 +43,8 @@ public class AppController extends Application implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    private Connection connection = Main.connect();
+    private ZonedDateTime dateFocus;
+    private ZonedDateTime today;
     
     // ---------- MAIN PAGE FXML ----------
     @FXML private ListView<String> mainPageListView;
@@ -53,14 +54,16 @@ public class AppController extends Application implements Initializable {
 
     // ---------- CLASSROOM FXML ----------
     @FXML private ListView<String> currClassroomListView;
+
+    // ---------- CLASSROOM FXML - STUDENT ----------
+    @FXML private TextArea studentWork;
+
+    // ---------- CLASSROOM FXML - TEACHER ----------
     @FXML private TextArea assignmentName;
     @FXML private TextArea assignmentDescription;
     @FXML private TextArea assignmentGrade;
     @FXML private TextArea assignmentStudent;
     @FXML private DatePicker assignmentDatePicker;
-    
-    private ZonedDateTime dateFocus;
-    private ZonedDateTime today;
 
     // ---------- EMAIL LOGIN ----------
     private static String outlookEmail = null;
@@ -74,13 +77,10 @@ public class AppController extends Application implements Initializable {
     // ---------- MESSAGING FXML ----------
     @FXML private TextArea messageBody;
     @FXML private TextField recipientField;
-
     
     public static void setCurrentUser(User user) { currentUser = user; }
     public static void setCurrentClass(String currentClassInfo) { currentClassroomInfo = currentClassInfo; }
-
-
-
+    public static void setCurrentAssignment(String currentAssignmentString) { currentAssignmentString = currentAssignmentString; }
     // ===========================================
     //                INITIALIZATION
     // ===========================================
@@ -114,11 +114,6 @@ public class AppController extends Application implements Initializable {
         messageBody.clear();
     }
 
-    // ===========================================
-    //                SCENE SWITCHING
-    // ===========================================
-
-
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
@@ -129,7 +124,9 @@ public class AppController extends Application implements Initializable {
         stage.show();
     }
 
-    // ---------- Scene Switching ----------
+    // ===========================================
+    //                SCENE SWITCHING
+    // ===========================================
     public void switchToClassroom(ActionEvent event) throws IOException {
         String target = currentUser.getIsTeacher() ? "/com/ilearn/views/TeacherClassroom.fxml" : "/com/ilearn/views/Classroom.fxml";
         Parent root = FXMLLoader.load(getClass().getResource(target));
@@ -183,7 +180,7 @@ public class AppController extends Application implements Initializable {
     }
 
     // ===========================================
-    //               CLASSROOM PAGE
+    //          CLASSROOM PAGE - DEFAULT
     // ===========================================
     @FXML private void currClassInfoToClassTab() {
         currClassroomListView.getItems().setAll(classroomDAO.viewClassroomInfo(currentClassroomInfo));
@@ -197,6 +194,29 @@ public class AppController extends Application implements Initializable {
         currClassroomListView.getItems().setAll(classroomDAO.viewClassroomGrades(currentUser, currentClassroomInfo));
     }
 
+    @FXML private void currAssignmentToClassTab() {
+        currClassroomListView.getItems().setAll(assignmentDAO.getAssignments(currentUser, currentClassroomInfo));
+    }
+
+    @FXML private void currGradebookToGradebookTab() {
+        currGradebookListView.getItems().setAll(gradebookDAO.viewGrades(currentUser));
+    }
+
+    // ===========================================
+    //          CLASSROOM PAGE - STUDENT
+    // ===========================================
+
+    @FXML private void submitAssignment() {
+        String selectedAssignment = currClassroomListView.getSelectionModel().getSelectedItem();
+        setCurrentAssignment(selectedAssignment);
+        String work = studentWork.getText();
+        assignmentDAO.submitAssignment(currentUser, currentClassroomInfo, work, currentAssignmentString.split(", ")[0]);
+        currClassroomListView.getItems().setAll("Work added to " + currentAssignmentString.split(", ")[0] + " : " + work);
+    }
+
+    // ===========================================
+    //        CLASSROOM PAGE - TEACHER ONLY
+    // ===========================================
     @FXML private void addAssignmentToClassTab() {
         String assignmentNameStr = assignmentName.getText();
         String assignmentDescriptionStr = assignmentDescription.getText();
@@ -206,15 +226,6 @@ public class AppController extends Application implements Initializable {
         String assignmentDueDateStr = assignmentDueDate.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         assignmentDAO.addAssignment(currentUser, currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr, assignmentDueDateStr);
         System.out.println("Assignment added: " + assignmentNameStr);
-    }
-
-    @FXML private void currAssignmentToClassTab() {
-        currClassroomListView.getItems().setAll(assignmentDAO.getAssignments(currentUser, currentClassroomInfo));
-    }
-
-    // ---------- Gradebook ----------
-    @FXML private void currGradebookToGradebookTab() {
-        currGradebookListView.getItems().setAll(gradebookDAO.viewGrades(currentUser));
     }
 
     // ===========================================

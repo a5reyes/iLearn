@@ -3,6 +3,8 @@ import java.awt.*;
 import javax.swing.*;
 
 import com.ilearn.dao.ClassroomDAO;
+import com.ilearn.dao.GradebookDAO;
+import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
 
 import java.sql.*;
@@ -15,12 +17,16 @@ public class LoginRegister extends JFrame {
     private boolean isTeacher = false;
     private UserDAO userDAO;
     private ClassroomDAO classroomDAO;
+    private RosterDAO rosterDAO;
+    private GradebookDAO gradebookDAO;
     Connection connection = Main.connect();
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
         this.userDAO = new UserDAO();
         this.classroomDAO = new ClassroomDAO();
+        this.rosterDAO = new RosterDAO();
+        this.gradebookDAO = new GradebookDAO();
         setTitle("iLearn");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,7 +133,7 @@ public class LoginRegister extends JFrame {
                             classId = Math.abs(rand.nextInt() + 1);
                         }
                         String[] newDiscussion = {"Hello! Check syllabus"};
-                        Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
+                        Classroom course = new Classroom(enteredClass, classId, isTeacher ? username : "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
                         classroomArr.add(course);
                     }
                     registerUser(user, classroomArr);
@@ -146,12 +152,14 @@ public class LoginRegister extends JFrame {
         userDAO.connectToDatabase(user);
         for (Classroom c : classes) {
             classroomDAO.connectToDatabase(user, c);
+            rosterDAO.connectToDatabase(user, c);
+            gradebookDAO.connectToDatabase(user, c);
         }
     }
 
     //login user in dao
     private void loginUser(User user, String username, String password) {
-        userDAO.getFromDatabase(username, password, user);
+        userDAO.setFromDatabase(username, password, user);
         classroomDAO.setClassrooms(user);
     }
 

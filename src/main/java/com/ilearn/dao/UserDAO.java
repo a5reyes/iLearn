@@ -27,9 +27,9 @@ public class UserDAO {
         }
     }
 
-    //when logging in, get the classroom's id, isTeacher, classrooms from users table in sqlite db and set those fields to user object
+    //when logging in, set the user's id, isTeacher, classrooms from users table in sqlite db
     //making sure the logged in user is set to the current user object passed to the app 
-    public void getFromDatabase(String username, String pw, User currUser) {
+    public void setFromDatabase(String username, String pw, User currUser) {
         try {
             String getUser = "SELECT id, isTeacher, classrooms FROM users WHERE name=? AND password=?";
             PreparedStatement pstmtGetUser = connection.prepareStatement(getUser);
@@ -46,6 +46,21 @@ public class UserDAO {
         } catch (SQLException er) {
             er.printStackTrace(System.err);
         }
+    }
+
+    public Integer getStudentIdFromDatabase(String studentName) {
+        try {
+            String getUser = "SELECT id FROM users WHERE name=?";
+            PreparedStatement pstmtGetUser = connection.prepareStatement(getUser);
+            pstmtGetUser.setString(1, studentName);
+            ResultSet res = pstmtGetUser.executeQuery();
+            while (res.next()) {
+                return res.getInt("id");
+            }
+        } catch (SQLException er) {
+            er.printStackTrace(System.err);
+        }
+        return 0;
     }
 
 }
