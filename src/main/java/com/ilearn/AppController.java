@@ -21,21 +21,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-<<<<<<< HEAD
-
-
-import java.time.DayOfWeek;
-
-import java.sql.SQLException;
-
-
 import java.time.DayOfWeek;
 import java.sql.SQLException;
-
-=======
-import java.time.DayOfWeek;
-import java.sql.SQLException;
->>>>>>> 8262f55150d844bd84592a70c90e80edc25b2b1d
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
