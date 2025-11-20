@@ -3,15 +3,29 @@ package com.ilearn;
 import java.util.Objects;
 
 public class Assignment {
-    String name;
+    String assignmentName;
     String description;
-    int grade;
+    double grade;
+    String name;
+    String dueDateString;
+    String work;
 
-    Assignment(String name, String description, int grade) {
-        this.name = name;
+    public Assignment(String assignmentName, String description, double grade, String name, String dueDateString, String work) {
+        this.assignmentName = assignmentName;
         this.description = description;
         this.grade = grade;
+        this.name = name;
+        this.dueDateString = dueDateString;
+        this.work = work;
     }
+
+    public String getAssignmentName() {
+		return assignmentName;
+	}
+
+    public String getDueDateString() {
+		return dueDateString;
+	}
 
     @Override
     public String toString() {

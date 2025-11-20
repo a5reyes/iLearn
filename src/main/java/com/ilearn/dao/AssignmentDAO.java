@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ilearn.Assignment;
 import com.ilearn.User;
 
 public class AssignmentDAO {
@@ -40,7 +42,6 @@ public class AssignmentDAO {
     }
 
     public List<String> getAssignments(User user, String currentClassroomInfo){
-        //ArrayList<Assignment> assignmentList = new ArrayList<>();
         List<String> assignmentNameList = new ArrayList<>();
         //for(Classroom classroomObj: classroomArr){
             //if(classroomObj.getClassroomName().equals(currentClassroomName)){
@@ -67,6 +68,29 @@ public class AssignmentDAO {
         return assignmentNameList;
             //}
         //}
+    }
+
+    public List<Assignment> getAllAssignments(User user){
+        List<Assignment> assignmentsList = new ArrayList<>();
+        String query = user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ? AND class_name = ? AND class_id = ?" : "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, user.getName());
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    String assignmentName = rs.getString("name");
+                    String description = rs.getString("description");
+                    double grade = rs.getDouble("grade");
+                    String name = user.getIsTeacher() ? rs.getString("student") : rs.getString("teacher");
+                    String dueDateString = rs.getString("due_date");
+                    String work = rs.getString("work");
+                    Assignment assignment = new Assignment(assignmentName, description, grade, name, dueDateString, work);
+                    assignmentsList.add(assignment);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return assignmentsList;
     }
 
     public void submitAssignment(User user, String currentClassroomInfo, String work, String assignmentName, String studentName){

@@ -165,6 +165,7 @@ public class LoginRegister extends JFrame {
     private void loginUser(User user, String username, String password) {
         userDAO.setFromDatabase(username, password, user);
         classroomDAO.setClassrooms(user);
+        
     }
 
     // Displays an error message via jframe
