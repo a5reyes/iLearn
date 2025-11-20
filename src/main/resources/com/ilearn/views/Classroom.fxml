@@ -16,13 +16,13 @@
          </font>
       </Label>
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
-      <ListView fx:id="currClassroomListView" layoutX="32.0" layoutY="136.0" prefHeight="179.0" prefWidth="585.0" />
+      <ListView fx:id="currClassroomListView" layoutX="32.0" layoutY="120.0" prefHeight="179.0" prefWidth="585.0" />
       <Button layoutX="143.0" layoutY="78.0" mnemonicParsing="false" onAction="#currAssignmentToClassTab" text="Assignments" />
       <Button layoutX="288.0" layoutY="78.0" mnemonicParsing="false" onAction="#currRosterToClassTab" text="Roster" />
       <Button layoutX="436.0" layoutY="78.0" mnemonicParsing="false" onAction="#currGradebookToClassTab" text="Gradebook" />
       <Button layoutX="44.0" layoutY="78.0" mnemonicParsing="false" onAction="#currClassInfoToClassTab" text="Info" />
       <TextArea fx:id="studentWork" layoutX="32.0" layoutY="356.0" prefHeight="200.0" prefWidth="585.0" />
-      <Text layoutX="44.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To submit assignment, click assignment above, enter work below and click submit" wrappingWidth="461.78843688964844" />
+      <Text layoutX="40.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To submit assignment, click assignment above from assignments button, enter work below, click submit, then click assignments button again to see work with assignment " wrappingWidth="570.4551239013672" />
       <Button layoutX="551.0" layoutY="566.0" mnemonicParsing="false" onAction="#submitAssignment" text="Submit" />
    </children>
 </AnchorPane>

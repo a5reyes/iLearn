@@ -36,7 +36,6 @@ import com.ilearn.dao.UserDAO;
 public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static String currentClassroomInfo;
-    private static String currentAssignmentString;
     private final ClassroomDAO classroomDAO;
     private final GradebookDAO gradebookDAO;
     private final AssignmentDAO assignmentDAO;
@@ -86,7 +85,6 @@ public class AppController extends Application implements Initializable {
     
     public static void setCurrentUser(User user) { currentUser = user; }
     public static void setCurrentClass(String currentClassInfo) { currentClassroomInfo = currentClassInfo; }
-    public static void setCurrentAssignment(String currentAssignmentString) { currentAssignmentString = currentAssignmentString; }
     // ===========================================
     //                INITIALIZATION
     // ===========================================
@@ -212,15 +210,14 @@ public class AppController extends Application implements Initializable {
     }
 
     // ===========================================
-    //          CLASSROOM PAGE - STUDENT
+    //        CLASSROOM PAGE - STUDENT ONLY
     // ===========================================
 
     @FXML private void submitAssignment() {
         String selectedAssignment = currClassroomListView.getSelectionModel().getSelectedItem();
-        setCurrentAssignment(selectedAssignment);
         String work = studentWork.getText();
-        assignmentDAO.submitAssignment(currentUser, currentClassroomInfo, work, currentAssignmentString.split(", ")[0], currentUser.getName());
-        currClassroomListView.getItems().setAll("Work added to " + currentAssignmentString.split(", ")[0] + " : " + work);
+        assignmentDAO.submitAssignment(currentUser, currentClassroomInfo, work, selectedAssignment.split(", ")[0], currentUser.getName());
+        System.out.println("Work added to " + selectedAssignment.split(", ")[0] + " : " + work);
     }
 
     // ===========================================
