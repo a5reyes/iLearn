@@ -23,14 +23,19 @@ import java.net.URL;
 import java.sql.Connection;
 <<<<<<< HEAD
 
+
 import java.time.DayOfWeek;
 
+import java.sql.SQLException;
+
+
+import java.time.DayOfWeek;
 import java.sql.SQLException;
 
 =======
 import java.time.DayOfWeek;
 import java.sql.SQLException;
->>>>>>> 03c86120cc256cf8bd2e12172cf17aef22fa5837
+>>>>>>> 8262f55150d844bd84592a70c90e80edc25b2b1d
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -393,14 +398,7 @@ public class AppController extends Application implements Initializable {
         int m = date.getMonthValue();
         Random r = new Random();
 
-        for (int i = 0; i < 50; i++) {
-            ZonedDateTime t = ZonedDateTime.of(
-                    y, m, r.nextInt(27) + 1,
-                    16, 0, 0, 0,
-                    date.getZone()
-            );
-            list.add(new CalendarActivity(t, "user", 1234533));
-        }
+
 
         return createCalendarMap(list);
     }
