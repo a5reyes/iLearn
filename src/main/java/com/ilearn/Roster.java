@@ -1,12 +1,10 @@
 package com.ilearn;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Roster {
     private List<String> roster = new ArrayList<>();
     private Classroom classroom;
-    Connection connection = Main.connect();
 
 	Roster(Classroom classroom) {
         this.classroom = classroom;

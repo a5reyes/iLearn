@@ -3,6 +3,8 @@ import java.awt.*;
 import javax.swing.*;
 
 import com.ilearn.dao.ClassroomDAO;
+import com.ilearn.dao.GradebookDAO;
+import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
 
 import java.sql.*;
@@ -15,12 +17,16 @@ public class LoginRegister extends JFrame {
     private boolean isTeacher = false;
     private UserDAO userDAO;
     private ClassroomDAO classroomDAO;
-    Connection connection = Main.connect();
+    private RosterDAO rosterDAO;
+    private GradebookDAO gradebookDAO;
+    private Connection connection;
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
-        this.userDAO = new UserDAO();
-        this.classroomDAO = new ClassroomDAO();
+        this.userDAO = Main.userDAO;
+        this.classroomDAO = Main.classroomDAO;
+        this.rosterDAO = Main.rosterDAO;
+        this.gradebookDAO = Main.gradebookDAO;
         setTitle("iLearn");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +64,7 @@ public class LoginRegister extends JFrame {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             if (!username.equals("") && !password.equals("")) {
-                if(isRegistered(username, password)){
+                if(userDAO.isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     User loggedUser = new User(0, password, null, username, null);
@@ -66,6 +72,7 @@ public class LoginRegister extends JFrame {
                     SetUser currentUser = new SetUser();
                     currentUser.setUser(loggedUser);
                     Main.HomePage(currentUser); 
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
                     cardLayout.show(mainPanel, "register");
@@ -114,7 +121,7 @@ public class LoginRegister extends JFrame {
             String classes = classesField.getText();
             int id = Math.abs(rand.nextInt() + 1);
             if (!username.equals("") && !password.equals("") && !classes.equals("")) {
-                if(isRegistered(username, password)){ 
+                if(userDAO.isRegistered(username, password)){ 
                     JOptionPane.showMessageDialog(this, "Already registered! Login!");
                     cardLayout.show(mainPanel, "login");
                 } else {
@@ -127,7 +134,7 @@ public class LoginRegister extends JFrame {
                             classId = Math.abs(rand.nextInt() + 1);
                         }
                         String[] newDiscussion = {"Hello! Check syllabus"};
-                        Classroom course = new Classroom(enteredClass, classId, "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
+                        Classroom course = new Classroom(enteredClass, classId, isTeacher ? username : "Dr. Poonam Kumari", newDiscussion, "TR 12:30PM ~ 2:00PM & T 3:15PM ~ 4:00PM");
                         classroomArr.add(course);
                     }
                     registerUser(user, classroomArr);
@@ -146,12 +153,14 @@ public class LoginRegister extends JFrame {
         userDAO.connectToDatabase(user);
         for (Classroom c : classes) {
             classroomDAO.connectToDatabase(user, c);
+            rosterDAO.connectToDatabase(user, c);
+            gradebookDAO.connectToDatabase(user, c);
         }
     }
 
     //login user in dao
     private void loginUser(User user, String username, String password) {
-        userDAO.getFromDatabase(username, password, user);
+        userDAO.setFromDatabase(username, password, user);
         classroomDAO.setClassrooms(user);
     }
 
@@ -162,28 +171,8 @@ public class LoginRegister extends JFrame {
 
     // Verifies that the user info is registered
     public void login(String username, String password) {
-        if (!isRegistered(username, password)) {
+        if (!userDAO.isRegistered(username, password)) {
             showMessage("Please register");
         }
-    }
-
-    // Checks if a user is registered
-    private boolean isRegistered(String username, String pw) {
-        try(Statement statement = connection.createStatement()){
-            String findUser = "SELECT * FROM users WHERE name = ? AND password = ?";
-            PreparedStatement pstmtFindUser = connection.prepareStatement(findUser);
-            pstmtFindUser.setString(1, username);
-            pstmtFindUser.setString(2, pw);
-            try (ResultSet res = pstmtFindUser.executeQuery()){
-                while (res.next()){
-                    String name = res.getString("name");
-                    String password = res.getString("password");
-                    return (username.equals(name) && password.equals(pw));
-                }
-            }
-        } catch (SQLException er) {
-            er.printStackTrace(System.err);
-        }
-        return false;
     }
 }

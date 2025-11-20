@@ -1,6 +1,5 @@
 package com.ilearn;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 
 public class Classroom {
@@ -10,7 +9,7 @@ public class Classroom {
 	private String[] discussions;
 	private String meetingTime;
 	ArrayList<Assignment> assignments = new ArrayList<>(); 
-	Connection connection = Main.connect();
+
 	
 	public Classroom(String classroomName, int classroomId, String teacher, String[] discussions,  String meetingTime) {
 		this.classroomName = classroomName;
