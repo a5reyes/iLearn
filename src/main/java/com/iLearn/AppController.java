@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,11 +36,12 @@ public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static String currentClassroomInfo;
     private static String currentAssignmentString;
-    private UserDAO userDAO = new UserDAO();
-    private ClassroomDAO classroomDAO = new ClassroomDAO();
-    private RosterDAO rosterDAO = new RosterDAO();
-    private GradebookDAO gradebookDAO = new GradebookDAO();
-    private AssignmentDAO assignmentDAO = new AssignmentDAO();
+    private Connection connection = Main.connect();
+    private UserDAO userDAO = new UserDAO(connection);
+    private ClassroomDAO classroomDAO = new ClassroomDAO(connection);
+    private RosterDAO rosterDAO = new RosterDAO(connection);
+    private GradebookDAO gradebookDAO = new GradebookDAO(connection);
+    private AssignmentDAO assignmentDAO = new AssignmentDAO(connection);
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -210,7 +212,7 @@ public class AppController extends Application implements Initializable {
         String selectedAssignment = currClassroomListView.getSelectionModel().getSelectedItem();
         setCurrentAssignment(selectedAssignment);
         String work = studentWork.getText();
-        assignmentDAO.submitAssignment(currentUser, currentClassroomInfo, work, currentAssignmentString.split(", ")[0]);
+        assignmentDAO.submitAssignment(currentUser, currentClassroomInfo, work, currentAssignmentString.split(", ")[0], currentUser.getName());
         currClassroomListView.getItems().setAll("Work added to " + currentAssignmentString.split(", ")[0] + " : " + work);
     }
 

@@ -19,14 +19,15 @@ public class LoginRegister extends JFrame {
     private ClassroomDAO classroomDAO;
     private RosterDAO rosterDAO;
     private GradebookDAO gradebookDAO;
-    Connection connection = Main.connect();
+    private Connection connection;
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
-        this.userDAO = new UserDAO();
-        this.classroomDAO = new ClassroomDAO();
-        this.rosterDAO = new RosterDAO();
-        this.gradebookDAO = new GradebookDAO();
+        this.connection = Main.connect(); // share same connection across all files
+        this.userDAO = new UserDAO(connection);
+        this.classroomDAO = new ClassroomDAO(connection);
+        this.rosterDAO = new RosterDAO(connection);
+        this.gradebookDAO = new GradebookDAO(connection);
         setTitle("iLearn");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

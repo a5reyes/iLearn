@@ -1,5 +1,4 @@
 package com.ilearn;
-import java.sql.*;
 import java.util.ArrayList;
 public class User {
     private int id;
@@ -8,7 +7,6 @@ public class User {
     private String name;
     private String[] classroomsNames;
     ArrayList<Classroom> classroomArr = new ArrayList<>(); 
-    Connection connection = Main.connect();
 
     public User(int id, String password, Boolean isTeacher, String name, String[] classroomsNames) {
         this.id = id;

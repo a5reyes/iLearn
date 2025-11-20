@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 public class Main{
+    private static Connection conn;
     public static void HomePage(SetUser currUser){
         User user = currUser.getUser();
         AppController.setCurrentUser(user);
@@ -14,14 +15,17 @@ public class Main{
 
     // Connects application to SQL database
     public static Connection connect() {
-        Connection conn = null;
-        try {
-            String url = "jdbc:sqlite:ilearn.db";
-            conn = DriverManager.getConnection(url);
-            System.out.println("Connection to SQLite has been established.");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } 
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection("jdbc:sqlite:ilearn.db");
+                conn.createStatement().execute("PRAGMA busy_timeout = 5000;");
+                conn.createStatement().execute("PRAGMA journal_mode = WAL;");
+                System.out.println("Connected to SQLite.");
+                System.out.println(">>> Opening connection: " + System.identityHashCode(conn));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return conn;
     }
 

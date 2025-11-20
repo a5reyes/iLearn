@@ -4,35 +4,37 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ilearn.Classroom;
-import com.ilearn.Main;
 import com.ilearn.User;
 
 public class ClassroomDAO {
-    Connection connection = Main.connect();
+    private final Connection connection;
+    
+    public ClassroomDAO(Connection connection) {
+        this.connection = connection; // share same connection across all files
+    }
     //classroom objects are only created when a user is registered so if user logins, 
     //here we get their classrooms from classrooms table in sqlite db and then create a classroom object for each
     //then add to classroomsArr
     public void setClassrooms(User user){
         String[] classroomsNames = user.getClassroomsNames().split(", ");
         for(String className : classroomsNames){
-            try {
-                String query = "SELECT * FROM classrooms WHERE class_name = ?";
-                PreparedStatement stmt = connection.prepareStatement(query);
+            String query = "SELECT * FROM classrooms WHERE class_name = ?";
+            try(PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, className);
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    String name = rs.getString("class_name");
-                    int id = rs.getInt("class_id");
-                    String teacher = rs.getString("teacher");
-                    String discussions = rs.getString("discussions");
-                    String meetingTime = rs.getString("meeting_time");
-                    Classroom course = new Classroom(name, id, teacher, discussions.split(","), meetingTime);
-                    user.addClassroom(course);
+                try(ResultSet rs = stmt.executeQuery()){
+                    while (rs.next()) {
+                        String name = rs.getString("class_name");
+                        int id = rs.getInt("class_id");
+                        String teacher = rs.getString("teacher");
+                        String discussions = rs.getString("discussions");
+                        String meetingTime = rs.getString("meeting_time");
+                        Classroom course = new Classroom(name, id, teacher, discussions.split(","), meetingTime);
+                        user.addClassroom(course);
+                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -43,15 +45,15 @@ public class ClassroomDAO {
     //view user's classrooms names & ids from sqlite db
     public List<String> viewClassroomsNamesIds(User user){
         List<String> classes = new ArrayList<>();
-        try {
-            String query = "SELECT class_name, class_id FROM classrooms WHERE user_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
+        String query = "SELECT class_name, class_id FROM classrooms WHERE user_id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, user.getId());
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String name = rs.getString("class_name");
-                int id = rs.getInt("class_id");
-                classes.add(name + ", " + id);
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    String name = rs.getString("class_name");
+                    int id = rs.getInt("class_id");
+                    classes.add(name + ", " + id);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,24 +64,24 @@ public class ClassroomDAO {
     //view a classroom's info - discussions, teacher, meeting-time etc. from sqlite db classrooms table
     public List<String> viewClassroomInfo(String currentClassroomInfo) {
         List<String> classInfo = new ArrayList<>();
-        try {
-            String query = "SELECT class_name, class_id, discussions, teacher, meeting_time FROM classrooms WHERE class_name = ? OR class_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
+        String query = "SELECT class_name, class_id, discussions, teacher, meeting_time FROM classrooms WHERE class_name = ? OR class_id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, currentClassroomInfo.split(", ")[0]);
             stmt.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String name = rs.getString("class_name");
-                int id = rs.getInt("class_id");
-                String discussions = rs.getString("discussions");
-                String teacher = rs.getString("teacher");
-                String meetingTime = rs.getString("meeting_time");
-                classInfo.add(name);
-                classInfo.add(Integer.toString(id));
-                classInfo.add(discussions);
-                classInfo.add(teacher);
-                classInfo.add(meetingTime);
-                break;
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    String name = rs.getString("class_name");
+                    int id = rs.getInt("class_id");
+                    String discussions = rs.getString("discussions");
+                    String teacher = rs.getString("teacher");
+                    String meetingTime = rs.getString("meeting_time");
+                    classInfo.add(name);
+                    classInfo.add(Integer.toString(id));
+                    classInfo.add(discussions);
+                    classInfo.add(teacher);
+                    classInfo.add(meetingTime);
+                    break;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,18 +92,18 @@ public class ClassroomDAO {
     //view a classroom's gradebook from sqlite db gradebook table
     public List<String> viewClassroomGrades(User user, String currentClassroomInfo){
         List<String> gradebookArr = new ArrayList<>();
-        try {
-            String query = "SELECT class_name, assignment, grade FROM gradebooks WHERE user_id = ? AND class_name = ? AND class_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
+         String query = "SELECT class_name, assignment, grade FROM gradebooks WHERE user_id = ? AND class_name = ? AND class_id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, user.getId());
             stmt.setString(2, currentClassroomInfo.split(", ")[0]);
             stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String name = rs.getString("class_name");
-                String assignment = rs.getString("assignment");
-                double grade = rs.getDouble("grade");
-                gradebookArr.add(name + ", " + assignment + ", " + String.valueOf(grade));
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    String name = rs.getString("class_name");
+                    String assignment = rs.getString("assignment");
+                    double grade = rs.getDouble("grade");
+                    gradebookArr.add(name + ", " + assignment + ", " + String.valueOf(grade));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,22 +111,18 @@ public class ClassroomDAO {
         return gradebookArr;
     }
 
-    public void sendMessage() {
-        //
-    }
-
     //view a classroom's roster from sqlite db rosters table
     public List<String> viewClassroomRoster(String currentClassroomInfo) {
         List<String> rosterArr = new ArrayList<>();
-        try {
-            String query = "SELECT username FROM rosters WHERE class_name = ? AND class_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
+        String query = "SELECT username FROM rosters WHERE class_name = ? AND class_id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(query)) {  
             stmt.setString(1, currentClassroomInfo.split(", ")[0]);
             stmt.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String name = rs.getString("username");
-                rosterArr.add(name);
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    String name = rs.getString("username");
+                    rosterArr.add(name);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -134,23 +132,23 @@ public class ClassroomDAO {
 
     // Fetches and inserts classroom data depending on the presence of exisitng data
 	public void connectToDatabase(User user, Classroom classroom){
-		try(Statement statement = connection.createStatement()){
-			String checkIfInClassroom = "SELECT * FROM classrooms WHERE user_id = ? AND class_id = ? AND class_name = ?";
-            PreparedStatement pstmtIfInClassroom = connection.prepareStatement(checkIfInClassroom);
+        String checkIfInClassroom = "SELECT * FROM classrooms WHERE user_id = ? AND class_id = ? AND class_name = ?";
+		try(PreparedStatement pstmtIfInClassroom = connection.prepareStatement(checkIfInClassroom)){
 			pstmtIfInClassroom.setInt(1, user.getId());
 			pstmtIfInClassroom.setInt(2, classroom.getClassroomId());
 			pstmtIfInClassroom.setString(3, classroom.getClassroomName());
             try (ResultSet rs = pstmtIfInClassroom.executeQuery()) {
                 if (!rs.next()) {
                     String insertNewClassroom = "INSERT INTO classrooms (user_id, class_id, class_name, discussions, teacher, meeting_time) VALUES (?, ?, ?, ?, ?, ?)";
-					PreparedStatement pstmtNewClassroom = connection.prepareStatement(insertNewClassroom);
-					pstmtNewClassroom.setInt(1, user.getId());
-					pstmtNewClassroom.setInt(2, classroom.getClassroomId());
-					pstmtNewClassroom.setString(3, classroom.getClassroomName());
-					pstmtNewClassroom.setString(4, String.join(",", classroom.getDiscussions()));
-					pstmtNewClassroom.setString(5, classroom.getTeacher());
-					pstmtNewClassroom.setString(6, classroom.getMeetingTime());
-					pstmtNewClassroom.executeUpdate();
+					try(PreparedStatement pstmtNewClassroom = connection.prepareStatement(insertNewClassroom)){
+                        pstmtNewClassroom.setInt(1, user.getId());
+                        pstmtNewClassroom.setInt(2, classroom.getClassroomId());
+                        pstmtNewClassroom.setString(3, classroom.getClassroomName());
+                        pstmtNewClassroom.setString(4, String.join(",", classroom.getDiscussions()));
+                        pstmtNewClassroom.setString(5, classroom.getTeacher());
+                        pstmtNewClassroom.setString(6, classroom.getMeetingTime());
+                        pstmtNewClassroom.executeUpdate();
+                    }
                 }
             }
         } catch (SQLException er) {
