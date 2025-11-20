@@ -23,11 +23,10 @@ public class LoginRegister extends JFrame {
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
-        this.connection = Main.connect(); // share same connection across all files
-        this.userDAO = new UserDAO(connection);
-        this.classroomDAO = new ClassroomDAO(connection);
-        this.rosterDAO = new RosterDAO(connection);
-        this.gradebookDAO = new GradebookDAO(connection);
+        this.userDAO = Main.userDAO;
+        this.classroomDAO = Main.classroomDAO;
+        this.rosterDAO = Main.rosterDAO;
+        this.gradebookDAO = Main.gradebookDAO;
         setTitle("iLearn");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,7 +64,7 @@ public class LoginRegister extends JFrame {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             if (!username.equals("") && !password.equals("")) {
-                if(isRegistered(username, password)){
+                if(userDAO.isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
                     User loggedUser = new User(0, password, null, username, null);
@@ -73,6 +72,7 @@ public class LoginRegister extends JFrame {
                     SetUser currentUser = new SetUser();
                     currentUser.setUser(loggedUser);
                     Main.HomePage(currentUser); 
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "User not found. Please register");
                     cardLayout.show(mainPanel, "register");
@@ -121,7 +121,7 @@ public class LoginRegister extends JFrame {
             String classes = classesField.getText();
             int id = Math.abs(rand.nextInt() + 1);
             if (!username.equals("") && !password.equals("") && !classes.equals("")) {
-                if(isRegistered(username, password)){ 
+                if(userDAO.isRegistered(username, password)){ 
                     JOptionPane.showMessageDialog(this, "Already registered! Login!");
                     cardLayout.show(mainPanel, "login");
                 } else {
@@ -171,28 +171,8 @@ public class LoginRegister extends JFrame {
 
     // Verifies that the user info is registered
     public void login(String username, String password) {
-        if (!isRegistered(username, password)) {
+        if (!userDAO.isRegistered(username, password)) {
             showMessage("Please register");
         }
-    }
-
-    // Checks if a user is registered
-    private boolean isRegistered(String username, String pw) {
-        try(Statement statement = connection.createStatement()){
-            String findUser = "SELECT * FROM users WHERE name = ? AND password = ?";
-            PreparedStatement pstmtFindUser = connection.prepareStatement(findUser);
-            pstmtFindUser.setString(1, username);
-            pstmtFindUser.setString(2, pw);
-            try (ResultSet res = pstmtFindUser.executeQuery()){
-                while (res.next()){
-                    String name = res.getString("name");
-                    String password = res.getString("password");
-                    return (username.equals(name) && password.equals(pw));
-                }
-            }
-        } catch (SQLException er) {
-            er.printStackTrace(System.err);
-        }
-        return false;
     }
 }

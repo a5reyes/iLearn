@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,17 +37,20 @@ public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static String currentClassroomInfo;
     private static String currentAssignmentString;
-    private Connection connection = Main.connect();
-    private UserDAO userDAO = new UserDAO(connection);
-    private ClassroomDAO classroomDAO = new ClassroomDAO(connection);
-    private RosterDAO rosterDAO = new RosterDAO(connection);
-    private GradebookDAO gradebookDAO = new GradebookDAO(connection);
-    private AssignmentDAO assignmentDAO = new AssignmentDAO(connection);
+    private final ClassroomDAO classroomDAO;
+    private final GradebookDAO gradebookDAO;
+    private final AssignmentDAO assignmentDAO;
     private Stage stage;
     private Scene scene;
     private Parent root;
     private ZonedDateTime dateFocus;
     private ZonedDateTime today;
+
+    public AppController() {
+        this.classroomDAO = Main.classroomDAO;
+        this.gradebookDAO = Main.gradebookDAO;
+        this.assignmentDAO = Main.assignmentDAO;
+    }
     
     // ---------- MAIN PAGE FXML ----------
     @FXML private ListView<String> mainPageListView;
@@ -116,6 +120,9 @@ public class AppController extends Application implements Initializable {
         messageBody.clear();
     }
 
+    // ===========================================
+    //                START
+    // ===========================================
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));

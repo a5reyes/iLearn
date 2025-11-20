@@ -47,4 +47,23 @@ public class UserDAO {
         }
     }
 
+    // Checks if a user is registered
+    public boolean isRegistered(String username, String pw) {
+        String findUser = "SELECT * FROM users WHERE name = ? AND password = ?";
+        try(PreparedStatement pstmtFindUser = connection.prepareStatement(findUser)){
+            pstmtFindUser.setString(1, username);
+            pstmtFindUser.setString(2, pw);
+            try (ResultSet res = pstmtFindUser.executeQuery()){
+                while (res.next()){
+                    String name = res.getString("name");
+                    String password = res.getString("password");
+                    return (username.equals(name) && password.equals(pw));
+                }
+            }
+        } catch (SQLException er) {
+            er.printStackTrace(System.err);
+        }
+        return false;
+    }
+
 }

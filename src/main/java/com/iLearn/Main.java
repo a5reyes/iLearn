@@ -4,32 +4,44 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.*;
+import com.ilearn.dao.AssignmentDAO;
+import com.ilearn.dao.ClassroomDAO;
+import com.ilearn.dao.GradebookDAO;
+import com.ilearn.dao.RosterDAO;
+import com.ilearn.dao.UserDAO;
 
 public class Main{
-    private static Connection conn;
+    public static Connection connection;
+    public static UserDAO userDAO;
+    public static ClassroomDAO classroomDAO;
+    public static RosterDAO rosterDAO;
+    public static GradebookDAO gradebookDAO;
+    public static AssignmentDAO assignmentDAO;
+
     public static void HomePage(SetUser currUser){
         User user = currUser.getUser();
         AppController.setCurrentUser(user);
         AppController.main(null);
     }
 
-    // Connects application to SQL database
-    public static Connection connect() {
-        if (conn == null) {
-            try {
-                conn = DriverManager.getConnection("jdbc:sqlite:ilearn.db");
-                conn.createStatement().execute("PRAGMA busy_timeout = 5000;");
-                conn.createStatement().execute("PRAGMA journal_mode = WAL;");
-                System.out.println("Connected to SQLite.");
-                System.out.println(">>> Opening connection: " + System.identityHashCode(conn));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return conn;
+    public static void initDatabase() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:sqlite:ilearn.db");
+        connection.createStatement().execute("PRAGMA busy_timeout = 5000;");
+        connection.createStatement().execute("PRAGMA foreign_keys = ON;");
+
+        userDAO = new UserDAO(connection);
+        classroomDAO = new ClassroomDAO(connection);
+        rosterDAO = new RosterDAO(connection);
+        gradebookDAO = new GradebookDAO(connection);
+        assignmentDAO = new AssignmentDAO(connection);
     }
 
     public static void main(String[] args) { 
+        try {
+            initDatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true));
     }
 }
