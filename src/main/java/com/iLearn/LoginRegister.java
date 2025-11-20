@@ -1,6 +1,7 @@
 package com.ilearn;
 import java.awt.*;
 import javax.swing.*;
+import java.net.URL;
 
 import com.ilearn.dao.ClassroomDAO;
 import com.ilearn.dao.GradebookDAO;
@@ -19,7 +20,6 @@ public class LoginRegister extends JFrame {
     private ClassroomDAO classroomDAO;
     private RosterDAO rosterDAO;
     private GradebookDAO gradebookDAO;
-    private Connection connection;
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
@@ -31,7 +31,10 @@ public class LoginRegister extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); 
-
+        URL logoURL = getClass().getResource("/com/ilearn/logo.png");
+        ImageIcon logo = new ImageIcon(logoURL);
+        setIconImage(logo.getImage());
+    
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
