@@ -22,7 +22,7 @@ public class Classroom {
 	public String getClassroomName() {
 		return classroomName;
 	}
-	public void setClassroomId(String classroomName) {
+	public void setClassroomName(String classroomName) {
 		this.classroomName = classroomName;
 	}
 
@@ -74,6 +74,11 @@ public class Classroom {
                 this.assignments.remove(idx); 
             }   
         }
+    }
+
+	@Override
+    public String toString() {
+        return classroomName + ", " + classroomId;
     }
 
 	

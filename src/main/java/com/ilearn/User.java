@@ -54,13 +54,8 @@ public class User {
         classroomArr.add(classroom);
     }
 
-    public void submitAssignment() {
-        //
-        
-    }
-
-    public void viewCalendar() {
-        //
+    public ArrayList<Classroom> getClassrooms() {
+        return this.classroomArr;
     }
 
     public static void main(String[] args) {

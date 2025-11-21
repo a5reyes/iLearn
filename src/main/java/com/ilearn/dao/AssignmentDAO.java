@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.ilearn.Assignment;
+import com.ilearn.Classroom;
 import com.ilearn.User;
 
 public class AssignmentDAO {
@@ -19,7 +20,7 @@ public class AssignmentDAO {
     }
 
     //this is where a teacher can assign assignments for classroom
-    public void addAssignment(User user, String currentClassroomInfo, String assignmentName, String description, double grade, String student, String dueDate){
+    public void addAssignment(User user, Classroom currentClassroom, String assignmentName, String description, double grade, String student, String dueDate){
         //for(Classroom classroomObj: classroomArr){
             //if(classroomObj.getClassroomName().equals(currentClassroomName)){
                 //Assignment assignment = new Assignment(name, description, grade);
@@ -27,8 +28,8 @@ public class AssignmentDAO {
         String insertNewAssignment = "INSERT INTO assignments (user_id, class_id, class_name, name, description, grade, student, due_date, teacher) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(PreparedStatement pstmtNewAssignment = connection.prepareStatement(insertNewAssignment);){
             pstmtNewAssignment.setInt(1, user.getId());
-            pstmtNewAssignment.setInt(2, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
-            pstmtNewAssignment.setString(3, currentClassroomInfo.split(", ")[0]);
+            pstmtNewAssignment.setInt(2, currentClassroom.getClassroomId());
+            pstmtNewAssignment.setString(3, currentClassroom.getClassroomName());
             pstmtNewAssignment.setString(4, assignmentName);
             pstmtNewAssignment.setString(5, description);
             pstmtNewAssignment.setDouble(6, grade);
@@ -44,7 +45,7 @@ public class AssignmentDAO {
     }
 
     //where all assignments from a specific classroom are returned
-    public List<String> getAssignments(User user, String currentClassroomInfo){
+    public List<String> getAssignments(User user, Classroom currentClassroom){
         List<String> assignmentNameList = new ArrayList<>();
         //for(Classroom classroomObj: classroomArr){
             //if(classroomObj.getClassroomName().equals(currentClassroomName)){
@@ -52,8 +53,8 @@ public class AssignmentDAO {
         String query = user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ? AND class_name = ? AND class_id = ?" : "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?";
         try(PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getName());
-            stmt.setString(2, currentClassroomInfo.split(", ")[0]);
-            stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            stmt.setString(2, currentClassroom.getClassroomName());
+            stmt.setInt(3, currentClassroom.getClassroomId());
             try (ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
                     String assignmentName = rs.getString("name");
@@ -74,16 +75,16 @@ public class AssignmentDAO {
     }
 
     //where all assignments no matter the classroom are returned
-    public List<Assignment> getAllAssignments(User user, String currentClassroomInfo){
+    public List<Assignment> getAllAssignments(User user, Classroom currentClassroom){
         List<Assignment> assignmentsList = new ArrayList<>();
-        String query = Objects.equals(null, currentClassroomInfo) ? 
+        String query = Objects.equals(null, currentClassroom) ? 
             (user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ?" : "SELECT * FROM assignments WHERE student = ?") 
             : (user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ? AND class_name = ? AND class_id = ?" : "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?") ;
         try(PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getName());
-            if(!Objects.equals(currentClassroomInfo, null)){
-                stmt.setString(2, currentClassroomInfo.split(", ")[0]);
-                stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            if(!Objects.equals(currentClassroom, null)){
+                stmt.setString(2, currentClassroom.getClassroomName());
+                stmt.setInt(3, currentClassroom.getClassroomId());
             }
             try (ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
@@ -104,12 +105,12 @@ public class AssignmentDAO {
     }
 
     //where a student can submit their work to an assignment 
-    public void submitAssignment(User user, String currentClassroomInfo, String work, String assignmentName, String studentName){
+    public void submitAssignment(User user, Classroom currentClassroom, String work, String assignmentName, String studentName){
 		String updateAssignment = "UPDATE assignments SET work = ? WHERE class_name = ? AND class_id = ? AND name = ? AND student = ?";
         try(PreparedStatement pstmt = connection.prepareStatement(updateAssignment)) {
             pstmt.setString(1, work);
-            pstmt.setString(2, currentClassroomInfo.split(", ")[0]);
-            pstmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            pstmt.setString(2, currentClassroom.getClassroomName());
+            pstmt.setInt(3, currentClassroom.getClassroomId());
             pstmt.setString(4, assignmentName);
             pstmt.setString(5, studentName);
             pstmt.executeUpdate();      

@@ -37,7 +37,7 @@ import com.ilearn.dao.UserDAO;
 
 public class AppController extends Application implements Initializable {
     private static User currentUser;
-    private static String currentClassroomInfo;
+    private static Classroom currentClassroom;
     private final ClassroomDAO classroomDAO;
     private final AssignmentDAO assignmentDAO;
     private Stage stage;
@@ -84,7 +84,7 @@ public class AppController extends Application implements Initializable {
     @FXML private TextField recipientField;
     
     public static void setCurrentUser(User user) { currentUser = user; }
-    public static void setCurrentClass(String currentClassInfo) { currentClassroomInfo = currentClassInfo; }
+    public static void setCurrentClassroom(Classroom classroom) { currentClassroom = classroom; }
     // ===========================================
     //                INITIALIZATION
     // ===========================================
@@ -181,33 +181,44 @@ public class AppController extends Application implements Initializable {
     }
 
     @FXML private void handleItemClick() {
-        String selectedItem = mainPageListView.getSelectionModel().getSelectedItem();
-        setCurrentClass(selectedItem);
-        System.out.println("Selected item: " + selectedItem);
+        String selectedClass = mainPageListView.getSelectionModel().getSelectedItem();
+        String selectedClassName = selectedClass.split(", ")[0];
+        String selectedClassId = selectedClass.split(", ")[1];
+        for(Classroom userClassroom : currentUser.getClassrooms()){
+            if(Objects.equals(userClassroom.getClassroomName(), selectedClassName) && Objects.equals(userClassroom.getClassroomId(), Integer.parseInt(selectedClassId))){
+                setCurrentClassroom(userClassroom);
+            }
+        }
+        System.out.println("Selected item: " + selectedClass);
     }
 
     // ===========================================
     //          CLASSROOM PAGE - DEFAULT
     // ===========================================
     @FXML private void currClassInfoToClassTab() {
-        currClassroomListView.getItems().setAll(classroomDAO.viewClassroomInfo(currentClassroomInfo));
+        currClassroomListView.getItems().setAll(classroomDAO.viewClassroomInfo(currentClassroom));
     }
 
     @FXML private void currRosterToClassTab() {
-        currClassroomListView.getItems().setAll(classroomDAO.viewClassroomRoster(currentClassroomInfo));
+        currClassroomListView.getItems().setAll(classroomDAO.viewClassroomRoster(currentClassroom));
     }
 
     @FXML private void currGradebookToClassTab() {
-        currClassroomListView.getItems().setAll(classroomDAO.viewClassroomGrades(currentUser, currentClassroomInfo));
+        currClassroomListView.getItems().setAll(
+        assignmentDAO.getAllAssignments(currentUser, currentClassroom)
+                     .stream()
+                     .map(Assignment::toString)
+                     .collect(Collectors.toList())
+    );
     }
 
     @FXML private void currAssignmentToClassTab() {
-        currClassroomListView.getItems().setAll(assignmentDAO.getAssignments(currentUser, currentClassroomInfo));
+        currClassroomListView.getItems().setAll(assignmentDAO.getAssignments(currentUser, currentClassroom));
     }
 
     @FXML private void currGradebookToGradebookTab() {
         currGradebookListView.getItems().setAll(
-        assignmentDAO.getAllAssignments(currentUser, currentClassroomInfo)
+        assignmentDAO.getAllAssignments(currentUser, currentClassroom)
                      .stream()
                      .map(Assignment::toString)
                      .collect(Collectors.toList())
@@ -221,7 +232,7 @@ public class AppController extends Application implements Initializable {
     @FXML private void submitAssignment() {
         String selectedAssignment = currClassroomListView.getSelectionModel().getSelectedItem();
         String work = studentWork.getText();
-        assignmentDAO.submitAssignment(currentUser, currentClassroomInfo, work, selectedAssignment.split(", ")[0], currentUser.getName());
+        assignmentDAO.submitAssignment(currentUser, currentClassroom, work, selectedAssignment.split(", ")[0], currentUser.getName());
         System.out.println("Work added to " + selectedAssignment.split(", ")[0] + " : " + work);
     }
 
@@ -235,7 +246,7 @@ public class AppController extends Application implements Initializable {
         String assignmentStudentStr = assignmentStudent.getText();
         LocalDate assignmentDueDate = assignmentDatePicker.getValue();
         String assignmentDueDateStr = assignmentDueDate.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        assignmentDAO.addAssignment(currentUser, currentClassroomInfo, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr, assignmentDueDateStr);
+        assignmentDAO.addAssignment(currentUser, currentClassroom, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr, assignmentDueDateStr);
         System.out.println("Assignment added: " + assignmentNameStr);
     }
 
@@ -387,7 +398,7 @@ public class AppController extends Application implements Initializable {
         List<CalendarActivity> list = new ArrayList<>();
         int y = date.getYear();
         int m = date.getMonthValue();
-        List<Assignment> allAssignments = assignmentDAO.getAllAssignments(currentUser, currentClassroomInfo);
+        List<Assignment> allAssignments = assignmentDAO.getAllAssignments(currentUser, currentClassroom);
         for (int i = 0; i < allAssignments.size(); i++) {
             String assignmentName = allAssignments.get(i).getAssignmentName();
             String assignmentDueDateString = allAssignments.get(i).getDueDateString();

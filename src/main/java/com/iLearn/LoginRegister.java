@@ -6,8 +6,6 @@ import java.net.URL;
 import com.ilearn.dao.ClassroomDAO;
 import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
-
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -160,8 +158,7 @@ public class LoginRegister extends JFrame {
     //login user in dao
     private void loginUser(User user, String username, String password) {
         userDAO.setFromDatabase(username, password, user);
-        classroomDAO.setClassrooms(user);
-        
+        classroomDAO.getClassrooms(user);
     }
 
     // Displays an error message via jframe
