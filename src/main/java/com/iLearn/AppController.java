@@ -383,9 +383,9 @@ public class AppController extends Application implements Initializable {
         List<CalendarActivity> list = new ArrayList<>();
         int y = date.getYear();
         int m = date.getMonthValue();
-        Random r = new Random();
         List<Assignment> allAssignments = assignmentDAO.getAllAssignments(currentUser, currentClassroomInfo);
         for (int i = 0; i < allAssignments.size(); i++) {
+            String assignmentName = allAssignments.get(i).getAssignmentName();
             String assignmentDueDateString = allAssignments.get(i).getDueDateString();
             String[] dateParts = assignmentDueDateString.split("-");
             int day = Integer.parseInt(dateParts[1]);
@@ -394,7 +394,7 @@ public class AppController extends Application implements Initializable {
                     11, 59, 0, 0,
                     date.getZone()
             );
-            list.add(new CalendarActivity(t, "user", 1234533));
+            list.add(new CalendarActivity(t, assignmentName, currentUser.getId()));
         }
 
         return createCalendarMap(list);
