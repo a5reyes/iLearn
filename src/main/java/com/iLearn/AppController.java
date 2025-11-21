@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -123,6 +124,9 @@ public class AppController extends Application implements Initializable {
     // ===========================================
     @Override
     public void start(Stage stage) throws IOException {
+        URL logoURL = getClass().getResource("/com/ilearn/logo.png");
+        Image logo = new Image(logoURL.toString());
+        stage.getIcons().add(logo);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 650, 600);

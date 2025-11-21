@@ -29,7 +29,6 @@ public class Main{
         connection = DriverManager.getConnection("jdbc:sqlite:ilearn.db");
         connection.createStatement().execute("PRAGMA busy_timeout = 5000;");
         connection.createStatement().execute("PRAGMA foreign_keys = ON;");
-
         userDAO = new UserDAO(connection);
         classroomDAO = new ClassroomDAO(connection);
         rosterDAO = new RosterDAO(connection);
