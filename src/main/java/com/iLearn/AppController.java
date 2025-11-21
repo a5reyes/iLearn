@@ -384,11 +384,14 @@ public class AppController extends Application implements Initializable {
         int y = date.getYear();
         int m = date.getMonthValue();
         Random r = new Random();
-
-        for (int i = 0; i < 50; i++) {
+        List<Assignment> allAssignments = assignmentDAO.getAllAssignments(currentUser, currentClassroomInfo);
+        for (int i = 0; i < allAssignments.size(); i++) {
+            String assignmentDueDateString = allAssignments.get(i).getDueDateString();
+            String[] dateParts = assignmentDueDateString.split("-");
+            int day = Integer.parseInt(dateParts[1]);
             ZonedDateTime t = ZonedDateTime.of(
-                    y, m, r.nextInt(27) + 1,
-                    16, 0, 0, 0,
+                    y, m, day,
+                    11, 59, 0, 0,
                     date.getZone()
             );
             list.add(new CalendarActivity(t, "user", 1234533));

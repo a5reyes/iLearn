@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.ilearn.Assignment;
 import com.ilearn.User;
@@ -73,11 +74,17 @@ public class AssignmentDAO {
     }
 
     //where all assignments no matter the classroom are returned
-    public List<Assignment> getAllAssignments(User user){
+    public List<Assignment> getAllAssignments(User user, String currentClassroomInfo){
         List<Assignment> assignmentsList = new ArrayList<>();
-        String query = user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ? AND class_name = ? AND class_id = ?" : "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?";
+        String query = Objects.equals(null, currentClassroomInfo) ? 
+            (user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ?" : "SELECT * FROM assignments WHERE student = ?") 
+            : (user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ? AND class_name = ? AND class_id = ?" : "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?") ;
         try(PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getName());
+            if(!Objects.equals(currentClassroomInfo, null)){
+                stmt.setString(2, currentClassroomInfo.split(", ")[0]);
+                stmt.setInt(3, Integer.parseInt(currentClassroomInfo.split(", ")[1]));
+            }
             try (ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
                     String assignmentName = rs.getString("name");
