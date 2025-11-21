@@ -11,6 +11,7 @@ import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
 
 public class Main{
+    //variables for daos
     public static Connection connection;
     public static UserDAO userDAO;
     public static ClassroomDAO classroomDAO;
@@ -18,12 +19,14 @@ public class Main{
     public static GradebookDAO gradebookDAO;
     public static AssignmentDAO assignmentDAO;
 
+    //passing setuser object from loginRegister JFRAME into appcontroller
     public static void HomePage(SetUser currUser){
         User user = currUser.getUser();
         AppController.setCurrentUser(user);
         AppController.main(null);
     }
 
+    //initializes db; if db locked cause its busy, wait 5ms; foreign_keys constraints off
     public static void initDatabase() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:ilearn.db");
         connection.createStatement().execute("PRAGMA busy_timeout = 5000;");
@@ -38,10 +41,10 @@ public class Main{
 
     public static void main(String[] args) { 
         try {
-            initDatabase();
+            initDatabase(); //initialize db connection all at once
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true));
+        SwingUtilities.invokeLater(() -> new LoginRegister().setVisible(true)); //start loginRegister JFrame
     }
 }

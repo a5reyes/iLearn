@@ -385,7 +385,14 @@ public class AppController extends Application implements Initializable {
         int m = date.getMonthValue();
         Random r = new Random();
 
-
+        for (int i = 0; i < 50; i++) {
+            ZonedDateTime t = ZonedDateTime.of(
+                    y, m, r.nextInt(27) + 1,
+                    16, 0, 0, 0,
+                    date.getZone()
+            );
+            list.add(new CalendarActivity(t, "user", 1234533));
+        }
 
         return createCalendarMap(list);
     }

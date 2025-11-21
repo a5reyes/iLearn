@@ -17,6 +17,7 @@ public class AssignmentDAO {
         this.connection = connection; // share same connection across all files
     }
 
+    //this is where a teacher can assign assignments for classroom
     public void addAssignment(User user, String currentClassroomInfo, String assignmentName, String description, double grade, String student, String dueDate){
         //for(Classroom classroomObj: classroomArr){
             //if(classroomObj.getClassroomName().equals(currentClassroomName)){
@@ -41,6 +42,7 @@ public class AssignmentDAO {
         //}
     }
 
+    //where all assignments from a specific classroom are returned
     public List<String> getAssignments(User user, String currentClassroomInfo){
         List<String> assignmentNameList = new ArrayList<>();
         //for(Classroom classroomObj: classroomArr){
@@ -70,6 +72,7 @@ public class AssignmentDAO {
         //}
     }
 
+    //where all assignments no matter the classroom are returned
     public List<Assignment> getAllAssignments(User user){
         List<Assignment> assignmentsList = new ArrayList<>();
         String query = user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ? AND class_name = ? AND class_id = ?" : "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?";
@@ -93,6 +96,7 @@ public class AssignmentDAO {
         return assignmentsList;
     }
 
+    //where a student can submit their work to an assignment 
     public void submitAssignment(User user, String currentClassroomInfo, String work, String assignmentName, String studentName){
 		String updateAssignment = "UPDATE assignments SET work = ? WHERE class_name = ? AND class_id = ? AND name = ? AND student = ?";
         try(PreparedStatement pstmt = connection.prepareStatement(updateAssignment)) {
