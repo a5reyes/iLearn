@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import javax.swing.*;
 import com.ilearn.dao.AssignmentDAO;
 import com.ilearn.dao.ClassroomDAO;
-import com.ilearn.dao.GradebookDAO;
 import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
 
@@ -16,7 +15,6 @@ public class Main{
     public static UserDAO userDAO;
     public static ClassroomDAO classroomDAO;
     public static RosterDAO rosterDAO;
-    public static GradebookDAO gradebookDAO;
     public static AssignmentDAO assignmentDAO;
 
     //passing setuser object from loginRegister JFRAME into appcontroller
@@ -35,7 +33,6 @@ public class Main{
         userDAO = new UserDAO(connection);
         classroomDAO = new ClassroomDAO(connection);
         rosterDAO = new RosterDAO(connection);
-        gradebookDAO = new GradebookDAO(connection);
         assignmentDAO = new AssignmentDAO(connection);
     }
 

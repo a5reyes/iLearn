@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.net.URL;
 
 import com.ilearn.dao.ClassroomDAO;
-import com.ilearn.dao.GradebookDAO;
 import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
 
@@ -19,14 +18,12 @@ public class LoginRegister extends JFrame {
     private UserDAO userDAO;
     private ClassroomDAO classroomDAO;
     private RosterDAO rosterDAO;
-    private GradebookDAO gradebookDAO;
 
     //constructor; sets up main panel where you can login or move to register
     public LoginRegister() {
         this.userDAO = Main.userDAO;
         this.classroomDAO = Main.classroomDAO;
         this.rosterDAO = Main.rosterDAO;
-        this.gradebookDAO = Main.gradebookDAO;
         setTitle("iLearn");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,7 +154,6 @@ public class LoginRegister extends JFrame {
         for (Classroom c : classes) {
             classroomDAO.connectToDatabase(user, c);
             rosterDAO.connectToDatabase(user, c);
-            gradebookDAO.connectToDatabase(user, c);
         }
     }
 

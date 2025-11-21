@@ -29,7 +29,9 @@ public class Assignment {
 
     @Override
     public String toString() {
-        return assignmentName;
+        String formatStr = String.format("Assignment - %s - Description - %s - Grade - %,.2f - Name - %s - Due - %s - Work - %s", 
+            assignmentName, description, grade, name, dueDateString, work);
+        return formatStr;
     }
 
     @Override

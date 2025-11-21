@@ -27,10 +27,11 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.ilearn.dao.AssignmentDAO;
 import com.ilearn.dao.ClassroomDAO;
-import com.ilearn.dao.GradebookDAO;
+
 import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
 
@@ -38,7 +39,6 @@ public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static String currentClassroomInfo;
     private final ClassroomDAO classroomDAO;
-    private final GradebookDAO gradebookDAO;
     private final AssignmentDAO assignmentDAO;
     private Stage stage;
     private Scene scene;
@@ -48,7 +48,6 @@ public class AppController extends Application implements Initializable {
 
     public AppController() {
         this.classroomDAO = Main.classroomDAO;
-        this.gradebookDAO = Main.gradebookDAO;
         this.assignmentDAO = Main.assignmentDAO;
     }
     
@@ -207,7 +206,12 @@ public class AppController extends Application implements Initializable {
     }
 
     @FXML private void currGradebookToGradebookTab() {
-        currGradebookListView.getItems().setAll(gradebookDAO.viewGrades(currentUser));
+        currGradebookListView.getItems().setAll(
+        assignmentDAO.getAllAssignments(currentUser, currentClassroomInfo)
+                     .stream()
+                     .map(Assignment::toString)
+                     .collect(Collectors.toList())
+    );
     }
 
     // ===========================================
