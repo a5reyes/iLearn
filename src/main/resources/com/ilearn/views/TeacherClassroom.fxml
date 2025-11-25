@@ -9,33 +9,33 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" style="-fx-background-color: #46B1E1;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
    <children>
-      <Label layoutX="260.0" layoutY="16.0" prefHeight="45.0" prefWidth="156.0" text="Classroom">
+      <Label layoutX="260.0" layoutY="16.0" prefHeight="45.0" prefWidth="156.0" text="Classroom" textFill="#090c7c">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
-      <ListView fx:id="currClassroomListView" layoutX="32.0" layoutY="136.0" prefHeight="176.0" prefWidth="585.0" />
-      <Button layoutX="143.0" layoutY="78.0" mnemonicParsing="false" onAction="#currAssignmentToClassTab" text="Assignments" />
-      <Button layoutX="288.0" layoutY="78.0" mnemonicParsing="false" onAction="#currRosterToClassTab" text="Roster" />
-      <Button layoutX="436.0" layoutY="78.0" mnemonicParsing="false" onAction="#currGradebookToClassTab" text="Gradebook" />
-      <Button layoutX="44.0" layoutY="78.0" mnemonicParsing="false" onAction="#currClassInfoToClassTab" text="Info" />
-      <Button layoutX="124.0" layoutY="47.0" mnemonicParsing="false" text="Add" />
-      <Button layoutX="175.0" layoutY="47.0" mnemonicParsing="false" text="Remove" />
-      <Button layoutX="474.0" layoutY="47.0" mnemonicParsing="false" text="Remove" />
-      <Button layoutX="424.0" layoutY="46.0" mnemonicParsing="false" text="Add" />
-      <TextArea fx:id="assignmentName" layoutX="115.0" layoutY="337.0" prefHeight="40.0" prefWidth="463.0" />
-      <Button layoutX="447.0" layoutY="547.0" mnemonicParsing="false" onAction="#addAssignmentToClassTab" text="Submit" />
-      <TextArea fx:id="assignmentDescription" layoutX="115.0" layoutY="387.0" prefHeight="40.0" prefWidth="463.0" />
-      <TextArea fx:id="assignmentGrade" layoutX="115.0" layoutY="439.0" prefHeight="40.0" prefWidth="463.0" />
-      <TextArea fx:id="assignmentStudent" layoutX="115.0" layoutY="488.0" prefHeight="40.0" prefWidth="463.0" />
-      <Text layoutX="32.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" wrappingWidth="83.33333333333331" />
-      <Text layoutX="32.0" layoutY="411.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="83.33333333333331" />
-      <Text layoutX="32.0" layoutY="463.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Grade" wrappingWidth="83.33333333333331" />
-      <Text layoutX="32.0" layoutY="512.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student" wrappingWidth="83.33333333333331" />
-      <DatePicker fx:id="assignmentDatePicker" layoutX="117.0" layoutY="547.0" />
-      <Text layoutX="32.0" layoutY="564.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Due Date" wrappingWidth="83.33333333333331" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMain" style="-fx-background-color: #F0F7FA;" text="Back" textFill="#090c7c" />
+      <ListView fx:id="currClassroomListView" layoutX="32.0" layoutY="136.0" prefHeight="176.0" prefWidth="585.0" style="-fx-background-color: #F0F7FA;" />
+      <Button layoutX="143.0" layoutY="78.0" mnemonicParsing="false" onAction="#currAssignmentToClassTab" style="-fx-background-color: #F0F7FA;" text="Assignments" textFill="#090c7c" />
+      <Button layoutX="288.0" layoutY="78.0" mnemonicParsing="false" onAction="#currRosterToClassTab" style="-fx-background-color: #F0F7FA;" text="Roster" textFill="#090c7c" />
+      <Button layoutX="436.0" layoutY="78.0" mnemonicParsing="false" onAction="#currGradebookToClassTab" style="-fx-background-color: #F0F7FA;" text="Gradebook" textFill="#090c7c" />
+      <Button layoutX="44.0" layoutY="78.0" mnemonicParsing="false" onAction="#currClassInfoToClassTab" style="-fx-background-color: #F0F7FA;" text="Info" textFill="#090c7c" />
+      <Button layoutX="124.0" layoutY="47.0" mnemonicParsing="false" style="-fx-background-color: #F0F7FA;" text="Add" textFill="#090c7c" />
+      <Button layoutX="175.0" layoutY="47.0" mnemonicParsing="false" style="-fx-background-color: #F0F7FA;" text="Remove" textFill="#090c7c" />
+      <Button layoutX="474.0" layoutY="47.0" mnemonicParsing="false" style="-fx-background-color: #F0F7FA;" text="Remove" textFill="#090c7c" />
+      <Button layoutX="424.0" layoutY="46.0" mnemonicParsing="false" style="-fx-background-color: #F0F7FA;" text="Add" textFill="#090c7c" />
+      <TextArea fx:id="assignmentName" layoutX="115.0" layoutY="337.0" prefHeight="40.0" prefWidth="463.0" style="-fx-background-color: #F0F7FA;" />
+      <Button layoutX="447.0" layoutY="547.0" mnemonicParsing="false" onAction="#addAssignmentToClassTab" style="-fx-background-color: #F0F7FA;" text="Submit" textFill="#090c7c" />
+      <TextArea fx:id="assignmentDescription" layoutX="115.0" layoutY="387.0" prefHeight="40.0" prefWidth="463.0" style="-fx-background-color: #F0F7FA;" />
+      <TextArea fx:id="assignmentGrade" layoutX="115.0" layoutY="439.0" prefHeight="40.0" prefWidth="463.0" style="-fx-background-color: #F0F7FA;" />
+      <TextArea fx:id="assignmentStudent" layoutX="115.0" layoutY="488.0" prefHeight="40.0" prefWidth="463.0" style="-fx-background-color: #F0F7FA;" />
+      <Text fill="#090c7c" layoutX="32.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" wrappingWidth="83.33333333333331" />
+      <Text fill="#090c7c" layoutX="32.0" layoutY="411.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="83.33333333333331" />
+      <Text fill="#090c7c" layoutX="32.0" layoutY="463.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Grade" wrappingWidth="83.33333333333331" />
+      <Text fill="#090c7c" layoutX="32.0" layoutY="512.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student" wrappingWidth="83.33333333333331" />
+      <DatePicker fx:id="assignmentDatePicker" layoutX="117.0" layoutY="547.0" style="-fx-background-color: #F0F7FA;" />
+      <Text fill="#090c7c" layoutX="32.0" layoutY="564.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Due Date" wrappingWidth="83.33333333333331" />
    </children>
 </AnchorPane>

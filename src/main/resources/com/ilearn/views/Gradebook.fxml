@@ -6,15 +6,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" style="-fx-background-color: #46B1E1;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
    <children>
-      <Label layoutX="258.0" layoutY="31.0" text="Gradebook">
+      <Label layoutX="258.0" layoutY="31.0" text="Gradebook" textFill="#090c7c">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
-      <ListView fx:id="currGradebookListView" layoutX="55.0" layoutY="100.0" prefHeight="459.0" prefWidth="545.0" />
-      <Button layoutX="114.0" layoutY="64.0" mnemonicParsing="false" onAction="#currGradebookToGradebookTab" text="View" />
+      <Button layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#backToMain" style="-fx-background-color: #F0F7FA;" text="Back" textFill="#090c7c" />
+      <ListView fx:id="currGradebookListView" layoutX="55.0" layoutY="100.0" prefHeight="459.0" prefWidth="545.0" style="-fx-background-color: #F0F7FA;" />
+      <Button layoutX="114.0" layoutY="64.0" mnemonicParsing="false" onAction="#currGradebookToGradebookTab" style="-fx-background-color: #F0F7FA;" text="View" textFill="#090c7c" />
    </children>
 </AnchorPane>

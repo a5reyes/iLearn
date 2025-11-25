@@ -6,26 +6,27 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" style="-fx-background-color: #46B1E1;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
    <children>
-      <Label layoutX="7.0" layoutY="7.0" prefHeight="34.0" prefWidth="67.0" text="Calendar">
+      <Label layoutX="7.0" layoutY="7.0" prefHeight="34.0" prefWidth="67.0" text="Calendar" textFill="#83cbeb">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Button layoutX="7.0" layoutY="35.0" mnemonicParsing="false" onAction="#backToMain" text="Back" />
+      <Button layoutX="7.0" layoutY="35.0" mnemonicParsing="false" onAction="#backToMain" text="Back" textFill="#090c7c" />
       <HBox alignment="CENTER" layoutX="183.0" layoutY="11.0" prefHeight="66.0" prefWidth="283.0">
          <children>
             <Button fx:id="backOneMonth" mnemonicParsing="false" onAction="#backOneMonth" text="&lt;" />
-            <Text fx:id="year" strokeType="OUTSIDE" strokeWidth="0.0" text="####">
+            <Text fx:id="year" fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="####">
                <font>
                   <Font size="22.0" />
                </font>
             </Text>
-            <Text fx:id="month" strokeType="OUTSIDE" strokeWidth="0.0" text="####">
+            <Text fx:id="month" fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="####">
                <font>
                   <Font size="22.0" />
                </font>
@@ -37,41 +38,55 @@
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sun" textAlignment="CENTER" />
+                  <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Sun" textAlignment="CENTER" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mon" textAlignment="CENTER" />
+                  <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Mon" textAlignment="CENTER" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tue" textAlignment="CENTER" />
+                  <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Tue" textAlignment="CENTER" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Wed" textAlignment="CENTER" />
+                  <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Wed" textAlignment="CENTER" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thu" textAlignment="CENTER" />
+                  <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Thu" textAlignment="CENTER" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fri" textAlignment="CENTER" />
+                  <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Fri" textAlignment="CENTER" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sat" textAlignment="CENTER" />
+                  <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Sat" textAlignment="CENTER" />
                </children>
             </VBox>
          </children>
       </HBox>
-      <FlowPane fx:id="calendar" layoutY="145.0" prefHeight="455.0" prefWidth="738.0" />
+      <FlowPane fx:id="calendar" layoutY="145.0" prefHeight="455.0" prefWidth="738.0" style="-fx-background-color: #46B1E1;">
+         <children>
+            <Line endX="100.0" startX="750.0" stroke="#090c7c" />
+         </children></FlowPane>
+      <Line endX="101.5" endY="145.0" startX="101.5" startY="600.0" stroke="#090c7c" />
+      <Line endX="652.0" endY="236.49998474121094" startY="236.5" stroke="#090c7c" />
+      <Line endX="650.0" endY="337.5" startY="337.5" stroke="#090c7c" />
+      <Line endX="650.0" endY="418.5" startY="418.5" stroke="#090c7c" />
+      <Line endX="650.0" endY="509.5" startY="509.5" stroke="#090c7c" />
+      <Line endX="200.5" endY="600.5" startX="200.5" startY="145.0" stroke="#090c7c" />
+      <Line endX="100.0" startX="-100.0" />
+      <Line endX="467.5" endY="600.0" startX="467.5" startY="145.0" stroke="#090c7c" />
+      <Line endX="553.5" endY="600.0" startX="553.5" startY="145.0" stroke="#090c7c" />
+      <Line endX="281.5" endY="600.0" startX="281.5" startY="145.0" stroke="#090c7c" />
+      <Line endX="376.5" endY="145.0" startX="376.5" startY="600.0" stroke="#090c7c" />
    </children>
 </AnchorPane>

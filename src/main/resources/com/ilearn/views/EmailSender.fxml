@@ -8,32 +8,32 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" style="-fx-background-color: #46B1E1;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
 
     <children>
 
         <!-- Title -->
-        <Label layoutX="260.0" layoutY="16.0" text="Messages">
+        <Label layoutX="260.0" layoutY="16.0" text="Messages" textFill="#090c7c">
             <font><Font size="30.0" /></font>
         </Label>
 
         <!-- Back button -->
-        <Button layoutX="19.0" layoutY="14.0" onAction="#backToMain" text="Back" />
+        <Button layoutX="19.0" layoutY="14.0" onAction="#backToMain" style="-fx-background-color: #F0F7FA;" text="Back" textFill="#090c7c" />
 
         <!-- Message input -->
-        <TextArea fx:id="messageBody" layoutX="148.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" promptText="Enter message" />
+        <TextArea fx:id="messageBody" layoutX="148.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" promptText="Enter message" style="-fx-background-color: #F0F7FA;" />
 
         <!-- Recipient input -->
-        <TextField fx:id="recipientField" layoutX="415.0" layoutY="100.0" prefHeight="30.0" prefWidth="200.0" promptText="Enter recipient email" />
+        <TextField fx:id="recipientField" layoutX="415.0" layoutY="100.0" prefHeight="30.0" prefWidth="200.0" promptText="Enter recipient email" style="-fx-background-color: #F0F7FA;" />
 
-        <Text layoutX="50.0" layoutY="320.0" text="Send a message" />
-        <Text layoutX="415.0" layoutY="85.0" text="To" />
+        <Text fill="#090c7c" layoutX="50.0" layoutY="320.0" text="Send a message" />
+        <Text fill="#090c7c" layoutX="415.0" layoutY="85.0" text="To" />
 
         <!-- Send Button -->
-        <Button layoutX="563.0" layoutY="320.0" onAction="#sendMessage" text="Send" />
+        <Button layoutX="563.0" layoutY="320.0" onAction="#sendMessage" style="-fx-background-color: #F0F7FA;" text="Send" textFill="#090c7c" />
 
         <!-- New Message Button -->
-        <Button layoutX="49.0" layoutY="343.0" onAction="#newMessage" text="New Message" />
+        <Button layoutX="49.0" layoutY="343.0" onAction="#newMessage" style="-fx-background-color: #F0F7FA;" text="New Message" textFill="#090c7c" />
 
     </children>
 </AnchorPane>
