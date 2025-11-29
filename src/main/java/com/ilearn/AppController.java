@@ -1,6 +1,8 @@
 package com.ilearn;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -213,7 +215,11 @@ public class AppController extends Application implements Initializable {
     }
 
     @FXML private void currAssignmentsToClassTab() { //classroom assignments and grades
-        currClassroomListView.getItems().setAll(assignmentDAO.getAssignments(currentUser, currentClassroom));
+        List<Assignment> classroomAssignments = currentClassroom.getAssignments(currentUser, assignmentDAO);
+        ObservableList<String> formatted = classroomAssignments.stream()
+            .map(Assignment::toString)
+            .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        currClassroomListView.getItems().setAll(formatted);
     }
 
     // ===========================================
@@ -221,12 +227,11 @@ public class AppController extends Application implements Initializable {
     // ===========================================
 
     @FXML private void currGradebookToGradebookTab() {
-        currGradebookListView.getItems().setAll(
-        assignmentDAO.getAllAssignments(currentUser, currentClassroom)
-                     .stream()
-                     .map(Assignment::toString)
-                     .collect(Collectors.toList())
-    );
+        List<Assignment> classroomAssignments = currentClassroom.getAssignments(currentUser, assignmentDAO);
+        ObservableList<String> formatted = classroomAssignments.stream()
+            .map(Assignment::toString)
+            .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        currGradebookListView.getItems().setAll(formatted);
     }
 
     // ===========================================
@@ -234,10 +239,11 @@ public class AppController extends Application implements Initializable {
     // ===========================================
 
     @FXML private void submitAssignment() {
-        String selectedAssignment = currClassroomListView.getSelectionModel().getSelectedItem();
+        String selectedAssignmentName = currClassroomListView.getSelectionModel().getSelectedItem().split(" - ")[1];
         String work = studentWork.getText();
-        assignmentDAO.submitAssignment(currentUser, currentClassroom, work, selectedAssignment.split(", ")[0], currentUser.getName());
-        System.out.println("Work added to " + selectedAssignment.split(", ")[0] + " : " + work);
+        Assignment selectedAssignment = currentClassroom.findAssignment(selectedAssignmentName);
+        currentClassroom.submitAssignment(assignmentDAO, selectedAssignment, work);
+        System.out.println("Work added to " + selectedAssignmentName + " : " + work);
     }
 
     // ===========================================
@@ -421,10 +427,10 @@ public class AppController extends Application implements Initializable {
         List<CalendarActivity> list = new ArrayList<>();
         int y = date.getYear();
         int m = date.getMonthValue();
-        List<Assignment> allAssignments = assignmentDAO.getAllAssignments(currentUser, currentClassroom);
-        for (int i = 0; i < allAssignments.size(); i++) {
-            String assignmentName = allAssignments.get(i).getAssignmentName();
-            String assignmentDueDateString = allAssignments.get(i).getDueDateString();
+        List<Assignment> classroomAssignments = currentClassroom.getAssignments(currentUser, assignmentDAO);
+        for (int i = 0; i < classroomAssignments.size(); i++) {
+            String assignmentName = classroomAssignments.get(i).getAssignmentName();
+            String assignmentDueDateString = classroomAssignments.get(i).getDueDateString();
             String[] dateParts = assignmentDueDateString.split("-");
             int day = Integer.parseInt(dateParts[1]);
             ZonedDateTime t = ZonedDateTime.of(

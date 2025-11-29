@@ -3,6 +3,8 @@ package com.ilearn;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ilearn.dao.AssignmentDAO;
+
 public class Classroom {
 	private String classroomName;
     private int classroomId;
@@ -60,29 +62,27 @@ public class Classroom {
 		this.meetingTime = meetingTime;
 	}
 
-    public ArrayList<Assignment> getAssignments() {
+    public ArrayList<Assignment> getAssignments(User user, AssignmentDAO assignmentDAO) {
+		assignments = assignmentDAO.getAssignments(user, this);
 		return assignments;
 	}
-	public void setAssignments(ArrayList<Assignment> assignments) {
-		this.assignments = assignments;
+
+	public Assignment findAssignment(String assignmentName) {
+		for(Assignment assignment : assignments){
+			if(assignmentName.equals(assignment.getAssignmentName())){
+				return assignment;
+			}
+		}
+		return null;
 	}
 
-    public Boolean checkAssignment(Assignment assignment) {
-        boolean contains = this.assignments.contains(assignment);
-        return contains;
+	public void submitAssignment(AssignmentDAO assignmentDAO, Assignment assignment, String studentWork){
+		assignment.updateWork(studentWork);
+		assignmentDAO.submitAssignment(this, assignment);
 	}
 
     public void addAssignment(Assignment assignment){
         this.assignments.add(assignment);
-    }
-
-    public void removeAssignment(User teacher, Assignment assignment){
-        if(teacher.getIsTeacher()){
-            if(checkAssignment(assignment)){
-                int idx = this.assignments.indexOf(assignment);
-                this.assignments.remove(idx); 
-            }   
-        }
     }
 
 	public List<String> asInfoList() {
@@ -99,6 +99,5 @@ public class Classroom {
     public String toString() {
         return classroomName + ", " + classroomId;
     }
-
 	
 }
