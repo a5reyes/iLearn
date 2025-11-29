@@ -85,6 +85,11 @@ public class Classroom {
         this.assignments.add(assignment);
     }
 
+	public Boolean checkAssignment(Assignment assignment) {
+        boolean contains = this.assignments.contains(assignment);
+        return contains;
+	}
+
 	public List<String> asInfoList() {
 		return List.of(
 			"Name: " + this.getClassroomName(),
