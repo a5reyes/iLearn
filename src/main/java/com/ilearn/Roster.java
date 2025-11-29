@@ -6,7 +6,7 @@ public class Roster {
     private List<String> roster = new ArrayList<>();
     private Classroom classroom;
 
-	Roster(Classroom classroom) {
+	public Roster(Classroom classroom) {
         this.classroom = classroom;
 	}
 

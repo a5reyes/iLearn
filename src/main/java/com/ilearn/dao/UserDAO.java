@@ -4,13 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
+
+import com.ilearn.Classroom;
+import com.ilearn.Main;
 import com.ilearn.User;
 
 public class UserDAO {
     private final Connection connection;
+    private final ClassroomDAO classroomDAO;
     
     public UserDAO(Connection connection) {
         this.connection = connection; // share same connection across all files
+        this.classroomDAO = Main.classroomDAO;
     }
     //insert new user to users table in sqlite db
     public void connectToDatabase(User user){
@@ -20,17 +26,18 @@ public class UserDAO {
             pstmtNewUser.setString(2, user.getName());
             pstmtNewUser.setString(3, user.getPassword());
             pstmtNewUser.setInt(4, user.getIsTeacher() ? 1 : 0);
-            pstmtNewUser.setString(5, String.join(",", user.getClassroomsNames()));
+            String classroomsStr = user.getClassrooms(classroomDAO).stream().map(Classroom::getClassroomName).collect(Collectors.joining(","));
+            pstmtNewUser.setString(5, classroomsStr);
             pstmtNewUser.executeUpdate();
         } catch (SQLException er) {
             er.printStackTrace(System.err);
         }
     }
 
-    //when logging in, set the user's id, isTeacher, classrooms from users table in sqlite db
+    //when logging in, set the user's id, isTeacher from users table in sqlite db
     //making sure the logged in user is set to the current user object passed to the app 
     public void setFromDatabase(String username, String pw, User currUser) {
-        String getUser = "SELECT id, isTeacher, classrooms FROM users WHERE name=? AND password=?";
+        String getUser = "SELECT id, isTeacher FROM users WHERE name=? AND password=?";
         try(PreparedStatement pstmtGetUser = connection.prepareStatement(getUser)) {
             pstmtGetUser.setString(1, username);
             pstmtGetUser.setString(2, pw);
@@ -38,8 +45,6 @@ public class UserDAO {
                 while (res.next()) {
                     currUser.setId(res.getInt("id"));
                     currUser.setIsTeacher(res.getInt("isTeacher") == 1);
-                    String classroomName = res.getString("classrooms");
-                    currUser.setClassroomsNames(classroomName.split("[,;|\\s]+"));
                 }
             }
         } catch (SQLException er) {

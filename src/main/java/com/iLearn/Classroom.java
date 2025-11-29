@@ -1,6 +1,7 @@
 package com.ilearn;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Classroom {
 	private String classroomName;
@@ -9,7 +10,7 @@ public class Classroom {
 	private String[] discussions;
 	private String meetingTime;
 	ArrayList<Assignment> assignments = new ArrayList<>(); 
-
+	private Roster roster;
 	
 	public Classroom(String classroomName, int classroomId, String teacher, String[] discussions,  String meetingTime) {
 		this.classroomName = classroomName;
@@ -17,6 +18,14 @@ public class Classroom {
 		this.teacher = teacher;
 		this.discussions = discussions;
 		this.meetingTime = meetingTime;
+	}
+	
+	public Roster getRoster() {
+		return roster;
+	}
+
+	public void setRoster(Roster roster) {
+		this.roster = roster;
 	}
 
 	public String getClassroomName() {
@@ -75,6 +84,16 @@ public class Classroom {
             }   
         }
     }
+
+	public List<String> asInfoList() {
+		return List.of(
+			"Name: " + this.getClassroomName(),
+			"ID: " + this.getClassroomId(),
+			"Discussions: " + String.join(", ", this.getDiscussions()),
+			"Teacher: " + this.getTeacher(),
+			"Meeting Time: " + this.getMeetingTime()
+		);
+	}
 
 	@Override
     public String toString() {

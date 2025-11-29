@@ -10,16 +10,15 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" style="-fx-background-color: #46B1E1;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
    <children>
-      <Label layoutX="247.0" layoutY="14.0" prefHeight="45.0" prefWidth="156.0" text="Classroom" textFill="#090c7c">
+      <Label layoutX="384.0" layoutY="39.0" prefHeight="45.0" prefWidth="156.0" text="Classroom" textFill="#090c7c">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMain" style="-fx-background-color: #F0F7FA;" text="Back" />
       <ListView fx:id="currClassroomListView" layoutX="32.0" layoutY="120.0" prefHeight="179.0" prefWidth="585.0" style="-fx-background-color: #F0F7FA;" />
-      <Button layoutX="143.0" layoutY="78.0" mnemonicParsing="false" onAction="#currAssignmentToClassTab" style="-fx-background-color: #F0F7FA;" text="Assignments" textFill="#090c7c" />
-      <Button layoutX="288.0" layoutY="78.0" mnemonicParsing="false" onAction="#currRosterToClassTab" style="-fx-background-color: #F0F7FA;" text="Roster" textFill="#090c7c" />
-      <Button layoutX="436.0" layoutY="78.0" mnemonicParsing="false" onAction="#currGradebookToClassTab" style="-fx-background-color: #F0F7FA;" text="Gradebook" textFill="#090c7c" />
+      <Button layoutX="126.0" layoutY="78.0" mnemonicParsing="false" onAction="#currAssignmentsToClassTab" style="-fx-background-color: #F0F7FA;" text="Assignments" textFill="#090c7c" />
+      <Button layoutX="247.0" layoutY="78.0" mnemonicParsing="false" onAction="#currRosterToClassTab" style="-fx-background-color: #F0F7FA;" text="Roster" textFill="#090c7c" />
       <Button layoutX="44.0" layoutY="78.0" mnemonicParsing="false" onAction="#currClassInfoToClassTab" style="-fx-background-color: #F0F7FA;" text="Info" textFill="#090c7c" />
       <TextArea fx:id="studentWork" layoutX="32.0" layoutY="356.0" prefHeight="200.0" prefWidth="585.0" style="-fx-background-color: #F0F7FA;" />
       <Text fill="#090c7c" layoutX="40.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To submit assignment, click assignment above from assignments button, enter work below, click submit, then click assignments button again to see work with assignment " wrappingWidth="570.4551239013672" />

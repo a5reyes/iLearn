@@ -65,6 +65,7 @@ public class AppController extends Application implements Initializable {
     @FXML private TextArea studentWork;
 
     // ---------- CLASSROOM FXML - TEACHER ----------
+    @FXML private VBox assignmentWindow;
     @FXML private TextArea assignmentName;
     @FXML private TextArea assignmentDescription;
     @FXML private TextArea assignmentGrade;
@@ -181,44 +182,43 @@ public class AppController extends Application implements Initializable {
     //                MAIN PAGE
     // ===========================================
     @FXML private void loadUserClasses() {
-        mainPageListView.getItems().setAll(classroomDAO.viewClassroomsNamesIds(currentUser));
+        ArrayList<Classroom> userClassrooms = currentUser.getClassrooms(classroomDAO);
+        List<String> formatted = userClassrooms.stream().map(c -> c.getClassroomName() + ", " + c.getClassroomId()).collect(Collectors.toList());
+        mainPageListView.getItems().setAll(formatted);
     }
 
     @FXML private void handleItemClick() {
         String selectedClass = mainPageListView.getSelectionModel().getSelectedItem();
         String selectedClassName = selectedClass.split(", ")[0];
         String selectedClassId = selectedClass.split(", ")[1];
-        for(Classroom userClassroom : currentUser.getClassrooms()){
+        for(Classroom userClassroom : currentUser.getClassrooms(classroomDAO)){
             if(Objects.equals(userClassroom.getClassroomName(), selectedClassName) && Objects.equals(userClassroom.getClassroomId(), Integer.parseInt(selectedClassId))){
                 setCurrentClassroom(userClassroom);
             }
         }
+        currentClassroom.setRoster(classroomDAO.getClassroomRoster(currentClassroom));
         System.out.println("Selected item: " + selectedClass);
     }
 
     // ===========================================
     //          CLASSROOM PAGE - DEFAULT
     // ===========================================
-    @FXML private void currClassInfoToClassTab() {
-        currClassroomListView.getItems().setAll(classroomDAO.viewClassroomInfo(currentClassroom));
+    @FXML private void currClassInfoToClassTab() { //classroom info
+        currClassroomListView.getItems().setAll(currentClassroom.asInfoList());
     }
 
     @FXML private void currRosterToClassTab() {
-        currClassroomListView.getItems().setAll(classroomDAO.viewClassroomRoster(currentClassroom));
+        Roster roster = currentClassroom.getRoster(); //classroom roster
+        currClassroomListView.getItems().setAll(roster.getRoster());
     }
 
-    @FXML private void currGradebookToClassTab() {
-        currClassroomListView.getItems().setAll(
-        assignmentDAO.getAllAssignments(currentUser, currentClassroom)
-                     .stream()
-                     .map(Assignment::toString)
-                     .collect(Collectors.toList())
-    );
-    }
-
-    @FXML private void currAssignmentToClassTab() {
+    @FXML private void currAssignmentsToClassTab() { //classroom assignments and grades
         currClassroomListView.getItems().setAll(assignmentDAO.getAssignments(currentUser, currentClassroom));
     }
+
+    // ===========================================
+    //              GRADEBOOK PAGE
+    // ===========================================
 
     @FXML private void currGradebookToGradebookTab() {
         currGradebookListView.getItems().setAll(
@@ -252,6 +252,25 @@ public class AppController extends Application implements Initializable {
         String assignmentDueDateStr = assignmentDueDate.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         assignmentDAO.addAssignment(currentUser, currentClassroom, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr, assignmentDueDateStr);
         System.out.println("Assignment added: " + assignmentNameStr);
+    }
+
+    @FXML private void editAssignment() {
+        String selected = currClassroomListView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            String[] parts = selected.split(", ");
+            int i = 0;
+            for(Node node : assignmentWindow.getChildren()){
+                if(node instanceof TextArea textArea){
+                    textArea.setText(parts[i]);
+                    i++;
+                } else if(node instanceof DatePicker datePicker){
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+                    LocalDate date = LocalDate.parse(parts[i], formatter);
+                    datePicker.setValue(date);
+                    i++;
+                }
+            }
+        }
     }
 
     // ===========================================

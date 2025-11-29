@@ -1,19 +1,19 @@
 package com.ilearn;
 import java.util.ArrayList;
+
+import com.ilearn.dao.ClassroomDAO;
 public class User {
     private int id;
     private String password;
     private Boolean isTeacher;
     private String name;
-    private String[] classroomsNames;
     ArrayList<Classroom> classroomArr = new ArrayList<>(); 
 
-    public User(int id, String password, Boolean isTeacher, String name, String[] classroomsNames) {
+    public User(int id, String password, Boolean isTeacher, String name) {
         this.id = id;
         this.password = password;
         this.isTeacher = isTeacher;
         this.name = name;
-        this.classroomsNames = classroomsNames;
     }
 
     public int getId() {
@@ -40,22 +40,19 @@ public class User {
         this.isTeacher = val;
     }
 
-    //user's classrooms names setter
-    public void setClassroomsNames(String[] classroomsNames) {
-        this.classroomsNames = classroomsNames;
-    }
-    
-    //user's classrooms names getter
-    public String getClassroomsNames() {
-        return String.join(", ", this.classroomsNames);
-    }
-
     public void addClassroom(Classroom classroom) {
         classroomArr.add(classroom);
     }
 
-    public ArrayList<Classroom> getClassrooms() {
+    public ArrayList<Classroom> getClassrooms(ClassroomDAO classroomDAO) {
+        if(this.classroomArr == null){
+            classroomDAO.getClassrooms(this);
+        }
         return this.classroomArr;
+    }
+
+    public void setClassrooms(ArrayList<Classroom> classrooms) {
+        this.classroomArr = classrooms;
     }
 
     public static void main(String[] args) {

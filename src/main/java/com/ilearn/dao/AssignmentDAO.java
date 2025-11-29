@@ -21,10 +21,6 @@ public class AssignmentDAO {
 
     //this is where a teacher can assign assignments for classroom
     public void addAssignment(User user, Classroom currentClassroom, String assignmentName, String description, double grade, String student, String dueDate){
-        //for(Classroom classroomObj: classroomArr){
-            //if(classroomObj.getClassroomName().equals(currentClassroomName)){
-                //Assignment assignment = new Assignment(name, description, grade);
-                //classroomObj.addAssignment(assignment);
         String insertNewAssignment = "INSERT INTO assignments (user_id, class_id, class_name, name, description, grade, student, due_date, teacher) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(PreparedStatement pstmtNewAssignment = connection.prepareStatement(insertNewAssignment);){
             pstmtNewAssignment.setInt(1, user.getId());
@@ -40,16 +36,12 @@ public class AssignmentDAO {
         } catch (SQLException er) {
             er.printStackTrace(System.err);
         }
-            //}
-        //}
     }
 
     //where all assignments from a specific classroom are returned
     public List<String> getAssignments(User user, Classroom currentClassroom){
         List<String> assignmentNameList = new ArrayList<>();
-        //for(Classroom classroomObj: classroomArr){
-            //if(classroomObj.getClassroomName().equals(currentClassroomName)){
-                //assignmentList = classroomObj.getAssignments();
+        ArrayList<Assignment> assignmentsList = new ArrayList<>();
         String query = user.getIsTeacher() ? "SELECT * FROM assignments WHERE teacher = ? AND class_name = ? AND class_id = ?" : "SELECT * FROM assignments WHERE student = ? AND class_name = ? AND class_id = ?";
         try(PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getName());
@@ -64,14 +56,15 @@ public class AssignmentDAO {
                     String dueDateString = rs.getString("due_date");
                     String work = rs.getString("work");
                     assignmentNameList.add(assignmentName + ", " + description + ", " + name + ", " + String.valueOf(grade) + ", " + dueDateString + ", " + work);
+                    Assignment assignment = new Assignment(assignmentName, description, grade, name, dueDateString, work);
+                    assignmentsList.add(assignment);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        currentClassroom.setAssignments(assignmentsList);
         return assignmentNameList;
-            //}
-        //}
     }
 
     //where all assignments no matter the classroom are returned

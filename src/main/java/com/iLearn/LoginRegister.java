@@ -65,7 +65,7 @@ public class LoginRegister extends JFrame {
                 if(userDAO.isRegistered(username, password)){
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     SwingUtilities.getWindowAncestor(panel).dispose();
-                    User loggedUser = new User(0, password, null, username, null);
+                    User loggedUser = new User(0, password, null, username);
                     loginUser(loggedUser, username, password);
                     SetUser currentUser = new SetUser();
                     currentUser.setUser(loggedUser);
@@ -123,7 +123,7 @@ public class LoginRegister extends JFrame {
                     JOptionPane.showMessageDialog(this, "Already registered! Login!");
                     cardLayout.show(mainPanel, "login");
                 } else {
-                    User user = new User(id, password, isTeacher, username, classes.split("[,;|\\s]+"));
+                    User user = new User(id, password, isTeacher, username);
                     for(String enteredClass : classes.split("[,;|\\s]+")){
                         Integer classId = 0;
                         try {
@@ -148,6 +148,7 @@ public class LoginRegister extends JFrame {
 
     //register user in dao
     private void registerUser(User user, ArrayList<Classroom> classes) {
+        user.setClassrooms(classes);
         userDAO.connectToDatabase(user);
         for (Classroom c : classes) {
             classroomDAO.connectToDatabase(user, c);
