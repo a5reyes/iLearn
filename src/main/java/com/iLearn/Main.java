@@ -10,7 +10,7 @@ import com.ilearn.dao.RosterDAO;
 import com.ilearn.dao.UserDAO;
 
 public class Main{
-    //variables for daos
+    //variables for daos; dao = code that talks to the database for you.
     public static Connection connection;
     public static UserDAO userDAO;
     public static ClassroomDAO classroomDAO;
