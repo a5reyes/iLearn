@@ -54,8 +54,4 @@ public class User {
     public void setClassrooms(ArrayList<Classroom> classrooms) {
         this.classroomArr = classrooms;
     }
-
-    public static void main(String[] args) {
-        //
-    }
 }

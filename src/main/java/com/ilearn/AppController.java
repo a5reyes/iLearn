@@ -20,12 +20,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.time.DayOfWeek;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,17 +32,12 @@ import java.util.stream.Collectors;
 import com.ilearn.dao.AssignmentDAO;
 import com.ilearn.dao.ClassroomDAO;
 
-import com.ilearn.dao.RosterDAO;
-import com.ilearn.dao.UserDAO;
-
 public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static Classroom currentClassroom;
     private final ClassroomDAO classroomDAO;
     private final AssignmentDAO assignmentDAO;
     private Stage stage;
-    private Scene scene;
-    private Parent root;
     private ZonedDateTime dateFocus;
     private ZonedDateTime today;
 
@@ -225,7 +217,6 @@ public class AppController extends Application implements Initializable {
     // ===========================================
     //              GRADEBOOK PAGE
     // ===========================================
-
     @FXML private void currGradebookToGradebookTab() {
         List<Assignment> classroomAssignments = currentClassroom.getAssignments(currentUser, assignmentDAO);
         ObservableList<String> formatted = classroomAssignments.stream()
@@ -237,7 +228,6 @@ public class AppController extends Application implements Initializable {
     // ===========================================
     //        CLASSROOM PAGE - STUDENT ONLY
     // ===========================================
-
     @FXML private void submitAssignment() {
         String selectedAssignmentName = currClassroomListView.getSelectionModel().getSelectedItem().split(" - ")[1];
         String work = studentWork.getText();
@@ -282,7 +272,6 @@ public class AppController extends Application implements Initializable {
     // ===========================================
     //                 CALENDAR
     // ===========================================
-
     @FXML
     private void backOneMonth(ActionEvent event) {
         dateFocus = dateFocus.minusMonths(1);
@@ -295,99 +284,84 @@ public class AppController extends Application implements Initializable {
         drawCalendar();
     }
 
-  private void drawCalendar() {
-    // Set header text
-    year.setText(String.valueOf(dateFocus.getYear()));
-    month.setText(String.valueOf(dateFocus.getMonth()));
+    private void drawCalendar() {
+        // Set header text
+        year.setText(String.valueOf(dateFocus.getYear()));
+        month.setText(String.valueOf(dateFocus.getMonth()));
 
-    // Use actual width if available, otherwise prefWidth
-    double width  = calendar.getWidth()  > 0 ? calendar.getWidth()  : calendar.getPrefWidth();
-    double height = calendar.getHeight() > 0 ? calendar.getHeight() : calendar.getPrefHeight();
-    double strokeWidth = 1;
-    double spaceH = calendar.getHgap();
-    double spaceV = calendar.getVgap();
+        // Use actual width if available, otherwise prefWidth
+        double width  = calendar.getWidth()  > 0 ? calendar.getWidth()  : calendar.getPrefWidth();
+        double height = calendar.getHeight() > 0 ? calendar.getHeight() : calendar.getPrefHeight();
+        double strokeWidth = 1;
+        double spaceH = calendar.getHgap();
+        double spaceV = calendar.getVgap();
 
-    // Activities mapped by day-of-month (1..31)
-    Map<Integer, List<CalendarActivity>> activityMap =
-            getCalendarActivitiesMonth(dateFocus);
+        // Activities mapped by day-of-month (1..31)
+        Map<Integer, List<CalendarActivity>> activityMap =
+                getCalendarActivitiesMonth(dateFocus);
 
-    // ---- DATE LOGIC ----
+        // ---- DATE LOGIC ----
+        // 1) First day of this month
+        LocalDate firstOfMonth = dateFocus.toLocalDate().withDayOfMonth(1);
+        int monthLength = firstOfMonth.lengthOfMonth();
 
-    // 1) First day of this month
-    LocalDate firstOfMonth = dateFocus.toLocalDate().withDayOfMonth(1);
-    int monthLength = firstOfMonth.lengthOfMonth();
-
-    // 2) Find the Sunday on or before the first of the month
-    LocalDate start = firstOfMonth;
-    while (start.getDayOfWeek() != DayOfWeek.SUNDAY) {
-        start = start.minusDays(1);
-    }
-
-    // 3) Clear old cells and walk forward one day per cell
-    calendar.getChildren().clear();
-    LocalDate current = start;
-
-    // Make cells narrow enough that 7 always fit in a row
-    // (using 1/8 of the width gives extra space for gaps and borders)
-    double cellW = (width / 8.0);
-    double cellH = (height / 6.0);
-
-    int cellCount = 0; // debug: count boxes
-
-    for (int row = 0; row < 6; row++) {
-        for (int col = 0; col < 7; col++) {
-            StackPane cell = new StackPane();
-
-            Rectangle rect = new Rectangle();
-            rect.setFill(Color.TRANSPARENT);
-            rect.setStroke(Color.BLACK);
-            rect.setStrokeWidth(strokeWidth);
-
-            rect.setWidth(cellW);
-            rect.setHeight(cellH);
-
-            cell.getChildren().add(rect);
-
-            // Only draw a day number if this date is actually in the focus month
-            if (current.getMonth() == firstOfMonth.getMonth()
-                    && current.getYear() == firstOfMonth.getYear()) {
-
-                int dayOfMonth = current.getDayOfMonth();
-
-                Text dateText = new Text(String.valueOf(dayOfMonth));
-                dateText.setTranslateY(-(cellH / 2.0) * 0.75);
-                cell.getChildren().add(dateText);
-
-                // Add activities for this day if any
-                List<CalendarActivity> activities = activityMap.get(dayOfMonth);
-                if (activities != null) {
-                    createCalendarActivity(activities, cellH, cellW, cell);
-                }
-
-                // Highlight today
-                if (today.toLocalDate().equals(current)) {
-                    rect.setStroke(Color.BLUE);
-                }
-            }
-
-            calendar.getChildren().add(cell);
-            current = current.plusDays(1); // move to next date
-            cellCount++;
+        // 2) Find the Sunday on or before the first of the month
+        LocalDate start = firstOfMonth;
+        while (start.getDayOfWeek() != DayOfWeek.SUNDAY) {
+            start = start.minusDays(1);
         }
+
+        // 3) Clear old cells and walk forward one day per cell
+        calendar.getChildren().clear();
+        LocalDate current = start;
+
+        // Make cells narrow enough that 7 always fit in a row
+        // (using 1/8 of the width gives extra space for gaps and borders)
+        double cellW = (width / 8.0);
+        double cellH = (height / 6.0);
+        int cellCount = 0; // debug: count boxes
+
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 7; col++) {
+                StackPane cell = new StackPane();
+                Rectangle rect = new Rectangle();
+                rect.setFill(Color.TRANSPARENT);
+                rect.setStroke(Color.BLACK);
+                rect.setStrokeWidth(strokeWidth);
+                rect.setWidth(cellW);
+                rect.setHeight(cellH);
+                cell.getChildren().add(rect);
+
+                // Only draw a day number if this date is actually in the focus month
+                if (current.getMonth() == firstOfMonth.getMonth() && current.getYear() == firstOfMonth.getYear()) {
+                    int dayOfMonth = current.getDayOfMonth();
+                    Text dateText = new Text(String.valueOf(dayOfMonth));
+                    dateText.setTranslateY(-(cellH / 2.0) * 0.75);
+                    cell.getChildren().add(dateText);
+
+                    // Add activities for this day if any
+                    List<CalendarActivity> activities = activityMap.get(dayOfMonth);
+                    if (activities != null) {
+                        createCalendarActivity(activities, cellH, cellW, cell);
+                    }
+
+                    // Highlight today
+                    if (today.toLocalDate().equals(current)) {
+                        rect.setStroke(Color.BLUE);
+                    }
+                }
+
+                calendar.getChildren().add(cell);
+                current = current.plusDays(1); // move to next date
+                cellCount++;
+            }
+        }
+        // Debug: verify we really made 42 boxes
+        System.out.println("Calendar cells created: " + cellCount);
     }
 
-    // Debug: verify we really made 42 boxes
-    System.out.println("Calendar cells created: " + cellCount);
-}
-
-
-    
-
-    private void createCalendarActivity(List<CalendarActivity> activities,
-                                        double cellH, double cellW,
-                                        StackPane cell) {
+    private void createCalendarActivity(List<CalendarActivity> activities, double cellH, double cellW, StackPane cell) {
         VBox box = new VBox();
-
         for (int i = 0; i < activities.size(); i++) {
             if (i >= 2) {
                 Text more = new Text("...");
@@ -395,10 +369,8 @@ public class AppController extends Application implements Initializable {
                 more.setOnMouseClicked(e -> System.out.println(activities));
                 break;
             }
-
             CalendarActivity activity = activities.get(i);
-            Text text = new Text(activity.getUserName() + ", " +
-                    activity.getDate().toLocalTime());
+            Text text = new Text(activity.getUserName() + ", " + activity.getDate().toLocalTime());
 
             box.getChildren().add(text);
             text.setOnMouseClicked(e -> System.out.println(text.getText()));
@@ -440,14 +412,12 @@ public class AppController extends Application implements Initializable {
             );
             list.add(new CalendarActivity(t, assignmentName, currentUser.getId()));
         }
-
         return createCalendarMap(list);
     }
 
     // ===========================================
     //             EMAIL LOGIN + SEND
     // ===========================================
-
     private void showEmailLoginPopup() {
         Stage popup = new Stage();
         popup.setTitle("Outlook Login");

@@ -5,16 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
 import com.ilearn.Assignment;
 import com.ilearn.Classroom;
 import com.ilearn.User;
 
 public class AssignmentDAO {
     private final Connection connection;
-    
     public AssignmentDAO(Connection connection) {
         this.connection = connection; // share same connection across all files
     }
@@ -64,7 +61,6 @@ public class AssignmentDAO {
         }
         return assignmentsList;
     }
-
 
     //where a student can submit their work to an assignment 
     public void submitAssignment(Classroom currentClassroom, Assignment assignment){

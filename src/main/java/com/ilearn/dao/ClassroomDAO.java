@@ -4,16 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ilearn.Classroom;
 import com.ilearn.Roster;
 import com.ilearn.User;
 
 public class ClassroomDAO {
     private final Connection connection;
-    
     public ClassroomDAO(Connection connection) {
         this.connection = connection; // share same connection across all files
     }

@@ -13,7 +13,6 @@ import com.ilearn.User;
 public class UserDAO {
     private final Connection connection;
     private final ClassroomDAO classroomDAO;
-    
     public UserDAO(Connection connection) {
         this.connection = connection; // share same connection across all files
         this.classroomDAO = Main.classroomDAO;

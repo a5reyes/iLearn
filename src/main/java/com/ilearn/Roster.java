@@ -18,14 +18,6 @@ public class Roster {
         this.roster = roster;
 	}
 
-    /*
-    public Boolean getStudent(String student) {
-        //get student info - name
-        boolean contains = this.roster.contains(student);
-        return contains;
-	}
-    */
-
     public Boolean checkStudent(String student) {
         boolean contains = this.roster.contains(student);
         return contains;
@@ -46,5 +38,4 @@ public class Roster {
             }
         }
 	}
-
 }

@@ -24,7 +24,7 @@ public class Main{
         AppController.main(null);
     }
 
-    //initializes db; if db locked cause its busy, wait 5ms; foreign_keys constraints off
+    //initializes db; if db locked cause its busy, wait 5ms; foreign_key support on
     public static void initDatabase() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:ilearn.db");
         connection.createStatement().execute("PRAGMA busy_timeout = 5000;");

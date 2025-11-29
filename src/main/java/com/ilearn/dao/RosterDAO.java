@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import com.ilearn.Classroom;
 import com.ilearn.User;
 
 public class RosterDAO {
     private final Connection connection;
-    
     public RosterDAO(Connection connection) {
         this.connection = connection; // share same connection across all files
     }

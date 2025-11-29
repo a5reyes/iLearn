@@ -51,7 +51,6 @@ public class Assignment {
 		this.work = updatedWork;
 	}
 
-
     @Override
     public String toString() {
         String formatStr = String.format("Assignment - %s - Description - %s - Grade - %,.2f - Name - %s - Due - %s - Work - %s", 
@@ -73,6 +72,4 @@ public class Assignment {
     public int hashCode() {
         return Objects.hash(assignmentName, name);
     }
-
-
 }

@@ -1,4 +1,4 @@
-module app {
+module app { //used to organize, manage and keep app safer and smaller
     requires java.sql;
     requires javafx.controls;
     requires javafx.fxml;
