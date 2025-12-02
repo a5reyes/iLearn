@@ -67,9 +67,9 @@ public class Classroom {
 		return assignments;
 	}
 
-	public Assignment findAssignment(String assignmentName) {
+	public Assignment findAssignment(Integer assignmentId) {
 		for(Assignment assignment : assignments){
-			if(assignmentName.equals(assignment.getAssignmentName())){
+			if(assignmentId.equals(assignment.getAssignmentId())){
 				return assignment;
 			}
 		}

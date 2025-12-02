@@ -230,11 +230,11 @@ public class AppController extends Application implements Initializable {
     //        CLASSROOM PAGE - STUDENT ONLY
     // ===========================================
     @FXML private void submitAssignment() {
-        String selectedAssignmentName = currClassroomListView.getSelectionModel().getSelectedItem().split(" - ")[1];
+        String selectedAssignmentId = currClassroomListView.getSelectionModel().getSelectedItem().split(" - ")[1];
         String work = studentWork.getText();
-        Assignment selectedAssignment = currentClassroom.findAssignment(selectedAssignmentName);
+        Assignment selectedAssignment = currentClassroom.findAssignment(Integer.parseInt(selectedAssignmentId));
         currentClassroom.submitAssignment(assignmentDAO, selectedAssignment, work);
-        System.out.println("Work added to " + selectedAssignmentName + " : " + work);
+        System.out.println("Work added to " + selectedAssignmentId + " : " + work);
     }
 
     // ===========================================
