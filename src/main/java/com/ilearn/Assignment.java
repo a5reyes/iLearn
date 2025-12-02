@@ -51,7 +51,7 @@ public class Assignment {
 		return name;
 	}
 
-    public Integer getTeacherId() {
+    public int getTeacherId() {
 		return teacherId;
 	}
 
