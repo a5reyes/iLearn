@@ -35,7 +35,7 @@
             <TextArea fx:id="assignmentGrade" prefHeight="40.0" prefWidth="463.0" style="-fx-background-color: #F0F7FA;" />
             <Text fill="#090c7c" strokeType="OUTSIDE" strokeWidth="0.0" text="Due Date" wrappingWidth="83.33333333333331" />
             <DatePicker fx:id="assignmentDatePicker" style="-fx-background-color: #F0F7FA;" />
-            <Button mnemonicParsing="false" onAction="#addAssignmentToClassTab" style="-fx-background-color: #F0F7FA;" text="Submit" textFill="#090c7c" />
+            <Button mnemonicParsing="false" onAction="#addOrUpdateAssignmentToClassTab" style="-fx-background-color: #F0F7FA;" text="Submit" textFill="#090c7c" />
          </children>
       </VBox>
       <Button layoutX="313.0" layoutY="573.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Remove" />

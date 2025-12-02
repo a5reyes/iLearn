@@ -31,6 +31,14 @@ public class Assignment {
 		return assignmentName;
 	}
 
+    public String getDescription() {
+		return description;
+	}
+
+    public double getGrade() {
+		return grade;
+	}
+
     public String getDueDateString() {
 		return dueDateString;
 	}
@@ -53,8 +61,8 @@ public class Assignment {
 
     @Override
     public String toString() {
-        String formatStr = String.format("Assignment - %s - Description - %s - Grade - %,.2f - Name - %s - Due - %s - Work - %s", 
-            assignmentName, description, grade, name, dueDateString, work);
+        String formatStr = String.format("Id - %d - Assignment - %s - Description - %s - Grade - %,.2f - Name - %s - Due - %s - Work - %s", 
+            assignmentId, assignmentName, description, grade, name, dueDateString, work);
         return formatStr;
     }
 

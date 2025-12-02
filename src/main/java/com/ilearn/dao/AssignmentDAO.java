@@ -17,23 +17,49 @@ public class AssignmentDAO {
     }
 
     //this is where a teacher can assign assignments for classroom
-    public void addAssignment(User teacher, Classroom currentClassroom, String assignmentName, String description, double grade, String student, String dueDate){
-        String insertNewAssignment = "INSERT INTO assignments (teacher_id, class_id, class_name, name, description, grade, student, due_date, teacher) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try(PreparedStatement pstmtNewAssignment = connection.prepareStatement(insertNewAssignment);){
-            pstmtNewAssignment.setInt(1, teacher.getId());
-            pstmtNewAssignment.setInt(2, currentClassroom.getClassroomId());
-            pstmtNewAssignment.setString(3, currentClassroom.getClassroomName());
-            pstmtNewAssignment.setString(4, assignmentName);
-            pstmtNewAssignment.setString(5, description);
-            pstmtNewAssignment.setDouble(6, grade);
-            pstmtNewAssignment.setString(7, student);
-            pstmtNewAssignment.setString(8, dueDate);
-            pstmtNewAssignment.setString(9, teacher.getName());
-            pstmtNewAssignment.executeUpdate();
-        } catch (SQLException er) {
-            er.printStackTrace(System.err);
+    public void addAssignment(User teacher, Classroom currentClassroom, String assignmentName, String description, double grade, String student, String dueDate) {
+        String sql = "INSERT INTO assignments (teacher_id, class_id, class_name, name, description, grade, student, due_date, teacher) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, teacher.getId());
+            pstmt.setInt(2, currentClassroom.getClassroomId());
+            pstmt.setString(3, currentClassroom.getClassroomName());
+            pstmt.setString(4, assignmentName);
+            pstmt.setString(5, description);
+            pstmt.setDouble(6, grade);
+            pstmt.setString(7, student);
+            pstmt.setString(8, dueDate);
+            pstmt.setString(9, teacher.getName());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
         }
     }
+
+    //this is where a teacher can assign assignments for classroom
+    public void updateAssignment(User teacher, Classroom currentClassroom, Integer assignmentId, String assignmentName, String description, double grade, String student, String dueDate) {
+        // update existing assignment
+        String sql = "UPDATE assignments SET " +
+                    "teacher_id = ?, class_id = ?, class_name = ?, name = ?, description = ?, grade = ?, student = ?, due_date = ?, teacher = ? " +
+                    "WHERE assignment_id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, teacher.getId());
+            pstmt.setInt(2, currentClassroom.getClassroomId());
+            pstmt.setString(3, currentClassroom.getClassroomName());
+            pstmt.setString(4, assignmentName);
+            pstmt.setString(5, description);
+            pstmt.setDouble(6, grade);
+            pstmt.setString(7, student);
+            pstmt.setString(8, dueDate);
+            pstmt.setString(9, teacher.getName());
+            pstmt.setInt(10, assignmentId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        
+    }
+
 
     //where all assignments from a specific classroom are returned
     public ArrayList<Assignment> getAssignments(User user, Classroom currentClassroom){

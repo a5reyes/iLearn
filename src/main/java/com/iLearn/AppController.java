@@ -35,6 +35,7 @@ import com.ilearn.dao.ClassroomDAO;
 public class AppController extends Application implements Initializable {
     private static User currentUser;
     private static Classroom currentClassroom;
+    private Integer selectedAssignmentId = null; 
     private final ClassroomDAO classroomDAO;
     private final AssignmentDAO assignmentDAO;
     private Stage stage;
@@ -239,32 +240,40 @@ public class AppController extends Application implements Initializable {
     // ===========================================
     //        CLASSROOM PAGE - TEACHER ONLY
     // ===========================================
-    @FXML private void addAssignmentToClassTab() {
+    @FXML private void addOrUpdateAssignmentToClassTab() {
         String assignmentNameStr = assignmentName.getText();
         String assignmentDescriptionStr = assignmentDescription.getText();
         String assignmentGradeStr = assignmentGrade.getText();
         String assignmentStudentStr = assignmentStudent.getText();
         LocalDate assignmentDueDate = assignmentDatePicker.getValue();
         String assignmentDueDateStr = assignmentDueDate.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        assignmentDAO.addAssignment(currentUser, currentClassroom, assignmentNameStr, assignmentDescriptionStr, Double.parseDouble(assignmentGradeStr), assignmentStudentStr, assignmentDueDateStr);
-        System.out.println("Assignment added: " + assignmentNameStr);
+        double grade = Double.parseDouble(assignmentGradeStr);
+        if (selectedAssignmentId == null) { // no existing assignment selected -> add new
+            assignmentDAO.addAssignment(currentUser, currentClassroom, assignmentNameStr, assignmentDescriptionStr, grade, assignmentStudentStr, assignmentDueDateStr);
+            System.out.println("Assignment added: " + assignmentNameStr);
+        } else { // existing assignment selected -> update
+            assignmentDAO.updateAssignment(currentUser, currentClassroom, selectedAssignmentId, assignmentNameStr, assignmentDescriptionStr, grade, assignmentStudentStr, assignmentDueDateStr);
+            System.out.println("Assignment updated: " + assignmentNameStr);
+            selectedAssignmentId = null; // reset after update
+        }
     }
 
-    @FXML private void editAssignment() {
+    @FXML
+    private void editAssignment() {
         String selected = currClassroomListView.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            String[] parts = selected.split(", ");
-            int i = 0;
-            for(Node node : assignmentWindow.getChildren()){
-                if(node instanceof TextArea textArea){
-                    textArea.setText(parts[i]);
-                    i++;
-                } else if(node instanceof DatePicker datePicker){
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-                    LocalDate date = LocalDate.parse(parts[i], formatter);
-                    datePicker.setValue(date);
-                    i++;
-                }
+            String[] parts = selected.split(" - ");
+            if (parts.length >= 12) {
+                selectedAssignmentId = Integer.parseInt(parts[1]);
+                assignmentName.setText(parts[3]);
+                assignmentDescription.setText(parts[5]);
+                assignmentStudent.setText(parts[9]);
+                assignmentGrade.setText(parts[7]);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+                LocalDate date = LocalDate.parse(parts[11], formatter);
+                assignmentDatePicker.setValue(date);
+            } else {
+                System.out.println("Error: selected item does not have enough fields: " + Arrays.toString(parts));
             }
         }
     }

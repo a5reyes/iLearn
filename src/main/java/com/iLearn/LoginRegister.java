@@ -173,4 +173,8 @@ public class LoginRegister extends JFrame {
             showMessage("Please register");
         }
     }
+
+    public UserDAO getUserDAO(){
+        return this.userDAO;
+    }
 }
