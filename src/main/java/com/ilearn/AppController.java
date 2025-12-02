@@ -12,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -65,13 +64,7 @@ public class AppController extends Application implements Initializable {
     @FXML private TextArea assignmentDescription;
     @FXML private TextArea assignmentGrade;
     @FXML private TextArea assignmentStudent;
-    @FXML
-    private DatePicker assignmentDatePicker;
-    
-    // ---------- Image FXML -----------
-
-    @FXML private ImageView mainImageView;
-
+    @FXML private DatePicker assignmentDatePicker;
 
     // ---------- EMAIL LOGIN ----------
     private static String outlookEmail = null;
@@ -97,18 +90,6 @@ public class AppController extends Application implements Initializable {
         initializeCalendarIfLoaded();
         initializeMessagingIfLoaded();
     }
-
-    public void setUserImage() {
-    if (mainImageView != null && currentUser != null) {
-        try {
-            String imagePath = "/com/images/logo.png"; 
-            Image img = new Image(getClass().getResource(imagePath).toString());
-            mainImageView.setImage(img);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
 
     private void initializeCalendarIfLoaded() {
         if (calendar != null && year != null && month != null) {
@@ -136,30 +117,18 @@ public class AppController extends Application implements Initializable {
     // ===========================================
     //                START
     // ===========================================
-  @Override
-public void start(Stage stage) throws IOException {
-    // Set app icon
-    URL logoURL = getClass().getResource("/com/images/logo.png");
-    Image logo = new Image(logoURL.toString());
-    stage.getIcons().add(logo);
-
-    // Load FXML
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
-    Parent root = loader.load();
-
-    // Get the controller instance from FXMLLoader
-    AppController controller = loader.getController();
-
-    // Set the user image
-    controller.setUserImage();
-
-    // Show scene
-    Scene scene = new Scene(root, 650, 600);
-    stage.setTitle(currentUser.getIsTeacher() ? "iLearn - Teacher View" : "iLearn - Student View");
-    stage.setScene(scene);
-    stage.show();
-}
-
+    @Override
+    public void start(Stage stage) throws IOException {
+        URL logoURL = getClass().getResource("/com/ilearn/logo.png");
+        Image logo = new Image(logoURL.toString());
+        stage.getIcons().add(logo);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ilearn/views/MainPage.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root, 650, 600);
+        stage.setTitle(currentUser.getIsTeacher() ? "iLearn - Teacher View" : "iLearn - Student View");
+        stage.setScene(scene);
+        stage.show();
+    }
 
     // ===========================================
     //                SCENE SWITCHING
@@ -206,21 +175,11 @@ public void start(Stage stage) throws IOException {
     // ===========================================
     //                MAIN PAGE
     // ===========================================
- @FXML
-private void loadUserClasses() {
-    if (mainPageListView != null) {
-        // Make it visible when button is clicked
-        mainPageListView.setVisible(true);
-
-        // Populate the list
+    @FXML private void loadUserClasses() {
         ArrayList<Classroom> userClassrooms = currentUser.getClassrooms(classroomDAO);
-        List<String> formatted = userClassrooms.stream()
-                .map(c -> c.getClassroomName() + ", " + c.getClassroomId())
-                .collect(Collectors.toList());
-
+        List<String> formatted = userClassrooms.stream().map(c -> c.getClassroomName() + ", " + c.getClassroomId()).collect(Collectors.toList());
         mainPageListView.getItems().setAll(formatted);
     }
-}
 
     @FXML private void handleItemClick() {
         String selectedClass = mainPageListView.getSelectionModel().getSelectedItem();

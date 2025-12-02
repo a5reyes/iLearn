@@ -26,7 +26,7 @@ public class LoginRegister extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); 
-        URL logoURL = getClass().getResource("/com/images/logo.png");
+        URL logoURL = getClass().getResource("/com/ilearn/logo.png");
         ImageIcon logo = new ImageIcon(logoURL);
         setIconImage(logo.getImage());
     

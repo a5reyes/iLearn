@@ -2,49 +2,45 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600" prefWidth="800" style="-fx-background-color: #46B1E1;"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.ilearn.AppController">
-
-    <!-- Top navigation bar with logo -->
-    <HBox alignment="CENTER_LEFT" layoutX="10" layoutY="10" spacing="10">
-        <ImageView fx:id="mainImageView" fitHeight="80" fitWidth="80" preserveRatio="true" />
-    </HBox>
-
-    <!-- Navigation buttons -->
-    <Button layoutX="226.0" layoutY="75.0" onAction="#switchToClassroom"
-            style="-fx-background-color: #46B1E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"
-            text="Classroom" />
-    <Button layoutX="356.0" layoutY="75.0" onAction="#switchToCalendar"
-            style="-fx-background-color: #46B1E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"
-            text="Calendar" />
-    <Button layoutX="463.0" layoutY="78.0" onAction="#switchToMessages"
-            style="-fx-background-color: #46B1E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"
-            text="Messages" />
-    <Button layoutX="556.0" layoutY="74.0" onAction="#switchToGradebook"
-            style="-fx-background-color: #46B1E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"
-            text="Gradebook" />
-
-    <!-- Sidebar -->
-    <VBox layoutX="10" layoutY="110" spacing="10">
-        <!-- Glance at Classes button -->
-        <Button onAction="#loadUserClasses" prefWidth="140"
-                style="-fx-background-color: #F0F7FA; -fx-text-fill: #090c7c; -fx-font-weight: bold;"
-                text="Glance at Classes" />
-    </VBox>
-
-    <!-- Middle box to display classes -->
-    <VBox fx:id="classBox" layoutX="200" layoutY="150" spacing="10" prefWidth="400" prefHeight="400"
-          style="-fx-background-color: #F0F7FA; -fx-border-color: #0288D1; -fx-border-width: 2; -fx-padding: 10;">
-        <!-- List of classes, hidden initially -->
-        <ListView fx:id="mainPageListView" prefWidth="380" prefHeight="350" visible="false" />
-    </VBox>
-
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="650.0" prefHeight="600.0" prefWidth="650.0" style="-fx-background-color: #46B1E1;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilearn.AppController">
+   <children>
+      <HBox alignment="CENTER" layoutX="14.0" prefHeight="192.0" prefWidth="650.0" style="-fx-background-color: #46B1E1;">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" />
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#switchToClassroom" style="-fx-background-color: #F0F7FA;" text="Classroom" textFill="#090c7c" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#switchToCalendar" style="-fx-background-color: #F0F7FA;" text="Calendar" textFill="#090c7c" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#switchToMessages" style="-fx-background-color: #F0F7FA;" text="Messages " textFill="#090c7c" />
+               </children>
+            </VBox>
+            <Button mnemonicParsing="false" onAction="#switchToGradebook" style="-fx-background-color: #F0F7FA;" text="Gradebook" textFill="#090c7c" />
+         </children>
+      </HBox>
+      <VBox layoutX="14.0" prefHeight="600.0" prefWidth="143.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#loadUserClasses" prefHeight="81.0" prefWidth="123.0" style="-fx-background-color: #F0F7FA;" text="Glance at Classes" textFill="#090c7c" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <ListView fx:id="mainPageListView" layoutX="146.0" layoutY="157.0" onMouseClicked="#handleItemClick" prefHeight="428.0" prefWidth="470.0" style="-fx-background-color: #F0F7FA;" />
+      <Text fill="#090c7c" layoutX="146.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Glance at classes, then click on a class" wrappingWidth="203.25845336914062" />
+   </children>
 </AnchorPane>
