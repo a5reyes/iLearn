@@ -26,7 +26,7 @@ public class JUnitTests {
     }
     
     // IMPORTANT --------- use mvn test --------
-    // test 1 - user is not registered
+    // test 1 - user is not registered - expected boolean: false
     @Test
     public void userIsNotRegistered() {
         LoginRegister login = new LoginRegister();
@@ -35,7 +35,7 @@ public class JUnitTests {
         assertEquals(false, registeredStatus);
     }
 
-    // test 2 - user is registered
+    // test 2 - user is registered - expected boolean: true
     @Test
     public void userIsRegistered() {
         LoginRegister login = new LoginRegister();
@@ -44,7 +44,7 @@ public class JUnitTests {
         assertEquals(true, registeredStatus);
     }
 
-    // test 3 - user has assignments
+    // test 3 - user has assignments - expected output: ArrayList<Assignments>
     @Test
     public void userAssignments(){
         AssignmentDAO assignmentDAO = Main.assignmentDAO;
@@ -53,7 +53,7 @@ public class JUnitTests {
         assertEquals(expected.getClass(), assignmentDAO.getAssignments(user, null).getClass());
     }
 
-    // test 4 - classroom has a roster
+    // test 4 - classroom has a roster - expected output: Roster object
     @Test
     public void classroomRoster(){
         ClassroomDAO classroomDAO = Main.classroomDAO;
