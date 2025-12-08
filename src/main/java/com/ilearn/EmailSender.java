@@ -1,5 +1,6 @@
 package com.ilearn;
 
+import jakarta.mail.*;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;

@@ -147,7 +147,7 @@ public class LoginRegister extends JFrame {
     }
 
     //register user in dao
-    private void registerUser(User user, ArrayList<Classroom> classes) {
+    public void registerUser(User user, ArrayList<Classroom> classes) {
         user.setClassrooms(classes);
         userDAO.connectToDatabase(user);
         for (Classroom c : classes) {
